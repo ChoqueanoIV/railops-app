@@ -1,14 +1,14 @@
-﻿from pydantic import BaseModel
+﻿from pydantic import BaseModel, Field
 
 
 class PrimeiroAcessoRequest(BaseModel):
-    matricula: str
-    pin: str
+    matricula: str = Field(pattern=r"^\d{8}$")
+    pin: str = Field(pattern=r"^\d{4}$")
 
 
 class LoginRequest(BaseModel):
-    matricula: str
-    pin: str
+    matricula: str = Field(pattern=r"^\d{8}$")
+    pin: str = Field(pattern=r"^\d{4}$")
 
 
 class LoginResponse(BaseModel):

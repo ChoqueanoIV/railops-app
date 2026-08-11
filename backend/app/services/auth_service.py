@@ -1,4 +1,4 @@
-import os
+﻿import os
 from datetime import datetime, timedelta, timezone
 
 from dotenv import load_dotenv
@@ -29,10 +29,10 @@ class AuthService:
         usuario = self.repository.buscar_por_matricula(matricula)
 
         if usuario is None:
-            raise AutenticacaoError("Matrícula não cadastrada.")
+            raise AutenticacaoError("MatrÃ­cula nÃ£o cadastrada.")
 
         if usuario.pin_definido:
-            raise AutenticacaoError("PIN já foi definido para esta matrícula.")
+            raise AutenticacaoError("PIN jÃ¡ foi definido para esta matrÃ­cula.")
 
         pin_hash = pwd_context.hash(pin)
         return self.repository.atualizar_pin(usuario, pin_hash)
@@ -41,16 +41,15 @@ class AuthService:
         usuario = self.repository.buscar_por_matricula(matricula)
 
         if usuario is None:
-            raise AutenticacaoError("Matrícula não cadastrada.")
+            raise AutenticacaoError("Matrícula ou PIN inválidos.")
 
         if not usuario.pin_definido:
-            raise AutenticacaoError("PIN ainda não foi definido para esta matrícula.")
+            raise AutenticacaoError("Matrícula ou PIN inválidos.")
 
         if not pwd_context.verify(pin, usuario.senha_hash):
-            raise AutenticacaoError("PIN incorreto.")
+            raise AutenticacaoError("Matrícula ou PIN inválidos.")
 
         return self._gerar_token(usuario)
-
     def _gerar_token(self, usuario: Usuario) -> str:
         expira_em = datetime.now(timezone.utc) + timedelta(minutes=EXPIRACAO_TOKEN_MINUTOS)
         payload = {
@@ -59,3 +58,4 @@ class AuthService:
             "exp": expira_em,
         }
         return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
