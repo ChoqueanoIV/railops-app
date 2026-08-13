@@ -21,12 +21,55 @@
             <p class="etapa">Pátio Brisamar</p>
             <h1>Nova passagem de serviço</h1>
             <p class="instrucao">
-                Preencha os dados do turno. O formulário completo será construído
-                no próximo incremento.
+                Preencha os dados registrados ao término do turno.
             </p>
         </section>
+
+        <form id="formulario-brisamar">
+            <section class="secao-formulario" aria-labelledby="titulo-turno">
+                <div class="cabecalho-secao">
+                    <span class="numero-secao">1</span>
+                    <div>
+                        <h2 id="titulo-turno">Dados do turno</h2>
+                        <p>Identifique a data e o turno desta passagem.</p>
+                    </div>
+                </div>
+
+                <div class="grade-formulario dois-campos">
+                    <div class="campo-formulario">
+                        <label for="data">Data</label>
+                        <input type="date" id="data" name="data" required>
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="turno">Turno</label>
+                        <select id="turno" name="turno" required>
+                            <option value="">Selecione</option>
+                            <option value="A">Turno A</option>
+                            <option value="B">Turno B</option>
+                            <option value="C">Turno C</option>
+                            <option value="D">Turno D</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="secao-formulario" aria-labelledby="titulo-equipe">
+                <div class="cabecalho-secao">
+                    <span class="numero-secao">2</span>
+                    <div>
+                        <h2 id="titulo-equipe">Equipe presente</h2>
+                        <p>Informe os demais membros que participaram do turno.</p>
+                    </div>
+                </div>
+                <div id="lista-equipe" class="lista-dinamica"></div>
+                <button type="button" id="adicionar-membro" class="botao-adicionar">
+                    + Adicionar membro
+                </button>
+            </section>
+        </form>
     </main>
 
     <script src="./js/terminal.js"></script>
+    <script src="./js/brisamar.js"></script>
 </body>
 </html>
