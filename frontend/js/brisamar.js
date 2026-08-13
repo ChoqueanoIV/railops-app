@@ -2,6 +2,11 @@ const listaEquipe = document.getElementById("lista-equipe");
 const adicionarMembroButton = document.getElementById("adicionar-membro");
 const listaLinhas = document.getElementById("lista-linhas");
 const linhasBrisamar = ["16", "18", "20", "22", "24", "26", "28", "30"];
+const mobileOpcoes = document.querySelectorAll('input[name="mobile_utilizado"]');
+const campoJustificativaMobile = document.getElementById(
+    "campo-justificativa-mobile"
+);
+const mobileJustificativaInput = document.getElementById("mobile-justificativa");
 let proximoMembroId = 1;
 
 function atualizarBotoesRemover() {
@@ -89,3 +94,17 @@ function criarCamposLinhas() {
 }
 
 criarCamposLinhas();
+
+function atualizarJustificativaMobile(event) {
+    const mobileNaoUtilizado = event.target.value === "false";
+    campoJustificativaMobile.classList.toggle("oculto", !mobileNaoUtilizado);
+    mobileJustificativaInput.required = mobileNaoUtilizado;
+
+    if (!mobileNaoUtilizado) {
+        mobileJustificativaInput.value = "";
+    }
+}
+
+mobileOpcoes.forEach(function (opcao) {
+    opcao.addEventListener("change", atualizarJustificativaMobile);
+});

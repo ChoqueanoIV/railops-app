@@ -429,6 +429,61 @@ a.cartao-terminal:focus-visible,
     }
 }
 
+textarea {
+    min-height: 96px;
+    resize: vertical;
+    line-height: 1.45;
+}
+
+.grupo-escolha {
+    margin: 4px 0 0;
+    padding: 0;
+    border: 0;
+}
+
+.grupo-escolha legend {
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.opcoes-em-linha {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.opcao-radio {
+    min-width: 110px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    padding: 11px 14px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
+    background-color: #f8fafc;
+    cursor: pointer;
+}
+
+.opcao-radio:has(input:checked) {
+    border-color: var(--cor-foco);
+    background-color: #eff6ff;
+    color: #1d4ed8;
+}
+
+.opcao-radio input {
+    width: auto;
+    margin: 0;
+    accent-color: var(--cor-foco);
+}
+
+#campo-justificativa-mobile {
+    padding: 18px;
+    border-left: 4px solid var(--cor-foco);
+    border-radius: 6px;
+    background-color: #eff6ff;
+}
+
 select,
 textarea {
     width: 100%;
