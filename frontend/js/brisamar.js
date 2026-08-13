@@ -1,5 +1,7 @@
 const listaEquipe = document.getElementById("lista-equipe");
 const adicionarMembroButton = document.getElementById("adicionar-membro");
+const listaLinhas = document.getElementById("lista-linhas");
+const linhasBrisamar = ["16", "18", "20", "22", "24", "26", "28", "30"];
 let proximoMembroId = 1;
 
 function atualizarBotoesRemover() {
@@ -47,3 +49,43 @@ function criarCampoMembro() {
 
 adicionarMembroButton.addEventListener("click", criarCampoMembro);
 criarCampoMembro();
+
+function criarCamposLinhas() {
+    linhasBrisamar.forEach(function (codigoLinha) {
+        const exigePosicao = codigoLinha === "22" || codigoLinha === "24";
+        const linha = document.createElement("div");
+        linha.className = "item-linha";
+        linha.dataset.codigoLinha = codigoLinha;
+
+        const campoPosicao = exigePosicao
+            ? `
+                <div class="campo-formulario campo-posicao">
+                    <label class="somente-leitor" for="linha-${codigoLinha}-posicao">
+                        Posição da linha ${codigoLinha}
+                    </label>
+                    <select id="linha-${codigoLinha}-posicao" name="linha_sup_inf" required>
+                        <option value="">SUP ou INF</option>
+                        <option value="SUP">SUP</option>
+                        <option value="INF">INF</option>
+                    </select>
+                </div>
+            `
+            : '<span class="nao-aplicavel">Não se aplica</span>';
+
+        linha.innerHTML = `
+            <strong class="codigo-linha">${codigoLinha}</strong>
+            <div class="campo-formulario">
+                <label class="somente-leitor" for="linha-${codigoLinha}-veiculos">
+                    Veículos ou situação da linha ${codigoLinha}
+                </label>
+                <input type="text" id="linha-${codigoLinha}-veiculos"
+                    name="linha_veiculos" placeholder="Ex.: Livre ou P02, P15">
+            </div>
+            ${campoPosicao}
+        `;
+
+        listaLinhas.appendChild(linha);
+    });
+}
+
+criarCamposLinhas();
