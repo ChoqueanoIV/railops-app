@@ -96,6 +96,7 @@ loginForm.addEventListener("submit", async function (event) {
 
         exibirMensagem("Login realizado com sucesso.", "sucesso");
         sessionStorage.setItem("access_token", data.access_token);
+        window.location.href = "./terminal.html";
     } catch (error) {
         exibirMensagem("Não foi possível conectar ao servidor.", "erro");
     } finally {
