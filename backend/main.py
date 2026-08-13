@@ -2,6 +2,7 @@
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.auth_router import router as auth_router
+from app.routers.passagem_router import router as passagem_router
 
 
 app = FastAPI(title="RailOps API")
@@ -17,3 +18,4 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+app.include_router(passagem_router)
