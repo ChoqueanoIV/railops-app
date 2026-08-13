@@ -135,6 +135,57 @@
                     </div>
                 </div>
             </section>
+
+            <section class="secao-formulario" aria-labelledby="titulo-recursos">
+                <div class="cabecalho-secao">
+                    <span class="numero-secao">5</span>
+                    <div>
+                        <h2 id="titulo-recursos">Recursos entregues</h2>
+                        <p>
+                            Registre as quantidades e a situação dos equipamentos
+                            ao término do turno.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grade-formulario quatro-campos">
+                    <div class="campo-formulario campo-quantidade">
+                        <label for="radios-operantes">Rádios operantes</label>
+                        <input type="number" id="radios-operantes"
+                            name="radios_operantes" min="0" step="1" required>
+                    </div>
+                    <div class="campo-formulario campo-quantidade">
+                        <label for="radios-inoperantes">Rádios inoperantes</label>
+                        <input type="number" id="radios-inoperantes"
+                            name="radios_inoperantes" min="0" step="1" required>
+                    </div>
+                    <div class="campo-formulario campo-quantidade">
+                        <label for="baterias">Baterias</label>
+                        <input type="number" id="baterias" name="baterias"
+                            min="0" step="1" required>
+                    </div>
+                    <div class="campo-formulario campo-quantidade">
+                        <label for="carregadores">Carregadores</label>
+                        <input type="number" id="carregadores" name="carregadores"
+                            min="0" step="1" required>
+                    </div>
+                </div>
+
+                <div class="grade-formulario dois-campos campos-eot">
+                    <div class="campo-formulario">
+                        <label for="eots-disponiveis">EOTs disponíveis</label>
+                        <textarea id="eots-disponiveis" name="eots_disponiveis"
+                            rows="3" placeholder="Ex.: EOT 03, EOT 07"></textarea>
+                        <small class="ajuda-campo">Informe números ou observações.</small>
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="eots-avariados">EOTs avariados</label>
+                        <textarea id="eots-avariados" name="eots_avariados"
+                            rows="3" placeholder="Ex.: EOT 05 — sem comunicação"></textarea>
+                        <small class="ajuda-campo">Descreva a identificação e a avaria.</small>
+                    </div>
+                </div>
+            </section>
         </form>
     </main>
 

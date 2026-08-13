@@ -484,6 +484,40 @@ textarea {
     background-color: #eff6ff;
 }
 
+.quatro-campos {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.campo-quantidade input {
+    font-variant-numeric: tabular-nums;
+}
+
+.campos-eot {
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.ajuda-campo {
+    display: block;
+    margin-top: 7px;
+    color: var(--cor-texto-secundario);
+    font-size: 0.8rem;
+}
+
+@media (max-width: 800px) {
+    .quatro-campos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .quatro-campos,
+    .campos-eot {
+        grid-template-columns: 1fr;
+    }
+}
+
 select,
 textarea {
     width: 100%;
