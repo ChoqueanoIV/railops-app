@@ -1,3 +1,4 @@
+const API_URL = "http://127.0.0.1:8000";
 const listaEquipe = document.getElementById("lista-equipe");
 const adicionarMembroButton = document.getElementById("adicionar-membro");
 const listaLinhas = document.getElementById("lista-linhas");
@@ -10,6 +11,9 @@ const mobileJustificativaInput = document.getElementById("mobile-justificativa")
 const listaRadios = document.getElementById("lista-radios");
 const radiosVazio = document.getElementById("radios-vazio");
 const adicionarRadioButton = document.getElementById("adicionar-radio");
+const formularioBrisamar = document.getElementById("formulario-brisamar");
+const enviarPassagemButton = document.getElementById("enviar-passagem");
+const mensagemEnvio = document.getElementById("mensagem-envio");
 let proximoMembroId = 1;
 let proximoRadioId = 1;
 
@@ -195,3 +199,163 @@ function atualizarOrdemRadios() {
 
 adicionarRadioButton.addEventListener("click", criarCampoRadio);
 atualizarEstadoRadios();
+
+function valorOuNulo(valor) {
+    const texto = valor.trim();
+    return texto === "" ? null : texto;
+}
+
+function montarEquipe() {
+    return Array.from(listaEquipe.querySelectorAll(".membro-equipe")).map(
+        function (membro) {
+            return {
+                nome: membro.querySelector('[name="equipe_nome"]').value,
+                matricula: membro.querySelector('[name="equipe_matricula"]').value,
+            };
+        }
+    );
+}
+
+function montarOcupacoesLinhas() {
+    return Array.from(listaLinhas.querySelectorAll(".item-linha")).map(
+        function (linha) {
+            const posicao = linha.querySelector('[name="linha_sup_inf"]');
+            return {
+                codigo_linha: linha.dataset.codigoLinha,
+                veiculos: valorOuNulo(
+                    linha.querySelector('[name="linha_veiculos"]').value
+                ),
+                sup_inf: posicao ? valorOuNulo(posicao.value) : null,
+            };
+        }
+    );
+}
+
+function montarRadiosUtilizados() {
+    return Array.from(listaRadios.querySelectorAll(".item-radio")).map(
+        function (radio) {
+            const apresentouFalha = radio.querySelector(
+                '[name="radio_apresentou_falha"]'
+            ).checked;
+            return {
+                numero: radio.querySelector('[name="radio_numero"]').value,
+                manobrador_nome: radio.querySelector(
+                    '[name="radio_manobrador"]'
+                ).value,
+                hora_retirada: valorOuNulo(
+                    radio.querySelector('[name="radio_hora_retirada"]').value
+                ),
+                hora_entrega: valorOuNulo(
+                    radio.querySelector('[name="radio_hora_entrega"]').value
+                ),
+                apresentou_falha: apresentouFalha,
+                falha_descricao: apresentouFalha
+                    ? valorOuNulo(
+                        radio.querySelector('[name="radio_falha_descricao"]').value
+                    )
+                    : null,
+            };
+        }
+    );
+}
+
+function montarPassagem() {
+    const mobileSelecionado = formularioBrisamar.querySelector(
+        '[name="mobile_utilizado"]:checked'
+    );
+    const mobileUtilizado = mobileSelecionado.value === "true";
+
+    return {
+        data: document.getElementById("data").value,
+        turno: document.getElementById("turno").value,
+        observacoes: valorOuNulo(document.getElementById("observacoes").value),
+        relatorio_ocorrencias: valorOuNulo(
+            document.getElementById("relatorio-ocorrencias").value
+        ),
+        mobile_utilizado: mobileUtilizado,
+        mobile_justificativa: mobileUtilizado
+            ? null
+            : valorOuNulo(mobileJustificativaInput.value),
+        equipe: montarEquipe(),
+        ocupacoes_linhas: montarOcupacoesLinhas(),
+        detalhe: {
+            radios_operantes: Number(document.getElementById("radios-operantes").value),
+            radios_inoperantes: Number(
+                document.getElementById("radios-inoperantes").value
+            ),
+            baterias: Number(document.getElementById("baterias").value),
+            carregadores: Number(document.getElementById("carregadores").value),
+            eots_disponiveis: valorOuNulo(
+                document.getElementById("eots-disponiveis").value
+            ),
+            eots_avariados: valorOuNulo(
+                document.getElementById("eots-avariados").value
+            ),
+        },
+        radios_utilizados: montarRadiosUtilizados(),
+    };
+}
+
+function exibirMensagemEnvio(texto, tipo) {
+    mensagemEnvio.textContent = texto;
+    mensagemEnvio.className = tipo;
+}
+
+function extrairMensagemErro(dados) {
+    if (typeof dados.detail === "string") {
+        return dados.detail;
+    }
+
+    if (Array.isArray(dados.detail) && dados.detail.length > 0) {
+        return dados.detail[0].msg || "Verifique os campos informados.";
+    }
+
+    return "Não foi possível registrar a passagem de serviço.";
+}
+
+formularioBrisamar.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    exibirMensagemEnvio("", "");
+    enviarPassagemButton.disabled = true;
+    enviarPassagemButton.textContent = "Enviando...";
+
+    try {
+        const response = await fetch(`${API_URL}/passagens/brisamar`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(montarPassagem()),
+        });
+        const dados = await response.json();
+
+        if (response.status === 401) {
+            sessionStorage.removeItem("access_token");
+            window.location.replace("./index.html");
+            return;
+        }
+
+        if (!response.ok) {
+            exibirMensagemEnvio(extrairMensagemErro(dados), "erro");
+            return;
+        }
+
+        exibirMensagemEnvio(
+            `${dados.mensagem} Protocolo: ${dados.id}`,
+            "sucesso"
+        );
+        formularioBrisamar.querySelectorAll("input, select, textarea, button")
+            .forEach(function (campo) {
+                campo.disabled = true;
+            });
+        mensagemEnvio.scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch (error) {
+        exibirMensagemEnvio("Não foi possível conectar ao servidor.", "erro");
+    } finally {
+        if (!mensagemEnvio.classList.contains("sucesso")) {
+            enviarPassagemButton.disabled = false;
+            enviarPassagemButton.textContent = "Enviar passagem de serviço";
+        }
+    }
+});
