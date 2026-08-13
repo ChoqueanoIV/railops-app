@@ -14,7 +14,9 @@ def primeiro_acesso(dados: PrimeiroAcessoRequest, db: Session = Depends(get_db))
     repository = UsuarioRepository(db)
     service = AuthService(repository)
     try:
-        service.primeiro_acesso(dados.matricula, dados.pin)
+        service.primeiro_acesso(
+            dados.matricula, dados.codigo_ativacao, dados.pin
+        )
     except AutenticacaoError as erro:
         raise HTTPException(status_code=400, detail=str(erro))
     return {"mensagem": "PIN definido com sucesso"}

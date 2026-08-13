@@ -1,4 +1,4 @@
-import os
+﻿import os
 from datetime import datetime, timedelta, timezone
 
 from dotenv import load_dotenv
@@ -25,29 +25,36 @@ class AuthService:
     def __init__(self, repository: UsuarioRepository):
         self.repository = repository
 
-    def primeiro_acesso(self, matricula: str, pin: str) -> Usuario:
+    def primeiro_acesso(
+        self, matricula: str, codigo_ativacao: str, pin: str
+    ) -> Usuario:
         usuario = self.repository.buscar_por_matricula(matricula)
 
         if usuario is None:
-            raise AutenticacaoError("Matrícula não cadastrada.")
+            raise AutenticacaoError("Dados de ativação inválidos.")
 
-        if usuario.pin_definido:
-            raise AutenticacaoError("PIN já foi definido para esta matrícula.")
+        if usuario.pin_definido or usuario.codigo_ativacao_hash is None:
+            raise AutenticacaoError("Dados de ativação inválidos.")
+
+        if not pwd_context.verify(
+            codigo_ativacao, usuario.codigo_ativacao_hash
+        ):
+            raise AutenticacaoError("Dados de ativação inválidos.")
 
         pin_hash = pwd_context.hash(pin)
-        return self.repository.atualizar_pin(usuario, pin_hash)
+        return self.repository.ativar_usuario(usuario, pin_hash)
 
     def login(self, matricula: str, pin: str) -> str:
         usuario = self.repository.buscar_por_matricula(matricula)
 
         if usuario is None:
-            raise AutenticacaoError("Matrícula não cadastrada.")
+            raise AutenticacaoError("Matrícula ou PIN inválidos.")
 
         if not usuario.pin_definido:
-            raise AutenticacaoError("PIN ainda não foi definido para esta matrícula.")
+            raise AutenticacaoError("Matrícula ou PIN inválidos.")
 
         if not pwd_context.verify(pin, usuario.senha_hash):
-            raise AutenticacaoError("PIN incorreto.")
+            raise AutenticacaoError("Matrícula ou PIN inválidos.")
 
         return self._gerar_token(usuario)
 
@@ -59,3 +66,4 @@ class AuthService:
             "exp": expira_em,
         }
         return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+

@@ -17,6 +17,7 @@ class Usuario(Base):
     matricula: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     nome: Mapped[str] = mapped_column(String, nullable=False)
     senha_hash: Mapped[str | None] = mapped_column(String, nullable=True)
+    codigo_ativacao_hash: Mapped[str | None] = mapped_column(String, nullable=True)
     pin_definido: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     criado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()

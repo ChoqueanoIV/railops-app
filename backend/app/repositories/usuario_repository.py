@@ -20,9 +20,10 @@ class UsuarioRepository:
         self.db.refresh(usuario)
         return usuario
 
-    def atualizar_pin(self, usuario: Usuario, novo_pin_hash: str) -> Usuario:
+    def ativar_usuario(self, usuario: Usuario, novo_pin_hash: str) -> Usuario:
         usuario.senha_hash = novo_pin_hash
         usuario.pin_definido = True
+        usuario.codigo_ativacao_hash = None
         self.db.commit()
         self.db.refresh(usuario)
         return usuario
