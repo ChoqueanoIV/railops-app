@@ -25,17 +25,24 @@ class AuthService:
     def __init__(self, repository: UsuarioRepository):
         self.repository = repository
 
-    def primeiro_acesso(self, matricula: str, pin: str) -> Usuario:
+    def primeiro_acesso(
+        self, matricula: str, codigo_ativacao: str, pin: str
+    ) -> Usuario:
         usuario = self.repository.buscar_por_matricula(matricula)
 
         if usuario is None:
-            raise AutenticacaoError("MatrÃ­cula nÃ£o cadastrada.")
+            raise AutenticacaoError("Dados de ativação inválidos.")
 
-        if usuario.pin_definido:
-            raise AutenticacaoError("PIN jÃ¡ foi definido para esta matrÃ­cula.")
+        if usuario.pin_definido or usuario.codigo_ativacao_hash is None:
+            raise AutenticacaoError("Dados de ativação inválidos.")
+
+        if not pwd_context.verify(
+            codigo_ativacao, usuario.codigo_ativacao_hash
+        ):
+            raise AutenticacaoError("Dados de ativação inválidos.")
 
         pin_hash = pwd_context.hash(pin)
-        return self.repository.atualizar_pin(usuario, pin_hash)
+        return self.repository.ativar_usuario(usuario, pin_hash)
 
     def login(self, matricula: str, pin: str) -> str:
         usuario = self.repository.buscar_por_matricula(matricula)
@@ -50,6 +57,7 @@ class AuthService:
             raise AutenticacaoError("Matrícula ou PIN inválidos.")
 
         return self._gerar_token(usuario)
+
     def _gerar_token(self, usuario: Usuario) -> str:
         expira_em = datetime.now(timezone.utc) + timedelta(minutes=EXPIRACAO_TOKEN_MINUTOS)
         payload = {

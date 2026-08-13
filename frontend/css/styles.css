@@ -54,6 +54,10 @@ form > div {
     margin-bottom: 20px;
 }
 
+.oculto {
+    display: none;
+}
+
 label {
     display: block;
     margin-bottom: 8px;

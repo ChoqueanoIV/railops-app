@@ -3,6 +3,7 @@
 
 class PrimeiroAcessoRequest(BaseModel):
     matricula: str = Field(pattern=r"^\d{8}$")
+    codigo_ativacao: str = Field(pattern=r"^\d{6}$")
     pin: str = Field(pattern=r"^\d{4}$")
 
 
