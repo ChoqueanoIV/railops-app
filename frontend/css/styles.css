@@ -518,6 +518,73 @@ textarea {
     }
 }
 
+.estado-vazio {
+    margin: 0;
+    padding: 20px;
+    border: 1px dashed var(--cor-borda);
+    border-radius: 10px;
+    background-color: #f8fafc;
+    color: var(--cor-texto-secundario);
+    text-align: center;
+}
+
+.item-radio {
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background-color: #f8fafc;
+}
+
+.cabecalho-item-radio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.cabecalho-item-radio strong {
+    color: var(--cor-primaria);
+}
+
+.grade-radio {
+    grid-template-columns: 0.7fr 1.4fr 0.8fr 0.8fr;
+}
+
+.opcao-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin: 18px 0 0;
+    cursor: pointer;
+}
+
+.opcao-checkbox input {
+    width: auto;
+    margin: 0;
+    accent-color: var(--cor-foco);
+}
+
+.campo-falha {
+    margin-top: 14px;
+    padding: 16px;
+    border-left: 4px solid var(--cor-erro);
+    border-radius: 6px;
+    background-color: #fff7f7;
+}
+
+@media (max-width: 800px) {
+    .grade-radio {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .grade-radio {
+        grid-template-columns: 1fr;
+    }
+}
+
 select,
 textarea {
     width: 100%;

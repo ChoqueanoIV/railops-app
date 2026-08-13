@@ -7,7 +7,11 @@ const campoJustificativaMobile = document.getElementById(
     "campo-justificativa-mobile"
 );
 const mobileJustificativaInput = document.getElementById("mobile-justificativa");
+const listaRadios = document.getElementById("lista-radios");
+const radiosVazio = document.getElementById("radios-vazio");
+const adicionarRadioButton = document.getElementById("adicionar-radio");
 let proximoMembroId = 1;
+let proximoRadioId = 1;
 
 function atualizarBotoesRemover() {
     const membros = listaEquipe.querySelectorAll(".membro-equipe");
@@ -108,3 +112,86 @@ function atualizarJustificativaMobile(event) {
 mobileOpcoes.forEach(function (opcao) {
     opcao.addEventListener("change", atualizarJustificativaMobile);
 });
+
+function atualizarEstadoRadios() {
+    radiosVazio.hidden = listaRadios.children.length > 0;
+}
+
+function criarCampoRadio() {
+    const radioId = proximoRadioId;
+    proximoRadioId += 1;
+
+    const radio = document.createElement("div");
+    radio.className = "item-radio";
+    radio.dataset.radioId = radioId;
+    radio.innerHTML = `
+        <div class="cabecalho-item-radio">
+            <strong>Rádio <span class="ordem-radio"></span></strong>
+            <button type="button" class="botao-remover">Remover</button>
+        </div>
+        <div class="grade-formulario grade-radio">
+            <div class="campo-formulario">
+                <label for="radio-${radioId}-numero">Número</label>
+                <input type="text" id="radio-${radioId}-numero"
+                    name="radio_numero" required>
+            </div>
+            <div class="campo-formulario campo-manobrador">
+                <label for="radio-${radioId}-manobrador">Manobrador</label>
+                <input type="text" id="radio-${radioId}-manobrador"
+                    name="radio_manobrador" required>
+            </div>
+            <div class="campo-formulario">
+                <label for="radio-${radioId}-retirada">Retirada</label>
+                <input type="time" id="radio-${radioId}-retirada"
+                    name="radio_hora_retirada">
+            </div>
+            <div class="campo-formulario">
+                <label for="radio-${radioId}-entrega">Entrega</label>
+                <input type="time" id="radio-${radioId}-entrega"
+                    name="radio_hora_entrega">
+            </div>
+        </div>
+        <label class="opcao-checkbox">
+            <input type="checkbox" name="radio_apresentou_falha">
+            <span>O rádio apresentou falha</span>
+        </label>
+        <div class="campo-formulario campo-falha oculto">
+            <label for="radio-${radioId}-falha">Descrição da falha</label>
+            <textarea id="radio-${radioId}-falha" name="radio_falha_descricao"
+                rows="2"></textarea>
+        </div>
+    `;
+
+    const falhaCheckbox = radio.querySelector('[name="radio_apresentou_falha"]');
+    const campoFalha = radio.querySelector(".campo-falha");
+    const falhaDescricao = radio.querySelector('[name="radio_falha_descricao"]');
+
+    falhaCheckbox.addEventListener("change", function () {
+        campoFalha.classList.toggle("oculto", !falhaCheckbox.checked);
+        falhaDescricao.required = falhaCheckbox.checked;
+
+        if (!falhaCheckbox.checked) {
+            falhaDescricao.value = "";
+        }
+    });
+
+    radio.querySelector(".botao-remover").addEventListener("click", function () {
+        radio.remove();
+        atualizarOrdemRadios();
+        atualizarEstadoRadios();
+    });
+
+    listaRadios.appendChild(radio);
+    atualizarOrdemRadios();
+    atualizarEstadoRadios();
+    radio.querySelector("input").focus();
+}
+
+function atualizarOrdemRadios() {
+    listaRadios.querySelectorAll(".item-radio").forEach(function (radio, indice) {
+        radio.querySelector(".ordem-radio").textContent = indice + 1;
+    });
+}
+
+adicionarRadioButton.addEventListener("click", criarCampoRadio);
+atualizarEstadoRadios();
