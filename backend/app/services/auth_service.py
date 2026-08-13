@@ -1,8 +1,9 @@
 ﻿import os
+import uuid
 from datetime import datetime, timedelta, timezone
 
 from dotenv import load_dotenv
-from jose import jwt
+from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from app.models.usuario import Usuario
@@ -57,6 +58,19 @@ class AuthService:
             raise AutenticacaoError("Matrícula ou PIN inválidos.")
 
         return self._gerar_token(usuario)
+
+    def validar_token(self, token: str) -> Usuario:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            usuario_id = uuid.UUID(payload["sub"])
+        except (JWTError, KeyError, TypeError, ValueError):
+            raise AutenticacaoError("Token inválido ou expirado.")
+
+        usuario = self.repository.buscar_por_id(usuario_id)
+        if usuario is None:
+            raise AutenticacaoError("Token inválido ou expirado.")
+
+        return usuario
 
     def _gerar_token(self, usuario: Usuario) -> str:
         expira_em = datetime.now(timezone.utc) + timedelta(minutes=EXPIRACAO_TOKEN_MINUTOS)
