@@ -1,6 +1,17 @@
 const listaEquipe = document.getElementById("lista-equipe");
 const adicionarMembroButton = document.getElementById("adicionar-membro");
 const listaLinhas = document.getElementById("lista-linhas");
+const mobileOpcoes = document.querySelectorAll('input[name="mobile_utilizado"]');
+const campoJustificativaMobile = document.getElementById(
+    "campo-justificativa-mobile"
+);
+const mobileJustificativaInput = document.getElementById("mobile-justificativa");
+const atendimentoOpcoes = document.querySelectorAll(
+    'input[name="houve_atendimento"]'
+);
+const mensagemSemAtendimento = document.getElementById(
+    "mensagem-sem-atendimento"
+);
 const linhasTecon = [
     "Viaduto/DM1A",
     "L1",
@@ -75,3 +86,26 @@ function criarCamposLinhas() {
 adicionarMembroButton.addEventListener("click", criarCampoMembro);
 criarCampoMembro();
 criarCamposLinhas();
+
+function atualizarJustificativaMobile(event) {
+    const mobileNaoUtilizado = event.target.value === "false";
+    campoJustificativaMobile.classList.toggle("oculto", !mobileNaoUtilizado);
+    mobileJustificativaInput.required = mobileNaoUtilizado;
+
+    if (!mobileNaoUtilizado) {
+        mobileJustificativaInput.value = "";
+    }
+}
+
+function atualizarMensagemAtendimento(event) {
+    const houveAtendimento = event.target.value === "true";
+    mensagemSemAtendimento.classList.toggle("oculto", houveAtendimento);
+}
+
+mobileOpcoes.forEach(function (opcao) {
+    opcao.addEventListener("change", atualizarJustificativaMobile);
+});
+
+atendimentoOpcoes.forEach(function (opcao) {
+    opcao.addEventListener("change", atualizarMensagemAtendimento);
+});

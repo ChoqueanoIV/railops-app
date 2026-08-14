@@ -80,6 +80,85 @@
                 </div>
                 <div id="lista-linhas" class="lista-linhas"></div>
             </section>
+
+            <section class="secao-formulario" aria-labelledby="titulo-registros">
+                <div class="cabecalho-secao">
+                    <span class="numero-secao">4</span>
+                    <div>
+                        <h2 id="titulo-registros">Registros do turno</h2>
+                        <p>Inclua as informações necessárias para a próxima equipe.</p>
+                    </div>
+                </div>
+                <div class="grade-formulario">
+                    <div class="campo-formulario">
+                        <label for="observacoes">Observações</label>
+                        <textarea id="observacoes" name="observacoes" rows="4"
+                            placeholder="Ex.: Sem alterações" required></textarea>
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="relatorio-ocorrencias">Relatório de ocorrências</label>
+                        <textarea id="relatorio-ocorrencias"
+                            name="relatorio_ocorrencias" rows="4"
+                            placeholder="Ex.: Sem ocorrências" required></textarea>
+                    </div>
+
+                    <fieldset class="grupo-escolha">
+                        <legend>O Mobile foi utilizado?</legend>
+                        <div class="opcoes-em-linha">
+                            <label class="opcao-radio">
+                                <input type="radio" name="mobile_utilizado"
+                                    value="true" required>
+                                <span>Sim</span>
+                            </label>
+                            <label class="opcao-radio">
+                                <input type="radio" name="mobile_utilizado"
+                                    value="false" required>
+                                <span>Não</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div id="campo-justificativa-mobile"
+                        class="campo-formulario oculto">
+                        <label for="mobile-justificativa">
+                            Por que o Mobile não foi utilizado?
+                        </label>
+                        <textarea id="mobile-justificativa"
+                            name="mobile_justificativa" rows="3"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <section class="secao-formulario" aria-labelledby="titulo-atendimento">
+                <div class="cabecalho-secao">
+                    <span class="numero-secao">5</span>
+                    <div>
+                        <h2 id="titulo-atendimento">Atendimento no TECON</h2>
+                        <p>
+                            Informe se houve atendimento ao terminal durante este turno.
+                        </p>
+                    </div>
+                </div>
+                <fieldset class="grupo-escolha">
+                    <legend>Houve atendimento ao terminal?</legend>
+                    <div class="opcoes-em-linha">
+                        <label class="opcao-radio">
+                            <input type="radio" name="houve_atendimento"
+                                value="true" required>
+                            <span>Sim</span>
+                        </label>
+                        <label class="opcao-radio">
+                            <input type="radio" name="houve_atendimento"
+                                value="false" required>
+                            <span>Não</span>
+                        </label>
+                    </div>
+                </fieldset>
+                <p id="mensagem-sem-atendimento" class="aviso-informativo oculto">
+                    Sem atendimento, a vistoria e as Áreas 1 e 2 não precisam ser
+                    preenchidas. As linhas e os registros gerais permanecem obrigatórios.
+                </p>
+            </section>
         </form>
     </main>
 
