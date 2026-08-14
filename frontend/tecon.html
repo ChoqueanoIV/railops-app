@@ -31,7 +31,7 @@
                     <span class="numero-secao">1</span>
                     <div>
                         <h2 id="titulo-turno">Dados do turno</h2>
-                        <p>Identifique a data e o turno desta passagem.</p>
+                        <p>Identifique a data de início, a turma e o turno.</p>
                     </div>
                 </div>
                 <div class="grade-formulario dois-campos">
@@ -40,13 +40,21 @@
                         <input type="date" id="data" name="data" required>
                     </div>
                     <div class="campo-formulario">
+                        <label for="turma">Turma</label>
+                        <select id="turma" name="turma" required>
+                            <option value="">Selecione</option>
+                            <option value="A">Turma A</option>
+                            <option value="B">Turma B</option>
+                            <option value="C">Turma C</option>
+                            <option value="D">Turma D</option>
+                        </select>
+                    </div>
+                    <div class="campo-formulario">
                         <label for="turno">Turno</label>
                         <select id="turno" name="turno" required>
                             <option value="">Selecione</option>
-                            <option value="A">Turno A</option>
-                            <option value="B">Turno B</option>
-                            <option value="C">Turno C</option>
-                            <option value="D">Turno D</option>
+                            <option value="DIURNO">Diurno — 07h às 19h</option>
+                            <option value="NOTURNO">Noturno — 19h às 07h</option>
                         </select>
                     </div>
                 </div>

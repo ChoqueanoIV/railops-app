@@ -357,6 +357,7 @@ function montarPassagem() {
     ).value === "true";
     return {
         data: document.getElementById("data").value,
+        turma: document.getElementById("turma").value,
         turno: document.getElementById("turno").value,
         observacoes: document.getElementById("observacoes").value,
         relatorio_ocorrencias: document.getElementById(
@@ -424,6 +425,7 @@ formularioTecon.addEventListener("submit", async function (event) {
                 mensagem: dados.mensagem,
                 terminal: "Terminal TECON",
                 data: document.getElementById("data").value,
+                turma: document.getElementById("turma").value,
                 turno: document.getElementById("turno").value,
             })
         );

@@ -267,6 +267,7 @@ function montarPassagem() {
 
     return {
         data: document.getElementById("data").value,
+        turma: document.getElementById("turma").value,
         turno: document.getElementById("turno").value,
         observacoes: valorOuNulo(document.getElementById("observacoes").value),
         relatorio_ocorrencias: valorOuNulo(
@@ -348,6 +349,7 @@ formularioBrisamar.addEventListener("submit", async function (event) {
                 mensagem: dados.mensagem,
                 terminal: "Pátio Brisamar",
                 data: document.getElementById("data").value,
+                turma: document.getElementById("turma").value,
                 turno: document.getElementById("turno").value,
             })
         );

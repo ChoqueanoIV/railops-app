@@ -1,13 +1,18 @@
 from datetime import date, time
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.models.passagem import LadoLinha
+from app.models.passagem import LadoLinha, Turma, Turno
 
 
 class SchemaBase(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
+
+    @field_validator("*", mode="before")
+    @classmethod
+    def remover_espacos_antes_da_tipagem(cls, valor):
+        return valor.strip() if isinstance(valor, str) else valor
 
 
 class EquipeMembroRequest(SchemaBase):
@@ -49,7 +54,8 @@ class RadioUsoRequest(SchemaBase):
 
 class PassagemBrisamarRequest(SchemaBase):
     data: date
-    turno: str = Field(min_length=1)
+    turma: Turma
+    turno: Turno
     observacoes: str | None = None
     relatorio_ocorrencias: str | None = None
     mobile_utilizado: bool
@@ -143,7 +149,8 @@ class TeconDetalheRequest(SchemaBase):
 
 class PassagemTeconRequest(SchemaBase):
     data: date
-    turno: str = Field(min_length=1)
+    turma: Turma
+    turno: Turno
     observacoes: str = Field(min_length=1)
     relatorio_ocorrencias: str = Field(min_length=1)
     mobile_utilizado: bool

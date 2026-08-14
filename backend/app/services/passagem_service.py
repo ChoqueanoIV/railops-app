@@ -62,6 +62,7 @@ class PassagemService:
         passagem = PassagemServico(
             terminal=Terminal.BRISAMAR,
             data=dados.data,
+            turma=dados.turma,
             turno=dados.turno,
             responsavel_id=responsavel.id,
             observacoes=dados.observacoes,
@@ -117,6 +118,7 @@ class PassagemService:
         passagem = PassagemServico(
             terminal=Terminal.TECON,
             data=dados.data,
+            turma=dados.turma,
             turno=dados.turno,
             responsavel_id=responsavel.id,
             observacoes=dados.observacoes,

@@ -10,7 +10,9 @@ if (!passagemSalva) {
     document.getElementById("confirmacao-data").textContent = data.toLocaleDateString(
         "pt-BR"
     );
-    document.getElementById("confirmacao-turno").textContent = passagem.turno;
+    document.getElementById("confirmacao-turma").textContent = passagem.turma;
+    document.getElementById("confirmacao-turno").textContent =
+        passagem.turno === "DIURNO" ? "Diurno — 07h às 19h" : "Noturno — 19h às 07h";
     document.getElementById("confirmacao-protocolo").textContent = passagem.id;
     const outroTerminalLink = document.getElementById("preencher-outro-terminal");
     const passagemEhTecon = passagem.terminal === "Terminal TECON";

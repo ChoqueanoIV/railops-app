@@ -27,7 +27,8 @@ def criar_linhas_brisamar() -> list[Linha]:
 def criar_dados_validos() -> PassagemBrisamarRequest:
     return PassagemBrisamarRequest(
         data="2026-08-13",
-        turno="A",
+        turma="A",
+        turno="DIURNO",
         observacoes="Sem alterações",
         relatorio_ocorrencias="Sem ocorrências",
         mobile_utilizado=True,

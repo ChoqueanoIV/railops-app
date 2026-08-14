@@ -20,7 +20,8 @@ LINHAS_TECON = [
 def dados_tecon_validos() -> dict:
     return {
         "data": "2026-08-14",
-        "turno": "A",
+        "turma": "C",
+        "turno": "NOTURNO",
         "observacoes": "Sem alterações.",
         "relatorio_ocorrencias": "Sem ocorrências.",
         "mobile_utilizado": True,
