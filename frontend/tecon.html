@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailOps - Passagem do TECON</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body class="pagina-tecon">
+    <header class="cabecalho">
+        <div>
+            <strong>RailOps</strong>
+            <span>Passagem de Serviço Ferroviária</span>
+        </div>
+        <button type="button" id="sair" class="botao-secundario">Sair</button>
+    </header>
+
+    <main class="conteudo-formulario">
+        <a href="./terminal.html" class="voltar">← Voltar para os terminais</a>
+        <section class="introducao-formulario">
+            <p class="etapa">Terminal TECON</p>
+            <h1>Nova passagem de serviço</h1>
+            <p class="instrucao">
+                Preencha os dados registrados ao término do turno.
+            </p>
+        </section>
+
+        <form id="formulario-tecon">
+            <section class="secao-formulario" aria-labelledby="titulo-turno">
+                <div class="cabecalho-secao">
+                    <span class="numero-secao">1</span>
+                    <div>
+                        <h2 id="titulo-turno">Dados do turno</h2>
+                        <p>Identifique a data e o turno desta passagem.</p>
+                    </div>
+                </div>
+                <div class="grade-formulario dois-campos">
+                    <div class="campo-formulario">
+                        <label for="data">Data</label>
+                        <input type="date" id="data" name="data" required>
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="turno">Turno</label>
+                        <select id="turno" name="turno" required>
+                            <option value="">Selecione</option>
+                            <option value="A">Turno A</option>
+                            <option value="B">Turno B</option>
+                            <option value="C">Turno C</option>
+                            <option value="D">Turno D</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="secao-formulario" aria-labelledby="titulo-equipe">
+                <div class="cabecalho-secao">
+                    <span class="numero-secao">2</span>
+                    <div>
+                        <h2 id="titulo-equipe">Equipe presente</h2>
+                        <p>Informe os demais membros que participaram do turno.</p>
+                    </div>
+                </div>
+                <div id="lista-equipe" class="lista-dinamica"></div>
+                <button type="button" id="adicionar-membro" class="botao-adicionar">
+                    + Adicionar membro
+                </button>
+            </section>
+
+            <section class="secao-formulario" aria-labelledby="titulo-linhas">
+                <div class="cabecalho-secao">
+                    <span class="numero-secao">3</span>
+                    <div>
+                        <h2 id="titulo-linhas">Ocupação das linhas</h2>
+                        <p>Registre os veículos ou informe que a linha está livre.</p>
+                    </div>
+                </div>
+                <div class="legenda-linhas legenda-linhas-tecon" aria-hidden="true">
+                    <span>Linha</span>
+                    <span>Veículos / situação</span>
+                </div>
+                <div id="lista-linhas" class="lista-linhas"></div>
+            </section>
+        </form>
+    </main>
+
+    <script src="./js/terminal.js"></script>
+    <script src="./js/tecon.js"></script>
+</body>
+</html>

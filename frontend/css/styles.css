@@ -404,6 +404,19 @@ a.cartao-terminal:focus-visible,
     font-size: 1.05rem;
 }
 
+.legenda-linhas-tecon,
+.item-linha-tecon {
+    grid-template-columns: minmax(130px, 0.45fr) minmax(0, 1fr);
+}
+
+.codigo-linha-texto {
+    width: auto;
+    min-width: 110px;
+    padding: 0 10px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
 .nao-aplicavel {
     color: var(--cor-texto-secundario);
     font-size: 0.85rem;
@@ -417,6 +430,14 @@ a.cartao-terminal:focus-visible,
     .item-linha {
         grid-template-columns: 48px minmax(0, 1fr);
         align-items: start;
+    }
+
+    .item-linha-tecon {
+        grid-template-columns: 1fr;
+    }
+
+    .codigo-linha-texto {
+        width: fit-content;
     }
 
     .campo-posicao,
