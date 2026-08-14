@@ -12,5 +12,11 @@ if (!passagemSalva) {
     );
     document.getElementById("confirmacao-turno").textContent = passagem.turno;
     document.getElementById("confirmacao-protocolo").textContent = passagem.id;
+    const outroTerminalLink = document.getElementById("preencher-outro-terminal");
+    const passagemEhTecon = passagem.terminal === "Terminal TECON";
+    outroTerminalLink.href = passagemEhTecon ? "./brisamar.html" : "./tecon.html";
+    outroTerminalLink.textContent = passagemEhTecon
+        ? "Preencher passagem do Brisamar agora"
+        : "Preencher passagem do TECON agora";
     sessionStorage.removeItem("ultima_passagem");
 }

@@ -231,6 +231,30 @@
                     preenchidas. As linhas e os registros gerais permanecem obrigatórios.
                 </p>
             </section>
+
+            <section class="secao-formulario" aria-labelledby="titulo-radios">
+                <div class="cabecalho-secao">
+                    <span class="numero-secao">6</span>
+                    <div>
+                        <h2 id="titulo-radios">Rádios utilizados</h2>
+                        <p>Registre cada rádio retirado e eventuais falhas.</p>
+                    </div>
+                </div>
+                <div id="lista-radios" class="lista-dinamica"></div>
+                <p id="radios-vazio" class="estado-vazio">
+                    Nenhum rádio utilizado foi informado.
+                </p>
+                <button type="button" id="adicionar-radio" class="botao-adicionar">
+                    + Adicionar rádio utilizado
+                </button>
+            </section>
+
+            <div class="acoes-formulario">
+                <p id="mensagem-envio" role="alert" aria-live="polite"></p>
+                <button type="submit" id="enviar-passagem" class="botao-principal">
+                    Enviar passagem de serviço
+                </button>
+            </div>
         </form>
     </main>
 
