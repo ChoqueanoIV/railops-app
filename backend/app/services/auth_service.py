@@ -2,16 +2,14 @@
 import uuid
 from datetime import datetime, timedelta, timezone
 
-from dotenv import load_dotenv
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
+from app.core.config import obter_variavel_obrigatoria
 from app.models.usuario import Usuario
 from app.repositories.usuario_repository import UsuarioRepository
 
-load_dotenv()
-
-SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+SECRET_KEY = obter_variavel_obrigatoria("JWT_SECRET_KEY")
 ALGORITHM = "HS256"
 EXPIRACAO_TOKEN_MINUTOS = 480  # 8 horas, cobrindo um turno completo
 
