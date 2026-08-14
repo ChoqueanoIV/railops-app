@@ -12,6 +12,14 @@ const atendimentoOpcoes = document.querySelectorAll(
 const mensagemSemAtendimento = document.getElementById(
     "mensagem-sem-atendimento"
 );
+const detalhesAtendimento = document.getElementById("detalhes-atendimento");
+const cargaOpcoes = document.querySelectorAll(
+    'input[name="carga_mal_posicionada"]'
+);
+const campoDescricaoCarga = document.getElementById("campo-descricao-carga");
+const cargaDescricaoInput = document.getElementById("carga-descricao");
+const area1AtendidaInput = document.getElementById("area1-atendida");
+const area2AtendidaInput = document.getElementById("area2-atendida");
 const linhasTecon = [
     "Viaduto/DM1A",
     "L1",
@@ -100,6 +108,53 @@ function atualizarJustificativaMobile(event) {
 function atualizarMensagemAtendimento(event) {
     const houveAtendimento = event.target.value === "true";
     mensagemSemAtendimento.classList.toggle("oculto", houveAtendimento);
+    detalhesAtendimento.classList.toggle("oculto", !houveAtendimento);
+
+    cargaOpcoes.forEach(function (opcao) {
+        opcao.required = houveAtendimento;
+    });
+
+    if (!houveAtendimento) {
+        limparDetalhesAtendimento();
+    }
+}
+
+function limparDetalhesAtendimento() {
+    cargaOpcoes.forEach(function (opcao) {
+        opcao.checked = false;
+    });
+    cargaDescricaoInput.value = "";
+    cargaDescricaoInput.required = false;
+    campoDescricaoCarga.classList.add("oculto");
+
+    area1AtendidaInput.checked = false;
+    area2AtendidaInput.checked = false;
+    atualizarHorariosArea(1, false);
+    atualizarHorariosArea(2, false);
+}
+
+function atualizarDescricaoCarga(event) {
+    const haviaCargaMalPosicionada = event.target.value === "true";
+    campoDescricaoCarga.classList.toggle("oculto", !haviaCargaMalPosicionada);
+    cargaDescricaoInput.required = haviaCargaMalPosicionada;
+
+    if (!haviaCargaMalPosicionada) {
+        cargaDescricaoInput.value = "";
+    }
+}
+
+function atualizarHorariosArea(numeroArea, atendida) {
+    const horarios = document.getElementById(`horarios-area${numeroArea}`);
+    const inicio = document.getElementById(`area${numeroArea}-inicio`);
+    const termino = document.getElementById(`area${numeroArea}-termino`);
+    horarios.classList.toggle("oculto", !atendida);
+    inicio.required = atendida;
+    termino.required = atendida;
+
+    if (!atendida) {
+        inicio.value = "";
+        termino.value = "";
+    }
 }
 
 mobileOpcoes.forEach(function (opcao) {
@@ -108,4 +163,16 @@ mobileOpcoes.forEach(function (opcao) {
 
 atendimentoOpcoes.forEach(function (opcao) {
     opcao.addEventListener("change", atualizarMensagemAtendimento);
+});
+
+cargaOpcoes.forEach(function (opcao) {
+    opcao.addEventListener("change", atualizarDescricaoCarga);
+});
+
+area1AtendidaInput.addEventListener("change", function () {
+    atualizarHorariosArea(1, area1AtendidaInput.checked);
+});
+
+area2AtendidaInput.addEventListener("change", function () {
+    atualizarHorariosArea(2, area2AtendidaInput.checked);
 });

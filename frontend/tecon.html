@@ -154,6 +154,78 @@
                         </label>
                     </div>
                 </fieldset>
+                <div id="detalhes-atendimento" class="detalhes-atendimento oculto">
+                    <div class="bloco-vistoria">
+                        <fieldset class="grupo-escolha">
+                            <legend>Foi identificada carga mal posicionada?</legend>
+                            <div class="opcoes-em-linha">
+                                <label class="opcao-radio">
+                                    <input type="radio" name="carga_mal_posicionada"
+                                        value="true">
+                                    <span>Sim</span>
+                                </label>
+                                <label class="opcao-radio">
+                                    <input type="radio" name="carga_mal_posicionada"
+                                        value="false">
+                                    <span>Não</span>
+                                </label>
+                            </div>
+                        </fieldset>
+                        <div id="campo-descricao-carga"
+                            class="campo-formulario campo-alerta oculto">
+                            <label for="carga-descricao">Descrição da carga</label>
+                            <textarea id="carga-descricao"
+                                name="carga_mal_posicionada_descricao" rows="3"
+                                placeholder="Descreva a carga e a posição identificada"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grade-areas">
+                        <fieldset class="cartao-area">
+                            <legend>Área 1 — Píer</legend>
+                            <label class="opcao-checkbox">
+                                <input type="checkbox" id="area1-atendida"
+                                    name="area1_atendida">
+                                <span>Área atendida neste turno</span>
+                            </label>
+                            <div id="horarios-area1"
+                                class="grade-formulario dois-campos horarios-area oculto">
+                                <div class="campo-formulario">
+                                    <label for="area1-inicio">Início</label>
+                                    <input type="time" id="area1-inicio"
+                                        name="area1_inicio">
+                                </div>
+                                <div class="campo-formulario">
+                                    <label for="area1-termino">Término</label>
+                                    <input type="time" id="area1-termino"
+                                        name="area1_termino">
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="cartao-area">
+                            <legend>Área 2 — Galpão</legend>
+                            <label class="opcao-checkbox">
+                                <input type="checkbox" id="area2-atendida"
+                                    name="area2_atendida">
+                                <span>Área atendida neste turno</span>
+                            </label>
+                            <div id="horarios-area2"
+                                class="grade-formulario dois-campos horarios-area oculto">
+                                <div class="campo-formulario">
+                                    <label for="area2-inicio">Início</label>
+                                    <input type="time" id="area2-inicio"
+                                        name="area2_inicio">
+                                </div>
+                                <div class="campo-formulario">
+                                    <label for="area2-termino">Término</label>
+                                    <input type="time" id="area2-termino"
+                                        name="area2_termino">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
                 <p id="mensagem-sem-atendimento" class="aviso-informativo oculto">
                     Sem atendimento, a vistoria e as Áreas 1 e 2 não precisam ser
                     preenchidas. As linhas e os registros gerais permanecem obrigatórios.
