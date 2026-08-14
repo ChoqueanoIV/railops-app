@@ -1,3 +1,7 @@
+import uuid
+from datetime import datetime, time, timedelta
+from zoneinfo import ZoneInfo
+
 from app.models.passagem import (
     EquipeMembro,
     PassagemBrisamarDetalhe,
@@ -6,6 +10,7 @@ from app.models.passagem import (
     PassagemServico,
     PassagemTeconDetalhe,
     Terminal,
+    Turno,
 )
 from app.models.usuario import Usuario
 from app.repositories.passagem_repository import (
@@ -18,6 +23,9 @@ from app.schemas.passagem_schema import PassagemBrisamarRequest, PassagemTeconRe
 
 class PassagemError(Exception):
     pass
+
+
+FUSO_OPERACAO = ZoneInfo("America/Sao_Paulo")
 
 
 class PassagemService:
@@ -151,3 +159,68 @@ class PassagemService:
         ]
 
         return self.passagem_repository.salvar(passagem)
+
+    def obter_para_edicao(
+        self,
+        passagem_id: uuid.UUID,
+        responsavel: Usuario,
+        agora: datetime | None = None,
+    ) -> PassagemServico:
+        passagem = self.passagem_repository.buscar_para_edicao(passagem_id)
+        try:
+            self.validar_permissao_edicao(passagem, responsavel, agora)
+            return passagem
+        except PassagemError:
+            self.passagem_repository.desfazer()
+            raise
+
+    @classmethod
+    def validar_permissao_edicao(
+        cls,
+        passagem: PassagemServico | None,
+        responsavel: Usuario,
+        agora: datetime | None = None,
+    ) -> None:
+        if passagem is None:
+            raise PassagemError("Passagem de serviço não encontrada.")
+        if passagem.responsavel_id != responsavel.id:
+            raise PassagemError("Somente o autor pode editar esta passagem.")
+        if passagem.turma is None or passagem.turno is None:
+            raise PassagemError(
+                "Esta passagem é anterior à separação entre turma e turno e não pode ser editada."
+            )
+
+        momento = agora or datetime.now(FUSO_OPERACAO)
+        if momento.tzinfo is None:
+            momento = momento.replace(tzinfo=FUSO_OPERACAO)
+        else:
+            momento = momento.astimezone(FUSO_OPERACAO)
+
+        inicio, encerramento = cls.calcular_janela_turno(passagem)
+        if not inicio <= momento < encerramento:
+            raise PassagemError(
+                "A passagem só pode ser editada enquanto o próprio turno estiver em andamento."
+            )
+
+    @staticmethod
+    def calcular_janela_turno(
+        passagem: PassagemServico,
+    ) -> tuple[datetime, datetime]:
+        if passagem.turno == Turno.DIURNO:
+            inicio = datetime.combine(
+                passagem.data, time(7, 0), tzinfo=FUSO_OPERACAO
+            )
+            encerramento = datetime.combine(
+                passagem.data, time(19, 0), tzinfo=FUSO_OPERACAO
+            )
+            return inicio, encerramento
+
+        inicio = datetime.combine(
+            passagem.data, time(19, 0), tzinfo=FUSO_OPERACAO
+        )
+        encerramento = datetime.combine(
+            passagem.data + timedelta(days=1),
+            time(7, 0),
+            tzinfo=FUSO_OPERACAO,
+        )
+        return inicio, encerramento

@@ -1,9 +1,19 @@
 import uuid
+from datetime import date, datetime
 from unittest.mock import MagicMock
+from zoneinfo import ZoneInfo
 
 import pytest
 
-from app.models.passagem import LadoLinha, Linha, Radio, Terminal
+from app.models.passagem import (
+    LadoLinha,
+    Linha,
+    PassagemServico,
+    Radio,
+    Terminal,
+    Turma,
+    Turno,
+)
 from app.models.usuario import Usuario
 from app.schemas.passagem_schema import PassagemBrisamarRequest
 from app.services.passagem_service import PassagemError, PassagemService
@@ -140,3 +150,87 @@ def test_criar_brisamar_rejeita_sup_inf_na_linha_16():
         service.criar_brisamar(dados, Usuario(id=uuid.uuid4()))
 
     passagem_repository.salvar.assert_not_called()
+
+
+FUSO_SP = ZoneInfo("America/Sao_Paulo")
+
+
+def criar_passagem_para_edicao(turno: Turno, responsavel_id=None):
+    return PassagemServico(
+        id=uuid.uuid4(),
+        data=date(2026, 8, 14),
+        turma=Turma.C,
+        turno=turno,
+        responsavel_id=responsavel_id or uuid.uuid4(),
+    )
+
+
+@pytest.mark.parametrize(
+    ("turno", "momento"),
+    (
+        (Turno.DIURNO, datetime(2026, 8, 14, 7, 0, tzinfo=FUSO_SP)),
+        (Turno.DIURNO, datetime(2026, 8, 14, 18, 59, tzinfo=FUSO_SP)),
+        (Turno.NOTURNO, datetime(2026, 8, 14, 19, 0, tzinfo=FUSO_SP)),
+        (Turno.NOTURNO, datetime(2026, 8, 15, 6, 59, tzinfo=FUSO_SP)),
+    ),
+)
+def test_edicao_permitida_durante_o_proprio_turno(turno, momento):
+    responsavel = Usuario(id=uuid.uuid4())
+    passagem = criar_passagem_para_edicao(turno, responsavel.id)
+
+    PassagemService.validar_permissao_edicao(passagem, responsavel, momento)
+
+
+@pytest.mark.parametrize(
+    ("turno", "momento"),
+    (
+        (Turno.DIURNO, datetime(2026, 8, 14, 6, 59, tzinfo=FUSO_SP)),
+        (Turno.DIURNO, datetime(2026, 8, 14, 19, 0, tzinfo=FUSO_SP)),
+        (Turno.NOTURNO, datetime(2026, 8, 14, 18, 59, tzinfo=FUSO_SP)),
+        (Turno.NOTURNO, datetime(2026, 8, 15, 7, 0, tzinfo=FUSO_SP)),
+    ),
+)
+def test_edicao_bloqueada_fora_do_proprio_turno(turno, momento):
+    responsavel = Usuario(id=uuid.uuid4())
+    passagem = criar_passagem_para_edicao(turno, responsavel.id)
+
+    with pytest.raises(PassagemError, match="turno estiver em andamento"):
+        PassagemService.validar_permissao_edicao(passagem, responsavel, momento)
+
+
+def test_edicao_bloqueada_para_usuario_diferente_do_autor():
+    passagem = criar_passagem_para_edicao(Turno.DIURNO)
+
+    with pytest.raises(PassagemError, match="Somente o autor"):
+        PassagemService.validar_permissao_edicao(
+            passagem,
+            Usuario(id=uuid.uuid4()),
+            datetime(2026, 8, 14, 18, 50, tzinfo=FUSO_SP),
+        )
+
+
+def test_edicao_bloqueada_para_registro_legado_sem_turma_e_turno():
+    responsavel = Usuario(id=uuid.uuid4())
+    passagem = PassagemServico(
+        id=uuid.uuid4(),
+        data=date(2026, 8, 14),
+        turno_legado="TESTE-E2E",
+        responsavel_id=responsavel.id,
+    )
+
+    with pytest.raises(PassagemError, match="anterior à separação"):
+        PassagemService.validar_permissao_edicao(
+            passagem,
+            responsavel,
+            datetime(2026, 8, 14, 18, 50, tzinfo=FUSO_SP),
+        )
+
+
+def test_busca_para_edicao_desfaz_transacao_quando_validacao_falha():
+    service, passagem_repository, _, _ = criar_service()
+    passagem_repository.buscar_para_edicao.return_value = None
+
+    with pytest.raises(PassagemError, match="não encontrada"):
+        service.obter_para_edicao(uuid.uuid4(), Usuario(id=uuid.uuid4()))
+
+    passagem_repository.desfazer.assert_called_once_with()
