@@ -6,9 +6,12 @@ from app.models.passagem import (
     PassagemLinhaOcupacao,
     PassagemRadioUso,
     PassagemServico,
+    PassagemServicoHistorico,
     PassagemTeconDetalhe,
     Radio,
     Terminal,
+    Turma,
+    Turno,
 )
 from app.models.usuario import Usuario
 
@@ -21,8 +24,11 @@ __all__ = [
     "PassagemLinhaOcupacao",
     "PassagemRadioUso",
     "PassagemServico",
+    "PassagemServicoHistorico",
     "PassagemTeconDetalhe",
     "Radio",
     "Terminal",
+    "Turma",
+    "Turno",
     "Usuario",
 ]

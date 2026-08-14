@@ -16,7 +16,7 @@ from sqlalchemy import (
     UniqueConstraint,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -35,6 +35,18 @@ class LadoLinha(str, enum.Enum):
     INF = "INF"
 
 
+class Turma(str, enum.Enum):
+    A = "A"
+    B = "B"
+    C = "C"
+    D = "D"
+
+
+class Turno(str, enum.Enum):
+    DIURNO = "DIURNO"
+    NOTURNO = "NOTURNO"
+
+
 class PassagemServico(Base):
     __tablename__ = "passagem_servico"
 
@@ -43,7 +55,14 @@ class PassagemServico(Base):
     )
     terminal: Mapped[Terminal] = mapped_column(Enum(Terminal), nullable=False)
     data: Mapped[date] = mapped_column(Date, nullable=False)
-    turno: Mapped[str] = mapped_column(String, nullable=False)
+    # Os três campos permitem preservar os registros criados antes da separação.
+    turno_legado: Mapped[str | None] = mapped_column(String, nullable=True)
+    turma: Mapped[Turma | None] = mapped_column(
+        Enum(Turma, name="turma"), nullable=True
+    )
+    turno: Mapped[Turno | None] = mapped_column(
+        Enum(Turno, name="turno"), nullable=True
+    )
     responsavel_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("usuario.id"), nullable=False
     )
@@ -77,6 +96,33 @@ class PassagemServico(Base):
     radios_utilizados: Mapped[list["PassagemRadioUso"]] = relationship(
         back_populates="passagem", cascade="all, delete-orphan"
     )
+    historico: Mapped[list["PassagemServicoHistorico"]] = relationship(
+        back_populates="passagem", cascade="all, delete-orphan"
+    )
+
+
+class PassagemServicoHistorico(Base):
+    __tablename__ = "passagem_servico_historico"
+    __table_args__ = (
+        UniqueConstraint("passagem_id", "versao", name="uq_historico_passagem_versao"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    passagem_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("passagem_servico.id"), nullable=False
+    )
+    versao: Mapped[int] = mapped_column(Integer, nullable=False)
+    snapshot: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    alterado_por: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("usuario.id"), nullable=False
+    )
+    alterado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    passagem: Mapped["PassagemServico"] = relationship(back_populates="historico")
 
 
 class PassagemBrisamarDetalhe(Base):
