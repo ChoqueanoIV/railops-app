@@ -341,19 +341,21 @@ formularioBrisamar.addEventListener("submit", async function (event) {
             return;
         }
 
-        exibirMensagemEnvio(
-            `${dados.mensagem} Protocolo: ${dados.id}`,
-            "sucesso"
+        sessionStorage.setItem(
+            "ultima_passagem",
+            JSON.stringify({
+                id: dados.id,
+                mensagem: dados.mensagem,
+                terminal: "Pátio Brisamar",
+                data: document.getElementById("data").value,
+                turno: document.getElementById("turno").value,
+            })
         );
-        formularioBrisamar.querySelectorAll("input, select, textarea, button")
-            .forEach(function (campo) {
-                campo.disabled = true;
-            });
-        mensagemEnvio.scrollIntoView({ behavior: "smooth", block: "center" });
+        window.location.href = "./confirmacao.html";
     } catch (error) {
         exibirMensagemEnvio("Não foi possível conectar ao servidor.", "erro");
     } finally {
-        if (!mensagemEnvio.classList.contains("sucesso")) {
+        if (window.location.pathname.endsWith("brisamar.html")) {
             enviarPassagemButton.disabled = false;
             enviarPassagemButton.textContent = "Enviar passagem de serviço";
         }

@@ -429,6 +429,115 @@ a.cartao-terminal:focus-visible,
     }
 }
 
+.conteudo-confirmacao {
+    min-height: calc(100vh - 72px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+}
+
+.cartao-confirmacao {
+    width: min(100%, 680px);
+    padding: clamp(28px, 6vw, 48px);
+    border: 1px solid var(--cor-borda);
+    border-radius: 14px;
+    background-color: var(--cor-superficie);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+    text-align: center;
+}
+
+.icone-sucesso {
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    background-color: #dcfce7;
+    color: var(--cor-sucesso);
+    font-size: 2rem;
+    font-weight: 900;
+}
+
+.cartao-confirmacao h1 {
+    margin: 0;
+    color: var(--cor-primaria);
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+}
+
+.resumo-confirmacao {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    margin: 30px 0;
+    border: 1px solid var(--cor-borda);
+    border-radius: 10px;
+    background-color: var(--cor-borda);
+    text-align: left;
+}
+
+.resumo-confirmacao div {
+    padding: 16px;
+    background-color: #f8fafc;
+}
+
+.resumo-confirmacao dt {
+    margin-bottom: 6px;
+    color: var(--cor-texto-secundario);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.resumo-confirmacao dd {
+    margin: 0;
+    color: var(--cor-primaria);
+    font-weight: 700;
+}
+
+.protocolo-confirmacao {
+    grid-column: 1 / -1;
+}
+
+.protocolo-confirmacao dd {
+    overflow-wrap: anywhere;
+    font-family: Consolas, monospace;
+    font-size: 0.9rem;
+}
+
+.acoes-confirmacao {
+    display: grid;
+    gap: 14px;
+}
+
+.link-botao {
+    display: block;
+    text-decoration: none;
+}
+
+.link-secundario {
+    color: var(--cor-primaria);
+    font-weight: 700;
+}
+
+.aviso-tecon {
+    margin: 18px 0 0;
+    color: var(--cor-texto-secundario);
+    font-size: 0.82rem;
+}
+
+@media (max-width: 560px) {
+    .resumo-confirmacao {
+        grid-template-columns: 1fr;
+    }
+
+    .protocolo-confirmacao {
+        grid-column: auto;
+    }
+}
+
 textarea {
     min-height: 96px;
     resize: vertical;
