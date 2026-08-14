@@ -65,6 +65,9 @@ class PassagemServico(Base):
     detalhe_brisamar: Mapped["PassagemBrisamarDetalhe | None"] = relationship(
         back_populates="passagem", cascade="all, delete-orphan", uselist=False
     )
+    detalhe_tecon: Mapped["PassagemTeconDetalhe | None"] = relationship(
+        back_populates="passagem", cascade="all, delete-orphan", uselist=False
+    )
     ocupacoes_linhas: Mapped[list["PassagemLinhaOcupacao"]] = relationship(
         back_populates="passagem", cascade="all, delete-orphan"
     )
@@ -98,6 +101,35 @@ class PassagemBrisamarDetalhe(Base):
     passagem: Mapped[PassagemServico] = relationship(
         back_populates="detalhe_brisamar"
     )
+
+
+class PassagemTeconDetalhe(Base):
+    __tablename__ = "passagem_tecon_detalhe"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    passagem_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("passagem_servico.id"),
+        unique=True,
+        nullable=False,
+    )
+    houve_atendimento: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    carga_mal_posicionada: Mapped[bool | None] = mapped_column(
+        Boolean, nullable=True
+    )
+    carga_mal_posicionada_descricao: Mapped[str | None] = mapped_column(
+        Text, nullable=True
+    )
+    area1_atendida: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    area1_inicio: Mapped[time | None] = mapped_column(Time, nullable=True)
+    area1_termino: Mapped[time | None] = mapped_column(Time, nullable=True)
+    area2_atendida: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    area2_inicio: Mapped[time | None] = mapped_column(Time, nullable=True)
+    area2_termino: Mapped[time | None] = mapped_column(Time, nullable=True)
+
+    passagem: Mapped[PassagemServico] = relationship(back_populates="detalhe_tecon")
 
 
 class Linha(Base):

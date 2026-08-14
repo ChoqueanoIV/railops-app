@@ -6,6 +6,7 @@ from app.models.passagem import (
     PassagemLinhaOcupacao,
     PassagemRadioUso,
     PassagemServico,
+    PassagemTeconDetalhe,
     Radio,
     Terminal,
 )
@@ -20,6 +21,7 @@ __all__ = [
     "PassagemLinhaOcupacao",
     "PassagemRadioUso",
     "PassagemServico",
+    "PassagemTeconDetalhe",
     "Radio",
     "Terminal",
     "Usuario",
