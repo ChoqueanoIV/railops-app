@@ -1,9 +1,19 @@
+import uuid
+from datetime import datetime, timedelta, timezone
+
 import pytest
+from jose import jwt
 from pydantic import ValidationError
 
 from app.models.usuario import Usuario
 from app.schemas.auth_schema import PrimeiroAcessoRequest
-from app.services.auth_service import AuthService, AutenticacaoError, pwd_context
+from app.services.auth_service import (
+    ALGORITHM,
+    SECRET_KEY,
+    AuthService,
+    AutenticacaoError,
+    pwd_context,
+)
 
 
 class UsuarioRepositoryFake:
@@ -12,6 +22,11 @@ class UsuarioRepositoryFake:
 
     def buscar_por_matricula(self, matricula: str) -> Usuario | None:
         if self.usuario is None or self.usuario.matricula != matricula:
+            return None
+        return self.usuario
+
+    def buscar_por_id(self, usuario_id: uuid.UUID) -> Usuario | None:
+        if self.usuario is None or self.usuario.id != usuario_id:
             return None
         return self.usuario
 
@@ -24,6 +39,7 @@ class UsuarioRepositoryFake:
 
 def criar_usuario_nao_ativado(codigo_ativacao: str = "123456") -> Usuario:
     return Usuario(
+        id=uuid.uuid4(),
         matricula="30032552",
         nome="Usuário de Teste",
         senha_hash=None,
@@ -94,3 +110,46 @@ def test_primeiro_acesso_rejeita_pin_fora_do_formato():
         PrimeiroAcessoRequest(
             matricula="30032552", codigo_ativacao="123456", pin="321"
         )
+
+
+def test_validar_token_retorna_usuario():
+    usuario = criar_usuario_nao_ativado()
+    service = AuthService(UsuarioRepositoryFake(usuario))
+    token = service._gerar_token(usuario)
+
+    resultado = service.validar_token(token)
+
+    assert resultado is usuario
+
+
+def test_validar_token_rejeita_token_adulterado():
+    usuario = criar_usuario_nao_ativado()
+    service = AuthService(UsuarioRepositoryFake(usuario))
+
+    with pytest.raises(AutenticacaoError, match="Token inválido ou expirado"):
+        service.validar_token("token.adulterado.invalido")
+
+
+def test_validar_token_rejeita_token_expirado():
+    usuario = criar_usuario_nao_ativado()
+    service = AuthService(UsuarioRepositoryFake(usuario))
+    token = jwt.encode(
+        {
+            "sub": str(usuario.id),
+            "exp": datetime.now(timezone.utc) - timedelta(minutes=1),
+        },
+        SECRET_KEY,
+        algorithm=ALGORITHM,
+    )
+
+    with pytest.raises(AutenticacaoError, match="Token inválido ou expirado"):
+        service.validar_token(token)
+
+
+def test_validar_token_rejeita_usuario_inexistente():
+    usuario = criar_usuario_nao_ativado()
+    token = AuthService(UsuarioRepositoryFake(usuario))._gerar_token(usuario)
+    service = AuthService(UsuarioRepositoryFake(None))
+
+    with pytest.raises(AutenticacaoError, match="Token inválido ou expirado"):
+        service.validar_token(token)

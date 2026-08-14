@@ -1,11 +1,15 @@
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String, Boolean, DateTime, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 
 from app.core.database import Base
+
+if TYPE_CHECKING:
+    from app.models.passagem import PassagemServico
 
 
 class Usuario(Base):
@@ -21,4 +25,8 @@ class Usuario(Base):
     pin_definido: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     criado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    passagens: Mapped[list["PassagemServico"]] = relationship(
+        back_populates="responsavel"
     )

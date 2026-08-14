@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy.orm import Session
 
 from app.models.usuario import Usuario
@@ -13,6 +15,9 @@ class UsuarioRepository:
             .filter(Usuario.matricula == matricula)
             .first()
         )
+
+    def buscar_por_id(self, usuario_id: uuid.UUID) -> Usuario | None:
+        return self.db.query(Usuario).filter(Usuario.id == usuario_id).first()
 
     def criar(self, usuario: Usuario) -> Usuario:
         self.db.add(usuario)
