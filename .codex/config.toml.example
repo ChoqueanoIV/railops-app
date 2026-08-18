@@ -1,0 +1,7 @@
+# Exemplo deliberadamente mínimo.
+# Copie somente opções compatíveis com sua versão atual do Codex para ~/.codex/config.toml.
+#
+# Exemplo:
+# project_doc_max_bytes = 65536
+#
+# Não versionar tokens, secrets, credenciais ou configuração pessoal sensível.
