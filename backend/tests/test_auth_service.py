@@ -6,7 +6,7 @@ from jose import jwt
 from pydantic import ValidationError
 
 from app.models.usuario import Usuario
-from app.schemas.auth_schema import PrimeiroAcessoRequest
+from app.schemas.auth_schema import LoginRequest, PrimeiroAcessoRequest
 from app.services.auth_service import (
     ALGORITHM,
     SECRET_KEY,
@@ -153,3 +153,46 @@ def test_validar_token_rejeita_usuario_inexistente():
 
     with pytest.raises(AutenticacaoError, match="Token inválido ou expirado"):
         service.validar_token(token)
+
+
+def test_login_valido_retorna_jwt_com_identidade_atual():
+    usuario = criar_usuario_nao_ativado()
+    usuario.pin_definido = True
+    usuario.senha_hash = pwd_context.hash("4321")
+    service = AuthService(UsuarioRepositoryFake(usuario))
+
+    token = service.login(usuario.matricula, "4321")
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+
+    assert payload["sub"] == str(usuario.id)
+    assert payload["matricula"] == usuario.matricula
+    assert "exp" in payload
+
+
+@pytest.mark.parametrize(
+    ("usuario", "pin"),
+    (
+        (None, "4321"),
+        (criar_usuario_nao_ativado(), "4321"),
+    ),
+)
+def test_login_rejeita_matricula_inexistente_ou_usuario_nao_ativado(usuario, pin):
+    service = AuthService(UsuarioRepositoryFake(usuario))
+
+    with pytest.raises(AutenticacaoError, match="Matrícula ou PIN inválidos"):
+        service.login("30032552", pin)
+
+
+def test_login_rejeita_pin_incorreto_sem_diferenciar_credencial():
+    usuario = criar_usuario_nao_ativado()
+    usuario.pin_definido = True
+    usuario.senha_hash = pwd_context.hash("4321")
+    service = AuthService(UsuarioRepositoryFake(usuario))
+
+    with pytest.raises(AutenticacaoError, match="Matrícula ou PIN inválidos"):
+        service.login(usuario.matricula, "9999")
+
+
+def test_login_exige_matricula_com_oito_digitos_e_pin_com_quatro():
+    with pytest.raises(ValidationError):
+        LoginRequest(matricula="1234567", pin="12345")

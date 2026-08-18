@@ -1,6 +1,6 @@
 # Baseline e testes de caracterização
 
-Status: `TODO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 Congelar o comportamento atual antes da refatoração arquitetural.
@@ -14,12 +14,12 @@ Congelar o comportamento atual antes da refatoração arquitetural.
 - adicionar testes de caracterização necessários.
 
 ## Critérios de aceite
-- [ ] suíte atual executada e resultado registrado;
-- [ ] endpoints públicos inventariados;
-- [ ] principais requests/responses registrados;
-- [ ] regras críticas cobertas por teste observável;
-- [ ] nenhum comportamento de produção alterado;
-- [ ] documento de baseline criado em `docs/architecture/baseline.md`.
+- [x] suíte atual executada e resultado registrado;
+- [x] endpoints públicos inventariados;
+- [x] principais requests/responses registrados;
+- [x] regras críticas cobertas por teste observável;
+- [x] nenhum comportamento de produção alterado;
+- [x] documento de baseline criado em `docs/architecture/baseline.md`.
 
 ## Fora de escopo
 - mover pastas;
@@ -31,10 +31,12 @@ Congelar o comportamento atual antes da refatoração arquitetural.
 
 Preencher ao executar a task:
 
-- Branch:
-- Commits:
-- Testes antes:
-- Testes depois:
-- Lint:
-- Type-check:
-- Observações:
+- Branch: `test/baseline-characterization`
+- Commits: `293bd27` (testes) e commit documental de conclusão desta task
+- Testes antes: `88 passed` com Pytest 9.1.1 e Python 3.13.0
+- Testes depois: `100 passed` com Pytest 9.1.1 e Python 3.13.0
+- Lint: ainda não configurado; responsabilidade da task 002
+- Type-check: ainda não configurado; responsabilidade da task 002
+- Observações: foram adicionados somente testes de caracterização de login,
+  rotas de autenticação e superfície OpenAPI. Nenhum arquivo de produção,
+  contrato HTTP, migration, dependência ou regra de negócio foi alterado.
