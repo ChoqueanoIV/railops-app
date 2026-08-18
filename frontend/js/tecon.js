@@ -27,6 +27,8 @@ const adicionarRadioButton = document.getElementById("adicionar-radio");
 const formularioTecon = document.getElementById("formulario-tecon");
 const enviarPassagemButton = document.getElementById("enviar-passagem");
 const mensagemEnvio = document.getElementById("mensagem-envio");
+const passagemIdEdicao = new URLSearchParams(window.location.search).get("editar");
+let modoEdicao = false;
 const linhasTecon = [
     "Viaduto/DM1A",
     "L1",
@@ -48,7 +50,7 @@ function atualizarBotoesRemover() {
     });
 }
 
-function criarCampoMembro() {
+function criarCampoMembro(dados = null, focar = true) {
     const membroId = proximoMembroId;
     proximoMembroId += 1;
     const membro = document.createElement("div");
@@ -77,7 +79,13 @@ function criarCampoMembro() {
     });
     listaEquipe.appendChild(membro);
     atualizarBotoesRemover();
-    membro.querySelector("input").focus();
+    if (dados) {
+        membro.querySelector('[name="equipe_nome"]').value = dados.nome;
+        membro.querySelector('[name="equipe_matricula"]').value = dados.matricula;
+    }
+    if (focar) {
+        membro.querySelector("input").focus();
+    }
 }
 
 function criarCamposLinhas() {
@@ -99,8 +107,10 @@ function criarCamposLinhas() {
     });
 }
 
-adicionarMembroButton.addEventListener("click", criarCampoMembro);
-criarCampoMembro();
+adicionarMembroButton.addEventListener("click", function () {
+    criarCampoMembro();
+});
+criarCampoMembro(null, false);
 criarCamposLinhas();
 
 function atualizarJustificativaMobile(event) {
@@ -195,7 +205,7 @@ function atualizarOrdemRadios() {
     });
 }
 
-function criarCampoRadio() {
+function criarCampoRadio(dados = null, focar = true) {
     const radioId = proximoRadioId;
     proximoRadioId += 1;
     const radio = document.createElement("div");
@@ -255,9 +265,23 @@ function criarCampoRadio() {
         atualizarEstadoRadios();
     });
     listaRadios.appendChild(radio);
+    if (dados) {
+        radio.querySelector('[name="radio_numero"]').value = dados.numero;
+        radio.querySelector('[name="radio_manobrador"]').value =
+            dados.manobrador_nome;
+        radio.querySelector('[name="radio_hora_retirada"]').value =
+            dados.hora_retirada ? dados.hora_retirada.slice(0, 5) : "";
+        radio.querySelector('[name="radio_hora_entrega"]').value =
+            dados.hora_entrega ? dados.hora_entrega.slice(0, 5) : "";
+        falhaCheckbox.checked = dados.apresentou_falha;
+        falhaDescricao.value = dados.falha_descricao || "";
+        falhaCheckbox.dispatchEvent(new Event("change"));
+    }
     atualizarOrdemRadios();
     atualizarEstadoRadios();
-    radio.querySelector("input").focus();
+    if (focar) {
+        radio.querySelector("input").focus();
+    }
 }
 
 function valorOuNulo(valor) {
@@ -357,6 +381,7 @@ function montarPassagem() {
     ).value === "true";
     return {
         data: document.getElementById("data").value,
+        turma: document.getElementById("turma").value,
         turno: document.getElementById("turno").value,
         observacoes: document.getElementById("observacoes").value,
         relatorio_ocorrencias: document.getElementById(
@@ -388,8 +413,121 @@ function extrairMensagemErro(dados) {
     return "Não foi possível registrar a passagem de serviço.";
 }
 
-adicionarRadioButton.addEventListener("click", criarCampoRadio);
+adicionarRadioButton.addEventListener("click", function () {
+    criarCampoRadio();
+});
 atualizarEstadoRadios();
+
+function preencherFormulario(passagem) {
+    if (passagem.terminal !== "TECON") {
+        throw new Error("A passagem informada não pertence ao TECON.");
+    }
+
+    document.getElementById("data").value = passagem.data;
+    document.getElementById("turma").value = passagem.turma || "";
+    document.getElementById("turno").value = passagem.turno || "";
+    ["data", "turma", "turno"].forEach(function (id) {
+        document.getElementById(id).disabled = true;
+    });
+    document.getElementById("observacoes").value = passagem.observacoes || "";
+    document.getElementById("relatorio-ocorrencias").value =
+        passagem.relatorio_ocorrencias || "";
+
+    const mobile = formularioTecon.querySelector(
+        `[name="mobile_utilizado"][value="${passagem.mobile_utilizado}"]`
+    );
+    mobile.checked = true;
+    mobile.dispatchEvent(new Event("change"));
+    mobileJustificativaInput.value = passagem.mobile_justificativa || "";
+
+    listaEquipe.innerHTML = "";
+    passagem.equipe.forEach(function (membro) {
+        criarCampoMembro(membro, false);
+    });
+    atualizarBotoesRemover();
+
+    passagem.ocupacoes_linhas.forEach(function (ocupacao) {
+        const linha = listaLinhas.querySelector(
+            `[data-codigo-linha="${ocupacao.codigo_linha}"]`
+        );
+        if (linha) {
+            linha.querySelector('[name="linha_veiculos"]').value =
+                ocupacao.veiculos || "";
+        }
+    });
+
+    const houveAtendimento = formularioTecon.querySelector(
+        `[name="houve_atendimento"][value="${passagem.detalhe.houve_atendimento}"]`
+    );
+    houveAtendimento.checked = true;
+    houveAtendimento.dispatchEvent(new Event("change"));
+    if (passagem.detalhe.houve_atendimento) {
+        const carga = formularioTecon.querySelector(
+            `[name="carga_mal_posicionada"][value="${passagem.detalhe.carga_mal_posicionada}"]`
+        );
+        carga.checked = true;
+        carga.dispatchEvent(new Event("change"));
+        cargaDescricaoInput.value =
+            passagem.detalhe.carga_mal_posicionada_descricao || "";
+
+        [1, 2].forEach(function (numeroArea) {
+            const atendida = passagem.detalhe[`area${numeroArea}_atendida`];
+            const checkbox = document.getElementById(`area${numeroArea}-atendida`);
+            checkbox.checked = atendida;
+            atualizarHorariosArea(numeroArea, atendida);
+            if (atendida) {
+                const inicio = passagem.detalhe[`area${numeroArea}_inicio`];
+                const termino = passagem.detalhe[`area${numeroArea}_termino`];
+                document.getElementById(`area${numeroArea}-inicio`).value =
+                    inicio ? inicio.slice(0, 5) : "";
+                document.getElementById(`area${numeroArea}-termino`).value =
+                    termino ? termino.slice(0, 5) : "";
+            }
+        });
+    }
+
+    listaRadios.innerHTML = "";
+    passagem.radios_utilizados.forEach(function (radio) {
+        criarCampoRadio(radio, false);
+    });
+    atualizarEstadoRadios();
+}
+
+async function carregarEdicao() {
+    if (!passagemIdEdicao) return;
+    enviarPassagemButton.disabled = true;
+    exibirMensagemEnvio("Carregando passagem...");
+
+    try {
+        const response = await fetch(`${API_URL}/passagens/${passagemIdEdicao}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        const dados = await response.json();
+        if (response.status === 401) {
+            sessionStorage.removeItem("access_token");
+            window.location.replace("./index.html");
+            return;
+        }
+        if (!response.ok) throw new Error(extrairMensagemErro(dados));
+        if (!dados.editavel) {
+            throw new Error("Esta passagem não pode mais ser editada.");
+        }
+        preencherFormulario(dados);
+        modoEdicao = true;
+        document.getElementById("titulo-pagina").textContent =
+            "Editar passagem de serviço";
+        document.getElementById("instrucao-pagina").textContent =
+            "Atualize os registros operacionais antes do encerramento do turno.";
+        enviarPassagemButton.textContent = "Salvar alterações";
+        mensagemEnvio.textContent = "";
+        mensagemEnvio.className = "";
+        enviarPassagemButton.disabled = false;
+    } catch (error) {
+        exibirMensagemEnvio(error.message);
+    }
+}
+
+carregarEdicao();
 
 formularioTecon.addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -399,13 +537,22 @@ formularioTecon.addEventListener("submit", async function (event) {
     enviarPassagemButton.textContent = "Enviando...";
 
     try {
-        const response = await fetch(`${API_URL}/passagens/tecon`, {
-            method: "POST",
+        const passagem = montarPassagem();
+        if (modoEdicao) {
+            delete passagem.data;
+            delete passagem.turma;
+            delete passagem.turno;
+        }
+        const endpoint = modoEdicao
+            ? `${API_URL}/passagens/${passagemIdEdicao}`
+            : `${API_URL}/passagens/tecon`;
+        const response = await fetch(endpoint, {
+            method: modoEdicao ? "PUT" : "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(montarPassagem()),
+            body: JSON.stringify(passagem),
         });
         const dados = await response.json();
         if (response.status === 401) {
@@ -422,8 +569,10 @@ formularioTecon.addEventListener("submit", async function (event) {
             JSON.stringify({
                 id: dados.id,
                 mensagem: dados.mensagem,
+                operacao: modoEdicao ? "edicao" : "criacao",
                 terminal: "Terminal TECON",
                 data: document.getElementById("data").value,
+                turma: document.getElementById("turma").value,
                 turno: document.getElementById("turno").value,
             })
         );
@@ -433,7 +582,9 @@ formularioTecon.addEventListener("submit", async function (event) {
     } finally {
         if (window.location.pathname.endsWith("tecon.html")) {
             enviarPassagemButton.disabled = false;
-            enviarPassagemButton.textContent = "Enviar passagem de serviço";
+            enviarPassagemButton.textContent = modoEdicao
+                ? "Salvar alterações"
+                : "Enviar passagem de serviço";
         }
     }
 });

@@ -7,27 +7,19 @@ conexão é lida do arquivo .env (variável DATABASE_URL), que nunca é
 versionado pelo Git.
 """
 
-import os
-
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+
+from app.core.config import obter_variavel_obrigatoria
 
 # Carrega as variáveis definidas no arquivo .env para o ambiente do
 # processo Python atual. Precisa ser chamado antes de tentarmos ler
 # qualquer variável com os.getenv().
-load_dotenv()
 
 # Lê a string de conexão a partir da variável de ambiente DATABASE_URL.
 # Se a variável não existir (.env ausente ou mal configurado), levanta
 # um erro claro e imediato, em vez de falhar silenciosamente mais tarde.
-DATABASE_URL = os.getenv("DATABASE_URL")
-
-if DATABASE_URL is None:
-    raise RuntimeError(
-        "DATABASE_URL não encontrada. Verifique se o arquivo "
-        "backend/.env existe e contém a variável DATABASE_URL."
-    )
+DATABASE_URL = obter_variavel_obrigatoria("DATABASE_URL")
 
 # O "engine" é o objeto central do SQLAlchemy responsável por gerenciar
 # a comunicação de baixo nível com o banco de dados (pool de conexões,

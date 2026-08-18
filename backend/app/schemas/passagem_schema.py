@@ -1,13 +1,20 @@
+from __future__ import annotations
+
 from datetime import date, time
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.models.passagem import LadoLinha
+from app.models.passagem import LadoLinha, Terminal, Turma, Turno
 
 
 class SchemaBase(BaseModel):
-    model_config = ConfigDict(str_strip_whitespace=True)
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    @field_validator("*", mode="before")
+    @classmethod
+    def remover_espacos_antes_da_tipagem(cls, valor):
+        return valor.strip() if isinstance(valor, str) else valor
 
 
 class EquipeMembroRequest(SchemaBase):
@@ -49,7 +56,27 @@ class RadioUsoRequest(SchemaBase):
 
 class PassagemBrisamarRequest(SchemaBase):
     data: date
-    turno: str = Field(min_length=1)
+    turma: Turma
+    turno: Turno
+    observacoes: str | None = None
+    relatorio_ocorrencias: str | None = None
+    mobile_utilizado: bool
+    mobile_justificativa: str | None = None
+    equipe: list[EquipeMembroRequest] = Field(default_factory=list)
+    ocupacoes_linhas: list[LinhaOcupacaoRequest] = Field(min_length=1)
+    detalhe: BrisamarDetalheRequest
+    radios_utilizados: list[RadioUsoRequest] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validar_justificativa_mobile(self):
+        if not self.mobile_utilizado and not self.mobile_justificativa:
+            raise ValueError(
+                "A justificativa é obrigatória quando o Mobile não foi utilizado."
+            )
+        return self
+
+
+class PassagemBrisamarEdicaoRequest(SchemaBase):
     observacoes: str | None = None
     relatorio_ocorrencias: str | None = None
     mobile_utilizado: bool
@@ -71,6 +98,28 @@ class PassagemBrisamarRequest(SchemaBase):
 class PassagemCriadaResponse(SchemaBase):
     id: UUID
     mensagem: str
+
+
+class PassagemAtualizadaResponse(SchemaBase):
+    id: UUID
+    mensagem: str
+
+
+class PassagemConsultaResponse(SchemaBase):
+    id: UUID
+    terminal: Terminal
+    data: date
+    turma: Turma | None
+    turno: Turno | None
+    observacoes: str | None
+    relatorio_ocorrencias: str | None
+    mobile_utilizado: bool
+    mobile_justificativa: str | None
+    equipe: list[EquipeMembroRequest]
+    ocupacoes_linhas: list[LinhaOcupacaoRequest]
+    detalhe: BrisamarDetalheRequest | TeconDetalheRequest
+    radios_utilizados: list[RadioUsoRequest]
+    editavel: bool
 
 
 class TeconDetalheRequest(SchemaBase):
@@ -143,7 +192,27 @@ class TeconDetalheRequest(SchemaBase):
 
 class PassagemTeconRequest(SchemaBase):
     data: date
-    turno: str = Field(min_length=1)
+    turma: Turma
+    turno: Turno
+    observacoes: str = Field(min_length=1)
+    relatorio_ocorrencias: str = Field(min_length=1)
+    mobile_utilizado: bool
+    mobile_justificativa: str | None = None
+    equipe: list[EquipeMembroRequest] = Field(default_factory=list)
+    ocupacoes_linhas: list[LinhaOcupacaoRequest] = Field(min_length=1)
+    detalhe: TeconDetalheRequest
+    radios_utilizados: list[RadioUsoRequest] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validar_justificativa_mobile(self):
+        if not self.mobile_utilizado and not self.mobile_justificativa:
+            raise ValueError(
+                "A justificativa é obrigatória quando o Mobile não foi utilizado."
+            )
+        return self
+
+
+class PassagemTeconEdicaoRequest(SchemaBase):
     observacoes: str = Field(min_length=1)
     relatorio_ocorrencias: str = Field(min_length=1)
     mobile_utilizado: bool

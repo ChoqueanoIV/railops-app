@@ -1,11 +1,23 @@
 import uuid
+from datetime import date, datetime
 from unittest.mock import MagicMock
+from zoneinfo import ZoneInfo
 
 import pytest
 
-from app.models.passagem import LadoLinha, Linha, Radio, Terminal
+from app.models.passagem import (
+    LadoLinha,
+    Linha,
+    PassagemLinhaOcupacao,
+    PassagemServico,
+    PassagemTeconDetalhe,
+    Radio,
+    Terminal,
+    Turma,
+    Turno,
+)
 from app.models.usuario import Usuario
-from app.schemas.passagem_schema import PassagemTeconRequest
+from app.schemas.passagem_schema import PassagemTeconEdicaoRequest, PassagemTeconRequest
 from app.services.passagem_service import PassagemError, PassagemService
 from tests.test_passagem_tecon_schema import LINHAS_TECON, dados_tecon_validos
 
@@ -122,3 +134,72 @@ def test_criar_tecon_rejeita_sup_inf():
         service.criar_tecon(dados, Usuario(id=uuid.uuid4()))
 
     passagem_repository.salvar.assert_not_called()
+
+
+def test_editar_tecon_preserva_identidade_e_confirma_snapshot():
+    service, repository, _, _ = criar_service_tecon()
+    responsavel = Usuario(id=uuid.uuid4())
+    passagem = PassagemServico(
+        id=uuid.uuid4(),
+        terminal=Terminal.TECON,
+        data=date(2026, 8, 14),
+        turma=Turma.C,
+        turno=Turno.NOTURNO,
+        responsavel_id=responsavel.id,
+        observacoes="Anterior",
+        mobile_utilizado=True,
+        detalhe_tecon=PassagemTeconDetalhe(houve_atendimento=False),
+        ocupacoes_linhas=[
+            PassagemLinhaOcupacao(linha=linha, veiculos="Anterior")
+            for linha in criar_linhas_tecon()
+        ],
+    )
+    repository.buscar_para_edicao.return_value = passagem
+    repository.confirmar_edicao.side_effect = lambda registro: registro
+    dados = dados_tecon_validos()
+    for campo in ("data", "turma", "turno"):
+        dados.pop(campo)
+    dados["observacoes"] = "Atualizada"
+
+    resultado = service.editar_tecon(
+        passagem.id,
+        PassagemTeconEdicaoRequest(**dados),
+        responsavel,
+        datetime(2026, 8, 14, 23, 0, tzinfo=ZoneInfo("America/Sao_Paulo")),
+    )
+
+    assert resultado.observacoes == "Atualizada"
+    assert resultado.terminal == Terminal.TECON
+    assert resultado.data == date(2026, 8, 14)
+    repository.registrar_snapshot.assert_called_once_with(passagem, responsavel.id)
+    repository.confirmar_edicao.assert_called_once_with(passagem)
+
+
+def test_editar_tecon_rejeita_passagem_de_outro_terminal_e_desfaz():
+    service, repository, _, _ = criar_service_tecon()
+    responsavel = Usuario(id=uuid.uuid4())
+    passagem = PassagemServico(
+        id=uuid.uuid4(),
+        terminal=Terminal.BRISAMAR,
+        data=date(2026, 8, 14),
+        turma=Turma.C,
+        turno=Turno.NOTURNO,
+        responsavel_id=responsavel.id,
+        mobile_utilizado=True,
+    )
+    repository.buscar_para_edicao.return_value = passagem
+    dados = dados_tecon_validos()
+    for campo in ("data", "turma", "turno"):
+        dados.pop(campo)
+
+    with pytest.raises(PassagemError, match="não correspondem"):
+        service.editar_tecon(
+            passagem.id,
+            PassagemTeconEdicaoRequest(**dados),
+            responsavel,
+            datetime(2026, 8, 14, 23, 0, tzinfo=ZoneInfo("America/Sao_Paulo")),
+        )
+
+    repository.registrar_snapshot.assert_not_called()
+    repository.confirmar_edicao.assert_not_called()
+    repository.desfazer.assert_called_once_with()
