@@ -16,6 +16,7 @@ from app.schemas.passagem_schema import (
     PassagemBrisamarEdicaoRequest,
     PassagemBrisamarRequest,
     PassagemCriadaResponse,
+    PassagemConsultaResponse,
     PassagemTeconEdicaoRequest,
     PassagemTeconRequest,
 )
@@ -23,6 +24,50 @@ from app.services.passagem_service import PassagemError, PassagemService
 
 
 router = APIRouter(prefix="/passagens", tags=["Passagens de serviço"])
+
+
+def montar_resposta_consulta(passagem, editavel):
+    detalhe = passagem.detalhe_brisamar or passagem.detalhe_tecon
+    return PassagemConsultaResponse(
+        id=passagem.id,
+        terminal=passagem.terminal,
+        data=passagem.data,
+        turma=passagem.turma,
+        turno=passagem.turno,
+        observacoes=passagem.observacoes,
+        relatorio_ocorrencias=passagem.relatorio_ocorrencias,
+        mobile_utilizado=passagem.mobile_utilizado,
+        mobile_justificativa=passagem.mobile_justificativa,
+        equipe=[
+            {"nome": membro.nome, "matricula": membro.matricula}
+            for membro in passagem.equipe
+        ],
+        ocupacoes_linhas=[
+            {
+                "codigo_linha": ocupacao.linha.codigo,
+                "veiculos": ocupacao.veiculos,
+                "sup_inf": ocupacao.sup_inf,
+            }
+            for ocupacao in passagem.ocupacoes_linhas
+        ],
+        detalhe={
+            coluna.name: getattr(detalhe, coluna.name)
+            for coluna in detalhe.__table__.columns
+            if coluna.name not in {"id", "passagem_id"}
+        },
+        radios_utilizados=[
+            {
+                "numero": uso.radio.numero,
+                "manobrador_nome": uso.manobrador_nome,
+                "hora_retirada": uso.hora_retirada,
+                "hora_entrega": uso.hora_entrega,
+                "apresentou_falha": uso.apresentou_falha,
+                "falha_descricao": uso.falha_descricao,
+            }
+            for uso in passagem.radios_utilizados
+        ],
+        editavel=editavel,
+    )
 
 
 @router.post(
@@ -103,4 +148,26 @@ def editar_passagem(
     return PassagemAtualizadaResponse(
         id=passagem.id,
         mensagem="Passagem de serviço atualizada com sucesso.",
+    )
+
+
+@router.get("/{passagem_id}", response_model=PassagemConsultaResponse)
+def consultar_passagem(
+    passagem_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    usuario_atual: Usuario = Depends(obter_usuario_atual),
+):
+    service = PassagemService(
+        PassagemRepository(db),
+        LinhaRepository(db),
+        RadioRepository(db),
+    )
+    try:
+        passagem = service.obter_por_id(passagem_id)
+    except PassagemError as erro:
+        raise HTTPException(status_code=404, detail=str(erro))
+
+    return montar_resposta_consulta(
+        passagem,
+        service.passagem_editavel(passagem, usuario_atual),
     )

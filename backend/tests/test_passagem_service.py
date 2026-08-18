@@ -242,6 +242,22 @@ def test_busca_para_edicao_desfaz_transacao_quando_validacao_falha():
     passagem_repository.desfazer.assert_called_once_with()
 
 
+def test_consulta_por_id_retorna_passagem_sem_validar_autoria():
+    service, repository, _, _ = criar_service()
+    passagem = criar_passagem_para_edicao(Turno.DIURNO)
+    repository.buscar_por_id.return_value = passagem
+
+    assert service.obter_por_id(passagem.id) is passagem
+
+
+def test_consulta_por_id_rejeita_registro_inexistente():
+    service, repository, _, _ = criar_service()
+    repository.buscar_por_id.return_value = None
+
+    with pytest.raises(PassagemError, match="não encontrada"):
+        service.obter_por_id(uuid.uuid4())
+
+
 def criar_dados_edicao_brisamar() -> PassagemBrisamarEdicaoRequest:
     dados = criar_dados_validos().model_dump()
     dados.pop("data")

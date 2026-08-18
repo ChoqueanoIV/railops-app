@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from datetime import date, time
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.models.passagem import LadoLinha, Turma, Turno
+from app.models.passagem import LadoLinha, Terminal, Turma, Turno
 
 
 class SchemaBase(BaseModel):
@@ -101,6 +103,23 @@ class PassagemCriadaResponse(SchemaBase):
 class PassagemAtualizadaResponse(SchemaBase):
     id: UUID
     mensagem: str
+
+
+class PassagemConsultaResponse(SchemaBase):
+    id: UUID
+    terminal: Terminal
+    data: date
+    turma: Turma | None
+    turno: Turno | None
+    observacoes: str | None
+    relatorio_ocorrencias: str | None
+    mobile_utilizado: bool
+    mobile_justificativa: str | None
+    equipe: list[EquipeMembroRequest]
+    ocupacoes_linhas: list[LinhaOcupacaoRequest]
+    detalhe: BrisamarDetalheRequest | TeconDetalheRequest
+    radios_utilizados: list[RadioUsoRequest]
+    editavel: bool
 
 
 class TeconDetalheRequest(SchemaBase):

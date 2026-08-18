@@ -203,3 +203,16 @@ def test_passagem_repository_desfaz_snapshot_e_edicao_quando_commit_falha():
 
     db.rollback.assert_called_once_with()
     db.refresh.assert_not_called()
+
+
+def test_passagem_repository_consulta_detalhada_sem_bloquear_registro():
+    db = MagicMock()
+    consulta = db.query.return_value.options.return_value.filter.return_value
+    passagem = criar_passagem_completa_para_snapshot()
+    consulta.first.return_value = passagem
+    repository = PassagemRepository(db)
+
+    resultado = repository.buscar_por_id(passagem.id)
+
+    assert resultado is passagem
+    consulta.with_for_update.assert_not_called()

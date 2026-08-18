@@ -78,6 +78,24 @@ class PassagemRepository:
             .first()
         )
 
+    def buscar_por_id(self, passagem_id: uuid.UUID) -> PassagemServico | None:
+        return (
+            self.db.query(PassagemServico)
+            .options(
+                selectinload(PassagemServico.detalhe_brisamar),
+                selectinload(PassagemServico.detalhe_tecon),
+                selectinload(PassagemServico.equipe),
+                selectinload(PassagemServico.ocupacoes_linhas).selectinload(
+                    PassagemLinhaOcupacao.linha
+                ),
+                selectinload(PassagemServico.radios_utilizados).selectinload(
+                    PassagemRadioUso.radio
+                ),
+            )
+            .filter(PassagemServico.id == passagem_id)
+            .first()
+        )
+
     def registrar_snapshot(
         self, passagem: PassagemServico, alterado_por: uuid.UUID
     ) -> PassagemServicoHistorico:

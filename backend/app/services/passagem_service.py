@@ -181,6 +181,25 @@ class PassagemService:
             self.passagem_repository.desfazer()
             raise
 
+    def obter_por_id(self, passagem_id: uuid.UUID) -> PassagemServico:
+        passagem = self.passagem_repository.buscar_por_id(passagem_id)
+        if passagem is None:
+            raise PassagemError("Passagem de serviço não encontrada.")
+        return passagem
+
+    @classmethod
+    def passagem_editavel(
+        cls,
+        passagem: PassagemServico,
+        responsavel: Usuario,
+        agora: datetime | None = None,
+    ) -> bool:
+        try:
+            cls.validar_permissao_edicao(passagem, responsavel, agora)
+            return True
+        except PassagemError:
+            return False
+
     def editar_brisamar(
         self,
         passagem_id: uuid.UUID,
