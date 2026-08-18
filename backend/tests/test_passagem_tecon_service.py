@@ -8,6 +8,7 @@ import pytest
 from app.models.passagem import (
     LadoLinha,
     Linha,
+    PassagemLinhaOcupacao,
     PassagemServico,
     PassagemTeconDetalhe,
     Radio,
@@ -148,6 +149,10 @@ def test_editar_tecon_preserva_identidade_e_confirma_snapshot():
         observacoes="Anterior",
         mobile_utilizado=True,
         detalhe_tecon=PassagemTeconDetalhe(houve_atendimento=False),
+        ocupacoes_linhas=[
+            PassagemLinhaOcupacao(linha=linha, veiculos="Anterior")
+            for linha in criar_linhas_tecon()
+        ],
     )
     repository.buscar_para_edicao.return_value = passagem
     repository.confirmar_edicao.side_effect = lambda registro: registro

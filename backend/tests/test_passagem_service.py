@@ -302,6 +302,8 @@ def test_editar_brisamar_registra_estado_anterior_e_confirma_uma_vez():
     repository.registrar_snapshot.side_effect = (
         lambda registro, _: estado_no_snapshot.append(registro.observacoes)
     )
+    detalhe_anterior = passagem.detalhe_brisamar
+    ocupacoes_anteriores = list(passagem.ocupacoes_linhas)
 
     resultado = service.editar_brisamar(
         passagem.id,
@@ -316,6 +318,12 @@ def test_editar_brisamar_registra_estado_anterior_e_confirma_uma_vez():
     assert resultado.turma == Turma.C
     assert resultado.turno == Turno.DIURNO
     assert resultado.equipe[0].nome == "Operador"
+    assert resultado.detalhe_brisamar is detalhe_anterior
+    assert resultado.detalhe_brisamar.radios_operantes == 4
+    assert all(
+        atual is anterior
+        for atual, anterior in zip(resultado.ocupacoes_linhas, ocupacoes_anteriores)
+    )
     repository.registrar_snapshot.assert_called_once_with(passagem, responsavel.id)
     repository.confirmar_edicao.assert_called_once_with(passagem)
     repository.desfazer.assert_not_called()

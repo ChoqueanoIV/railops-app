@@ -264,14 +264,14 @@ class PassagemService:
         passagem.mobile_utilizado = dados.mobile_utilizado
         passagem.mobile_justificativa = dados.mobile_justificativa
         passagem.equipe = [EquipeMembro(**item.model_dump()) for item in dados.equipe]
-        passagem.ocupacoes_linhas = [
-            PassagemLinhaOcupacao(
-                linha=linhas_por_codigo[item.codigo_linha],
-                veiculos=item.veiculos,
-                sup_inf=item.sup_inf,
-            )
-            for item in dados.ocupacoes_linhas
-        ]
+        ocupacoes_por_codigo = {
+            ocupacao.linha.codigo: ocupacao
+            for ocupacao in passagem.ocupacoes_linhas
+        }
+        for item in dados.ocupacoes_linhas:
+            ocupacao = ocupacoes_por_codigo[item.codigo_linha]
+            ocupacao.veiculos = item.veiculos
+            ocupacao.sup_inf = item.sup_inf
         passagem.radios_utilizados = [
             PassagemRadioUso(
                 radio=self.radio_repository.buscar_ou_criar(item.numero),
@@ -284,11 +284,11 @@ class PassagemService:
             for item in dados.radios_utilizados
         ]
         if terminal == Terminal.BRISAMAR:
-            passagem.detalhe_brisamar = PassagemBrisamarDetalhe(
-                **dados.detalhe.model_dump()
-            )
+            detalhe = passagem.detalhe_brisamar
         else:
-            passagem.detalhe_tecon = PassagemTeconDetalhe(**dados.detalhe.model_dump())
+            detalhe = passagem.detalhe_tecon
+        for campo, valor in dados.detalhe.model_dump().items():
+            setattr(detalhe, campo, valor)
 
     @classmethod
     def validar_permissao_edicao(
