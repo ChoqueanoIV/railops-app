@@ -98,6 +98,11 @@ class PassagemCriadaResponse(SchemaBase):
     mensagem: str
 
 
+class PassagemAtualizadaResponse(SchemaBase):
+    id: UUID
+    mensagem: str
+
+
 class TeconDetalheRequest(SchemaBase):
     houve_atendimento: bool
     carga_mal_posicionada: bool | None = None
