@@ -81,3 +81,17 @@ py -3.13 -m uv export --locked --no-default-groups --group dev --no-emit-project
 
 Se o Windows bloquear executáveis criados dentro do OneDrive, mantenha o clone
 do projeto em uma pasta local não sincronizada.
+
+## Configuração do backend
+
+Copie `backend/.env.example` para `backend/.env` e substitua os valores locais.
+O arquivo `.env` real permanece ignorado pelo Git.
+
+- `DATABASE_URL`: conexão PostgreSQL obrigatória;
+- `JWT_SECRET_KEY`: segredo JWT obrigatório;
+- `RAILOPS_ENV`: `development`, `test` ou `production` (padrão: `development`);
+- `API_TITLE`: título exibido no OpenAPI (padrão: `RailOps API`);
+- `CORS_ORIGINS`: origens permitidas separadas por vírgula.
+
+O entrypoint recomendado é `app.main:app` a partir da pasta `backend`. O
+entrypoint anterior `main:app` permanece compatível durante a migração.

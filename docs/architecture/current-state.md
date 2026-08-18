@@ -1,6 +1,6 @@
 # Estado atual observado
 
-Baseado no repositório público `ChoqueanoIV/railops-app` consultado em 15/08/2026.
+Atualizado a partir da `main` local em 18/08/2026.
 
 ## Backend
 
@@ -22,6 +22,9 @@ backend/
   alembic/
   app/
     core/
+      config.py
+      database.py
+    main.py
     models/
     repositories/
     routers/
@@ -29,11 +32,16 @@ backend/
     services/
   tests/
   alembic.ini
+  .env.example
   main.py
   requirements.txt
+  requirements-dev.txt
 ```
 
-A base já possui separação por camadas. O trabalho proposto é amadurecer contratos e organização, não reconstruir do zero.
+A aplicação possui configuração tipada centralizada e fábrica de bootstrap em
+`app/main.py`. O `main.py` da raiz do backend permanece como entrypoint
+compatível. A base já possui separação por camadas; o trabalho proposto é
+amadurecer contratos e organização, não reconstruir do zero.
 
 ## Testes existentes
 
@@ -47,7 +55,7 @@ O repositório já contém testes de:
 - TECON schema;
 - TECON service.
 
-O README público informa uma suíte de 48 testes no estado consultado.
+A suíte atual contém 105 testes e não depende das credenciais do `.env` real.
 
 ## Frontend
 
@@ -57,14 +65,9 @@ A modernização para React + TypeScript deve ser tratada como migração increm
 
 ## Dependências
 
-O backend usa `requirements.txt` fixado por versão.
+O backend usa `pyproject.toml` como manifesto, grupos separados para runtime,
+testes e desenvolvimento, e `uv.lock` versionado. Os arquivos requirements são
+exports compatíveis gerados a partir do mesmo lockfile.
 
-A maturidade desejada inclui:
-- manifesto de projeto;
-- separação runtime/dev;
-- lockfile;
-- lint;
-- formatter;
-- type-check;
-- coverage;
-- automação.
+A base de qualidade inclui Ruff, formatter do Ruff, mypy, pytest-cov e
+pre-commit. A automação remota de CI ainda é uma etapa futura.

@@ -7,10 +7,12 @@ conexão é lida do arquivo .env (variável DATABASE_URL), que nunca é
 versionado pelo Git.
 """
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from collections.abc import Generator
 
-from app.core.config import obter_variavel_obrigatoria
+from sqlalchemy import Engine, create_engine
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
+
+from app.core.config import obter_configuracao
 
 # Carrega as variáveis definidas no arquivo .env para o ambiente do
 # processo Python atual. Precisa ser chamado antes de tentarmos ler
@@ -19,12 +21,13 @@ from app.core.config import obter_variavel_obrigatoria
 # Lê a string de conexão a partir da variável de ambiente DATABASE_URL.
 # Se a variável não existir (.env ausente ou mal configurado), levanta
 # um erro claro e imediato, em vez de falhar silenciosamente mais tarde.
-DATABASE_URL = obter_variavel_obrigatoria("DATABASE_URL")
+configuracao = obter_configuracao()
+DATABASE_URL = configuracao.database_url
 
 # O "engine" é o objeto central do SQLAlchemy responsável por gerenciar
 # a comunicação de baixo nível com o banco de dados (pool de conexões,
 # execução de comandos SQL gerados pelo ORM, etc.).
-engine = create_engine(DATABASE_URL)
+engine: Engine = create_engine(DATABASE_URL)
 
 # SessionLocal é uma "fábrica" de sessões. Cada sessão representa uma
 # conversa individual com o banco (ex.: uma requisição HTTP inteira),
@@ -37,7 +40,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
-def get_db():
+def get_db() -> Generator[Session]:
     """
     Fornece uma sessão de banco de dados para uma requisição, e garante
     que ela seja fechada corretamente ao final, mesmo se ocorrer um
