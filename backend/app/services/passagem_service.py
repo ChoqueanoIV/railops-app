@@ -2,6 +2,8 @@ import uuid
 from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
+from sqlalchemy.exc import SQLAlchemyError
+
 from app.models.passagem import (
     EquipeMembro,
     PassagemBrisamarDetalhe,
@@ -18,7 +20,12 @@ from app.repositories.passagem_repository import (
     PassagemRepository,
     RadioRepository,
 )
-from app.schemas.passagem_schema import PassagemBrisamarRequest, PassagemTeconRequest
+from app.schemas.passagem_schema import (
+    PassagemBrisamarEdicaoRequest,
+    PassagemBrisamarRequest,
+    PassagemTeconEdicaoRequest,
+    PassagemTeconRequest,
+)
 
 
 class PassagemError(Exception):
@@ -173,6 +180,96 @@ class PassagemService:
         except PassagemError:
             self.passagem_repository.desfazer()
             raise
+
+    def editar_brisamar(
+        self,
+        passagem_id: uuid.UUID,
+        dados: PassagemBrisamarEdicaoRequest,
+        responsavel: Usuario,
+        agora: datetime | None = None,
+    ) -> PassagemServico:
+        return self._editar(passagem_id, dados, responsavel, Terminal.BRISAMAR, agora)
+
+    def editar_tecon(
+        self,
+        passagem_id: uuid.UUID,
+        dados: PassagemTeconEdicaoRequest,
+        responsavel: Usuario,
+        agora: datetime | None = None,
+    ) -> PassagemServico:
+        return self._editar(passagem_id, dados, responsavel, Terminal.TECON, agora)
+
+    def _editar(self, passagem_id, dados, responsavel, terminal, agora):
+        try:
+            passagem = self.passagem_repository.buscar_para_edicao(passagem_id)
+            self.validar_permissao_edicao(passagem, responsavel, agora)
+            if passagem.terminal != terminal:
+                raise PassagemError(
+                    f"Os dados informados não correspondem ao terminal {passagem.terminal.value}."
+                )
+
+            linhas_por_codigo = self._validar_linhas(dados, terminal)
+            self.passagem_repository.registrar_snapshot(passagem, responsavel.id)
+            self._aplicar_conteudo(passagem, dados, linhas_por_codigo, terminal)
+            return self.passagem_repository.confirmar_edicao(passagem)
+        except SQLAlchemyError:
+            # confirmar_edicao já desfaz a transação quando o commit falha.
+            raise
+        except Exception:
+            self.passagem_repository.desfazer()
+            raise
+
+    def _validar_linhas(self, dados, terminal):
+        linhas = self.linha_repository.listar_por_terminal(terminal)
+        linhas_por_codigo = {linha.codigo: linha for linha in linhas}
+        codigos = [item.codigo_linha for item in dados.ocupacoes_linhas]
+        if len(codigos) != len(set(codigos)):
+            raise PassagemError("Cada linha deve ser informada uma única vez.")
+        if set(codigos) != set(linhas_por_codigo):
+            raise PassagemError(
+                f"A ocupação de todas as linhas do {terminal.value.title()} é obrigatória."
+            )
+        for ocupacao in dados.ocupacoes_linhas:
+            linha = linhas_por_codigo[ocupacao.codigo_linha]
+            if linha.permite_sup_inf and ocupacao.sup_inf is None:
+                raise PassagemError(f"A linha {linha.codigo} exige indicação SUP ou INF.")
+            if not linha.permite_sup_inf and ocupacao.sup_inf is not None:
+                raise PassagemError(
+                    f"A linha {linha.codigo} não permite indicação SUP ou INF."
+                )
+        return linhas_por_codigo
+
+    def _aplicar_conteudo(self, passagem, dados, linhas_por_codigo, terminal):
+        passagem.observacoes = dados.observacoes
+        passagem.relatorio_ocorrencias = dados.relatorio_ocorrencias
+        passagem.mobile_utilizado = dados.mobile_utilizado
+        passagem.mobile_justificativa = dados.mobile_justificativa
+        passagem.equipe = [EquipeMembro(**item.model_dump()) for item in dados.equipe]
+        passagem.ocupacoes_linhas = [
+            PassagemLinhaOcupacao(
+                linha=linhas_por_codigo[item.codigo_linha],
+                veiculos=item.veiculos,
+                sup_inf=item.sup_inf,
+            )
+            for item in dados.ocupacoes_linhas
+        ]
+        passagem.radios_utilizados = [
+            PassagemRadioUso(
+                radio=self.radio_repository.buscar_ou_criar(item.numero),
+                manobrador_nome=item.manobrador_nome,
+                hora_retirada=item.hora_retirada,
+                hora_entrega=item.hora_entrega,
+                apresentou_falha=item.apresentou_falha,
+                falha_descricao=item.falha_descricao,
+            )
+            for item in dados.radios_utilizados
+        ]
+        if terminal == Terminal.BRISAMAR:
+            passagem.detalhe_brisamar = PassagemBrisamarDetalhe(
+                **dados.detalhe.model_dump()
+            )
+        else:
+            passagem.detalhe_tecon = PassagemTeconDetalhe(**dados.detalhe.model_dump())
 
     @classmethod
     def validar_permissao_edicao(

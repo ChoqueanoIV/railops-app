@@ -2,7 +2,10 @@ import pytest
 from pydantic import ValidationError
 
 from app.models.passagem import LadoLinha
-from app.schemas.passagem_schema import PassagemBrisamarRequest
+from app.schemas.passagem_schema import (
+    PassagemBrisamarEdicaoRequest,
+    PassagemBrisamarRequest,
+)
 
 
 def dados_passagem_validos() -> dict:
@@ -113,3 +116,12 @@ def test_passagem_brisamar_remove_espacos_dos_textos():
     assert passagem.turma.value == "A"
     assert passagem.turno.value == "DIURNO"
     assert passagem.equipe[0].nome == "Operador de Teste"
+
+
+def test_edicao_brisamar_rejeita_alteracao_dos_campos_de_identidade():
+    dados = dados_passagem_validos()
+    dados.pop("turma")
+    dados.pop("turno")
+
+    with pytest.raises(ValidationError, match="data"):
+        PassagemBrisamarEdicaoRequest(**dados)

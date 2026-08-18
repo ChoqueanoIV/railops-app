@@ -7,7 +7,7 @@ from app.models.passagem import LadoLinha, Turma, Turno
 
 
 class SchemaBase(BaseModel):
-    model_config = ConfigDict(str_strip_whitespace=True)
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
     @field_validator("*", mode="before")
     @classmethod
@@ -56,6 +56,25 @@ class PassagemBrisamarRequest(SchemaBase):
     data: date
     turma: Turma
     turno: Turno
+    observacoes: str | None = None
+    relatorio_ocorrencias: str | None = None
+    mobile_utilizado: bool
+    mobile_justificativa: str | None = None
+    equipe: list[EquipeMembroRequest] = Field(default_factory=list)
+    ocupacoes_linhas: list[LinhaOcupacaoRequest] = Field(min_length=1)
+    detalhe: BrisamarDetalheRequest
+    radios_utilizados: list[RadioUsoRequest] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validar_justificativa_mobile(self):
+        if not self.mobile_utilizado and not self.mobile_justificativa:
+            raise ValueError(
+                "A justificativa é obrigatória quando o Mobile não foi utilizado."
+            )
+        return self
+
+
+class PassagemBrisamarEdicaoRequest(SchemaBase):
     observacoes: str | None = None
     relatorio_ocorrencias: str | None = None
     mobile_utilizado: bool
@@ -151,6 +170,25 @@ class PassagemTeconRequest(SchemaBase):
     data: date
     turma: Turma
     turno: Turno
+    observacoes: str = Field(min_length=1)
+    relatorio_ocorrencias: str = Field(min_length=1)
+    mobile_utilizado: bool
+    mobile_justificativa: str | None = None
+    equipe: list[EquipeMembroRequest] = Field(default_factory=list)
+    ocupacoes_linhas: list[LinhaOcupacaoRequest] = Field(min_length=1)
+    detalhe: TeconDetalheRequest
+    radios_utilizados: list[RadioUsoRequest] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validar_justificativa_mobile(self):
+        if not self.mobile_utilizado and not self.mobile_justificativa:
+            raise ValueError(
+                "A justificativa é obrigatória quando o Mobile não foi utilizado."
+            )
+        return self
+
+
+class PassagemTeconEdicaoRequest(SchemaBase):
     observacoes: str = Field(min_length=1)
     relatorio_ocorrencias: str = Field(min_length=1)
     mobile_utilizado: bool

@@ -6,8 +6,11 @@ from zoneinfo import ZoneInfo
 import pytest
 
 from app.models.passagem import (
+    EquipeMembro,
     LadoLinha,
     Linha,
+    PassagemBrisamarDetalhe,
+    PassagemLinhaOcupacao,
     PassagemServico,
     Radio,
     Terminal,
@@ -15,7 +18,10 @@ from app.models.passagem import (
     Turno,
 )
 from app.models.usuario import Usuario
-from app.schemas.passagem_schema import PassagemBrisamarRequest
+from app.schemas.passagem_schema import (
+    PassagemBrisamarEdicaoRequest,
+    PassagemBrisamarRequest,
+)
 from app.services.passagem_service import PassagemError, PassagemService
 
 
@@ -234,3 +240,107 @@ def test_busca_para_edicao_desfaz_transacao_quando_validacao_falha():
         service.obter_para_edicao(uuid.uuid4(), Usuario(id=uuid.uuid4()))
 
     passagem_repository.desfazer.assert_called_once_with()
+
+
+def criar_dados_edicao_brisamar() -> PassagemBrisamarEdicaoRequest:
+    dados = criar_dados_validos().model_dump()
+    dados.pop("data")
+    dados.pop("turma")
+    dados.pop("turno")
+    dados["observacoes"] = "Estado atualizado"
+    return PassagemBrisamarEdicaoRequest(**dados)
+
+
+def criar_passagem_brisamar_existente(responsavel_id) -> PassagemServico:
+    linhas = criar_linhas_brisamar()
+    return PassagemServico(
+        id=uuid.uuid4(),
+        terminal=Terminal.BRISAMAR,
+        data=date(2026, 8, 14),
+        turma=Turma.C,
+        turno=Turno.DIURNO,
+        responsavel_id=responsavel_id,
+        observacoes="Estado anterior",
+        mobile_utilizado=True,
+        detalhe_brisamar=PassagemBrisamarDetalhe(
+            radios_operantes=2,
+            radios_inoperantes=0,
+            baterias=2,
+            carregadores=1,
+        ),
+        equipe=[EquipeMembro(nome="Antigo", matricula="87654321")],
+        ocupacoes_linhas=[
+            PassagemLinhaOcupacao(linha=linha, veiculos="Anterior")
+            for linha in linhas
+        ],
+    )
+
+
+def test_editar_brisamar_registra_estado_anterior_e_confirma_uma_vez():
+    service, repository, _, _ = criar_service()
+    responsavel = Usuario(id=uuid.uuid4())
+    passagem = criar_passagem_brisamar_existente(responsavel.id)
+    repository.buscar_para_edicao.return_value = passagem
+    repository.confirmar_edicao.side_effect = lambda registro: registro
+    estado_no_snapshot = []
+    repository.registrar_snapshot.side_effect = (
+        lambda registro, _: estado_no_snapshot.append(registro.observacoes)
+    )
+
+    resultado = service.editar_brisamar(
+        passagem.id,
+        criar_dados_edicao_brisamar(),
+        responsavel,
+        datetime(2026, 8, 14, 12, 0, tzinfo=FUSO_SP),
+    )
+
+    assert resultado.observacoes == "Estado atualizado"
+    assert estado_no_snapshot == ["Estado anterior"]
+    assert resultado.data == date(2026, 8, 14)
+    assert resultado.turma == Turma.C
+    assert resultado.turno == Turno.DIURNO
+    assert resultado.equipe[0].nome == "Operador"
+    repository.registrar_snapshot.assert_called_once_with(passagem, responsavel.id)
+    repository.confirmar_edicao.assert_called_once_with(passagem)
+    repository.desfazer.assert_not_called()
+
+
+def test_editar_brisamar_desfaz_sem_snapshot_quando_linhas_sao_invalidas():
+    service, repository, _, _ = criar_service()
+    responsavel = Usuario(id=uuid.uuid4())
+    passagem = criar_passagem_brisamar_existente(responsavel.id)
+    repository.buscar_para_edicao.return_value = passagem
+    dados = criar_dados_edicao_brisamar()
+    dados.ocupacoes_linhas.pop()
+
+    with pytest.raises(PassagemError, match="todas as linhas"):
+        service.editar_brisamar(
+            passagem.id,
+            dados,
+            responsavel,
+            datetime(2026, 8, 14, 12, 0, tzinfo=FUSO_SP),
+        )
+
+    repository.registrar_snapshot.assert_not_called()
+    repository.confirmar_edicao.assert_not_called()
+    repository.desfazer.assert_called_once_with()
+
+
+def test_editar_brisamar_desfaz_snapshot_se_mutacao_falha():
+    service, repository, _, radio_repository = criar_service()
+    responsavel = Usuario(id=uuid.uuid4())
+    passagem = criar_passagem_brisamar_existente(responsavel.id)
+    repository.buscar_para_edicao.return_value = passagem
+    radio_repository.buscar_ou_criar.side_effect = RuntimeError("falha simulada")
+
+    with pytest.raises(RuntimeError, match="falha simulada"):
+        service.editar_brisamar(
+            passagem.id,
+            criar_dados_edicao_brisamar(),
+            responsavel,
+            datetime(2026, 8, 14, 12, 0, tzinfo=FUSO_SP),
+        )
+
+    repository.registrar_snapshot.assert_called_once()
+    repository.confirmar_edicao.assert_not_called()
+    repository.desfazer.assert_called_once_with()
