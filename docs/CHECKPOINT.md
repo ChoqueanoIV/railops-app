@@ -40,6 +40,8 @@ Atualizado em: 18/08/2026
 - compatibilidade temporária mantida em `backend/main.py`;
 - `backend/.env.example` sem credenciais reais;
 - testes isolados do `.env` local;
+- README principal com instalação reproduzível, migrations, execução do backend
+  e frontend, criação opcional de usuário e roteiro de avaliação manual;
 - documentação do estado atual atualizada.
 
 ## Próximo passo obrigatório
