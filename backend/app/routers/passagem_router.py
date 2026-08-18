@@ -15,13 +15,12 @@ from app.schemas.passagem_schema import (
     PassagemAtualizadaResponse,
     PassagemBrisamarEdicaoRequest,
     PassagemBrisamarRequest,
-    PassagemCriadaResponse,
     PassagemConsultaResponse,
+    PassagemCriadaResponse,
     PassagemTeconEdicaoRequest,
     PassagemTeconRequest,
 )
 from app.services.passagem_service import PassagemError, PassagemService
-
 
 router = APIRouter(prefix="/passagens", tags=["Passagens de serviço"])
 

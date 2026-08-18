@@ -4,6 +4,7 @@ from unittest.mock import MagicMock
 from zoneinfo import ZoneInfo
 
 import pytest
+from tests.test_passagem_tecon_schema import LINHAS_TECON, dados_tecon_validos
 
 from app.models.passagem import (
     LadoLinha,
@@ -19,7 +20,6 @@ from app.models.passagem import (
 from app.models.usuario import Usuario
 from app.schemas.passagem_schema import PassagemTeconEdicaoRequest, PassagemTeconRequest
 from app.services.passagem_service import PassagemError, PassagemService
-from tests.test_passagem_tecon_schema import LINHAS_TECON, dados_tecon_validos
 
 
 def criar_linhas_tecon() -> list[Linha]:
@@ -43,9 +43,7 @@ def criar_service_tecon():
         id=uuid.uuid4(), numero="R-TECON-01"
     )
     passagem_repository.salvar.side_effect = lambda passagem: passagem
-    service = PassagemService(
-        passagem_repository, linha_repository, radio_repository
-    )
+    service = PassagemService(passagem_repository, linha_repository, radio_repository)
     return service, passagem_repository, linha_repository, radio_repository
 
 

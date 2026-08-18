@@ -24,3 +24,29 @@ Este diretório organiza a evolução técnica do `railops-app`.
 5. Execute testes antes e depois.
 6. Faça commit semântico.
 7. Atualize a task com evidências.
+
+## Qualidade do backend
+
+Instale as dependências de desenvolvimento a partir da raiz do repositório:
+
+```bash
+python -m pip install -r backend/requirements-dev.txt
+```
+
+Execute os checks também a partir da raiz:
+
+```bash
+python -m pytest
+python -m pytest --cov=backend/app --cov-report=term-missing
+python -m ruff check .
+python -m ruff format --check .
+python -m mypy
+python -m pre_commit run --all-files
+```
+
+Para instalar os hooks locais do Git:
+
+```bash
+python -m pre_commit install
+python -m pre_commit install --hook-type pre-push
+```

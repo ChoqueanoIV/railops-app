@@ -1,4 +1,3 @@
-﻿import os
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -35,9 +34,7 @@ class AuthService:
         if usuario.pin_definido or usuario.codigo_ativacao_hash is None:
             raise AutenticacaoError("Dados de ativação inválidos.")
 
-        if not pwd_context.verify(
-            codigo_ativacao, usuario.codigo_ativacao_hash
-        ):
+        if not pwd_context.verify(codigo_ativacao, usuario.codigo_ativacao_hash):
             raise AutenticacaoError("Dados de ativação inválidos.")
 
         pin_hash = pwd_context.hash(pin)
@@ -71,11 +68,12 @@ class AuthService:
         return usuario
 
     def _gerar_token(self, usuario: Usuario) -> str:
-        expira_em = datetime.now(timezone.utc) + timedelta(minutes=EXPIRACAO_TOKEN_MINUTOS)
+        expira_em = datetime.now(timezone.utc) + timedelta(
+            minutes=EXPIRACAO_TOKEN_MINUTOS
+        )
         payload = {
             "sub": str(usuario.id),
             "matricula": usuario.matricula,
             "exp": expira_em,
         }
         return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
-

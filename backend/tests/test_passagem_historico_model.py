@@ -34,7 +34,6 @@ def test_historico_possui_versao_unica_por_passagem():
     restricoes = PassagemServicoHistorico.__table__.constraints
 
     assert any(
-        restricao.name == "uq_historico_passagem_versao"
-        for restricao in restricoes
+        restricao.name == "uq_historico_passagem_versao" for restricao in restricoes
     )
     assert PassagemServico.historico.property.uselist is True

@@ -144,9 +144,7 @@ class PassagemBrisamarDetalhe(Base):
     eots_disponiveis: Mapped[str | None] = mapped_column(Text, nullable=True)
     eots_avariados: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    passagem: Mapped[PassagemServico] = relationship(
-        back_populates="detalhe_brisamar"
-    )
+    passagem: Mapped[PassagemServico] = relationship(back_populates="detalhe_brisamar")
 
 
 class PassagemTeconDetalhe(Base):
@@ -162,9 +160,7 @@ class PassagemTeconDetalhe(Base):
         nullable=False,
     )
     houve_atendimento: Mapped[bool] = mapped_column(Boolean, nullable=False)
-    carga_mal_posicionada: Mapped[bool | None] = mapped_column(
-        Boolean, nullable=True
-    )
+    carga_mal_posicionada: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
     carga_mal_posicionada_descricao: Mapped[str | None] = mapped_column(
         Text, nullable=True
     )
@@ -220,9 +216,7 @@ class PassagemLinhaOcupacao(Base):
     veiculos: Mapped[str | None] = mapped_column(Text, nullable=True)
     sup_inf: Mapped[LadoLinha | None] = mapped_column(Enum(LadoLinha), nullable=True)
 
-    passagem: Mapped[PassagemServico] = relationship(
-        back_populates="ocupacoes_linhas"
-    )
+    passagem: Mapped[PassagemServico] = relationship(back_populates="ocupacoes_linhas")
     linha: Mapped[Linha] = relationship(back_populates="ocupacoes")
 
 
@@ -275,7 +269,5 @@ class PassagemRadioUso(Base):
     )
     falha_descricao: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    passagem: Mapped[PassagemServico] = relationship(
-        back_populates="radios_utilizados"
-    )
+    passagem: Mapped[PassagemServico] = relationship(back_populates="radios_utilizados")
     radio: Mapped[Radio] = relationship(back_populates="usos")

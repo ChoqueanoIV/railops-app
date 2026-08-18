@@ -10,11 +10,7 @@ class UsuarioRepository:
         self.db = db
 
     def buscar_por_matricula(self, matricula: str) -> Usuario | None:
-        return (
-            self.db.query(Usuario)
-            .filter(Usuario.matricula == matricula)
-            .first()
-        )
+        return self.db.query(Usuario).filter(Usuario.matricula == matricula).first()
 
     def buscar_por_id(self, usuario_id: uuid.UUID) -> Usuario | None:
         return self.db.query(Usuario).filter(Usuario.id == usuario_id).first()

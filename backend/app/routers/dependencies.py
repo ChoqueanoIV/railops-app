@@ -5,8 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.usuario import Usuario
 from app.repositories.usuario_repository import UsuarioRepository
-from app.services.auth_service import AuthService, AutenticacaoError
-
+from app.services.auth_service import AutenticacaoError, AuthService
 
 bearer_scheme = HTTPBearer(auto_error=False)
 

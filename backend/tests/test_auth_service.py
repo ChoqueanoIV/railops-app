@@ -10,8 +10,8 @@ from app.schemas.auth_schema import LoginRequest, PrimeiroAcessoRequest
 from app.services.auth_service import (
     ALGORITHM,
     SECRET_KEY,
-    AuthService,
     AutenticacaoError,
+    AuthService,
     pwd_context,
 )
 
@@ -100,16 +100,12 @@ def test_primeiro_acesso_rejeita_reutilizacao_do_codigo():
 
 def test_primeiro_acesso_rejeita_codigo_fora_do_formato():
     with pytest.raises(ValidationError):
-        PrimeiroAcessoRequest(
-            matricula="30032552", codigo_ativacao="12345", pin="4321"
-        )
+        PrimeiroAcessoRequest(matricula="30032552", codigo_ativacao="12345", pin="4321")
 
 
 def test_primeiro_acesso_rejeita_pin_fora_do_formato():
     with pytest.raises(ValidationError):
-        PrimeiroAcessoRequest(
-            matricula="30032552", codigo_ativacao="123456", pin="321"
-        )
+        PrimeiroAcessoRequest(matricula="30032552", codigo_ativacao="123456", pin="321")
 
 
 def test_validar_token_retorna_usuario():

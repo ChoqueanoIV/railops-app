@@ -63,9 +63,7 @@ def test_login_converte_erro_de_credencial_em_401(monkeypatch):
     )
 
     with pytest.raises(HTTPException) as erro:
-        auth_router.login(
-            LoginRequest(matricula="30032552", pin="4321"), MagicMock()
-        )
+        auth_router.login(LoginRequest(matricula="30032552", pin="4321"), MagicMock())
 
     assert erro.value.status_code == 401
     assert erro.value.detail == "Matrícula ou PIN inválidos."
