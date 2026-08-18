@@ -4,6 +4,7 @@ Este diretório organiza a evolução técnica do `railops-app`.
 
 ## Índice
 
+- `CHECKPOINT.md` — estado seguro e próximo passo para retomar o projeto.
 - `architecture/current-state.md` — leitura do estado atual.
 - `architecture/target-architecture.md` — arquitetura alvo.
 - `architecture/migration-strategy.md` — como migrar sem big bang.
