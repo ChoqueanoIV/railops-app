@@ -3,7 +3,6 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-
 PASTA_BACKEND = Path(__file__).resolve().parents[2]
 ARQUIVO_ENV = PASTA_BACKEND / ".env"
 

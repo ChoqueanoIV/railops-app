@@ -15,7 +15,6 @@ from app.models.passagem import (
 )
 from app.models.usuario import Usuario
 
-
 __all__ = [
     "EquipeMembro",
     "LadoLinha",

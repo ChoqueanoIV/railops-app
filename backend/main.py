@@ -1,9 +1,8 @@
-﻿from fastapi import FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.auth_router import router as auth_router
 from app.routers.passagem_router import router as passagem_router
-
 
 app = FastAPI(title="RailOps API")
 

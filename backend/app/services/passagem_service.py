@@ -85,9 +85,7 @@ class PassagemService:
             mobile_utilizado=dados.mobile_utilizado,
             mobile_justificativa=dados.mobile_justificativa,
             detalhe_brisamar=PassagemBrisamarDetalhe(**dados.detalhe.model_dump()),
-            equipe=[
-                EquipeMembro(**membro.model_dump()) for membro in dados.equipe
-            ],
+            equipe=[EquipeMembro(**membro.model_dump()) for membro in dados.equipe],
             ocupacoes_linhas=[
                 PassagemLinhaOcupacao(
                     linha=linhas_por_codigo[ocupacao.codigo_linha],
@@ -141,9 +139,7 @@ class PassagemService:
             mobile_utilizado=dados.mobile_utilizado,
             mobile_justificativa=dados.mobile_justificativa,
             detalhe_tecon=PassagemTeconDetalhe(**dados.detalhe.model_dump()),
-            equipe=[
-                EquipeMembro(**membro.model_dump()) for membro in dados.equipe
-            ],
+            equipe=[EquipeMembro(**membro.model_dump()) for membro in dados.equipe],
             ocupacoes_linhas=[
                 PassagemLinhaOcupacao(
                     linha=linhas_por_codigo[ocupacao.codigo_linha],
@@ -251,7 +247,9 @@ class PassagemService:
         for ocupacao in dados.ocupacoes_linhas:
             linha = linhas_por_codigo[ocupacao.codigo_linha]
             if linha.permite_sup_inf and ocupacao.sup_inf is None:
-                raise PassagemError(f"A linha {linha.codigo} exige indicação SUP ou INF.")
+                raise PassagemError(
+                    f"A linha {linha.codigo} exige indicação SUP ou INF."
+                )
             if not linha.permite_sup_inf and ocupacao.sup_inf is not None:
                 raise PassagemError(
                     f"A linha {linha.codigo} não permite indicação SUP ou INF."
@@ -265,8 +263,7 @@ class PassagemService:
         passagem.mobile_justificativa = dados.mobile_justificativa
         passagem.equipe = [EquipeMembro(**item.model_dump()) for item in dados.equipe]
         ocupacoes_por_codigo = {
-            ocupacao.linha.codigo: ocupacao
-            for ocupacao in passagem.ocupacoes_linhas
+            ocupacao.linha.codigo: ocupacao for ocupacao in passagem.ocupacoes_linhas
         }
         for item in dados.ocupacoes_linhas:
             ocupacao = ocupacoes_por_codigo[item.codigo_linha]
@@ -323,17 +320,13 @@ class PassagemService:
         passagem: PassagemServico,
     ) -> tuple[datetime, datetime]:
         if passagem.turno == Turno.DIURNO:
-            inicio = datetime.combine(
-                passagem.data, time(7, 0), tzinfo=FUSO_OPERACAO
-            )
+            inicio = datetime.combine(passagem.data, time(7, 0), tzinfo=FUSO_OPERACAO)
             encerramento = datetime.combine(
                 passagem.data, time(19, 0), tzinfo=FUSO_OPERACAO
             )
             return inicio, encerramento
 
-        inicio = datetime.combine(
-            passagem.data, time(19, 0), tzinfo=FUSO_OPERACAO
-        )
+        inicio = datetime.combine(passagem.data, time(19, 0), tzinfo=FUSO_OPERACAO)
         encerramento = datetime.combine(
             passagem.data + timedelta(days=1),
             time(7, 0),

@@ -24,7 +24,6 @@ from app.schemas.passagem_schema import (
 )
 from app.services.passagem_service import PassagemError, PassagemService
 
-
 CODIGOS_BRISAMAR = ["16", "18", "20", "22", "24", "26", "28", "30"]
 
 
@@ -82,16 +81,12 @@ def criar_service():
         id=uuid.uuid4(), numero="R-01"
     )
     passagem_repository.salvar.side_effect = lambda passagem: passagem
-    service = PassagemService(
-        passagem_repository, linha_repository, radio_repository
-    )
+    service = PassagemService(passagem_repository, linha_repository, radio_repository)
     return service, passagem_repository, linha_repository, radio_repository
 
 
 def test_criar_brisamar_monta_passagem_completa():
-    service, passagem_repository, linha_repository, radio_repository = (
-        criar_service()
-    )
+    service, passagem_repository, linha_repository, radio_repository = criar_service()
     responsavel = Usuario(id=uuid.uuid4(), matricula="30032552", nome="Responsável")
 
     passagem = service.criar_brisamar(criar_dados_validos(), responsavel)
@@ -286,8 +281,7 @@ def criar_passagem_brisamar_existente(responsavel_id) -> PassagemServico:
         ),
         equipe=[EquipeMembro(nome="Antigo", matricula="87654321")],
         ocupacoes_linhas=[
-            PassagemLinhaOcupacao(linha=linha, veiculos="Anterior")
-            for linha in linhas
+            PassagemLinhaOcupacao(linha=linha, veiculos="Anterior") for linha in linhas
         ],
     )
 
@@ -299,8 +293,8 @@ def test_editar_brisamar_registra_estado_anterior_e_confirma_uma_vez():
     repository.buscar_para_edicao.return_value = passagem
     repository.confirmar_edicao.side_effect = lambda registro: registro
     estado_no_snapshot = []
-    repository.registrar_snapshot.side_effect = (
-        lambda registro, _: estado_no_snapshot.append(registro.observacoes)
+    repository.registrar_snapshot.side_effect = lambda registro, _: (
+        estado_no_snapshot.append(registro.observacoes)
     )
     detalhe_anterior = passagem.detalhe_brisamar
     ocupacoes_anteriores = list(passagem.ocupacoes_linhas)

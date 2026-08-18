@@ -1,6 +1,5 @@
 from main import app
 
-
 ENDPOINTS_PUBLICOS = {
     "/health": {"get"},
     "/auth/primeiro-acesso": {"post"},

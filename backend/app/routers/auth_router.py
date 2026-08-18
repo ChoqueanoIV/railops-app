@@ -1,10 +1,10 @@
-﻿from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.repositories.usuario_repository import UsuarioRepository
-from app.services.auth_service import AuthService, AutenticacaoError
-from app.schemas.auth_schema import PrimeiroAcessoRequest, LoginRequest, LoginResponse
+from app.schemas.auth_schema import LoginRequest, LoginResponse, PrimeiroAcessoRequest
+from app.services.auth_service import AutenticacaoError, AuthService
 
 router = APIRouter(prefix="/auth", tags=["Autenticação"])
 
@@ -14,9 +14,7 @@ def primeiro_acesso(dados: PrimeiroAcessoRequest, db: Session = Depends(get_db))
     repository = UsuarioRepository(db)
     service = AuthService(repository)
     try:
-        service.primeiro_acesso(
-            dados.matricula, dados.codigo_ativacao, dados.pin
-        )
+        service.primeiro_acesso(dados.matricula, dados.codigo_ativacao, dados.pin)
     except AutenticacaoError as erro:
         raise HTTPException(status_code=400, detail=str(erro))
     return {"mensagem": "PIN definido com sucesso"}

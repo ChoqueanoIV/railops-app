@@ -3,7 +3,6 @@ from pydantic import ValidationError
 
 from app.schemas.passagem_schema import PassagemTeconRequest
 
-
 LINHAS_TECON = [
     "Viaduto/DM1A",
     "L1",
@@ -27,8 +26,7 @@ def dados_tecon_validos() -> dict:
         "mobile_utilizado": True,
         "equipe": [],
         "ocupacoes_linhas": [
-            {"codigo_linha": codigo, "veiculos": "Livre"}
-            for codigo in LINHAS_TECON
+            {"codigo_linha": codigo, "veiculos": "Livre"} for codigo in LINHAS_TECON
         ],
         "detalhe": {"houve_atendimento": False},
         "radios_utilizados": [],

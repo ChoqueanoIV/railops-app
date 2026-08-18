@@ -3,14 +3,14 @@ from unittest.mock import MagicMock
 
 import pytest
 from fastapi import HTTPException
+from tests.test_passagem_repository import criar_passagem_completa_para_snapshot
+from tests.test_passagem_service import criar_dados_edicao_brisamar, criar_dados_validos
+from tests.test_passagem_tecon_service import criar_dados_tecon_request
 
 from app.models.usuario import Usuario
 from app.routers import passagem_router
 from app.schemas.passagem_schema import PassagemTeconEdicaoRequest
 from app.services.passagem_service import PassagemError
-from tests.test_passagem_service import criar_dados_edicao_brisamar, criar_dados_validos
-from tests.test_passagem_repository import criar_passagem_completa_para_snapshot
-from tests.test_passagem_tecon_service import criar_dados_tecon_request
 
 
 def test_criar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
@@ -102,9 +102,7 @@ def test_editar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
     dados = criar_dados_edicao_brisamar()
     usuario = Usuario(id=uuid.uuid4())
 
-    resposta = passagem_router.editar_passagem(
-        passagem_id, dados, MagicMock(), usuario
-    )
+    resposta = passagem_router.editar_passagem(passagem_id, dados, MagicMock(), usuario)
 
     assert resposta.id == passagem_id
     assert resposta.mensagem == "Passagem de serviço atualizada com sucesso."

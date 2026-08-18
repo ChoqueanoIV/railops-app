@@ -16,9 +16,7 @@ def dados_passagem_validos() -> dict:
         "observacoes": "Sem alterações",
         "relatorio_ocorrencias": "Sem ocorrências",
         "mobile_utilizado": True,
-        "equipe": [
-            {"nome": "Operador de Teste", "matricula": "12345678"}
-        ],
+        "equipe": [{"nome": "Operador de Teste", "matricula": "12345678"}],
         "ocupacoes_linhas": [
             {
                 "codigo_linha": "22",
