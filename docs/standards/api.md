@@ -69,6 +69,7 @@ código `REQUEST_VALIDATION_ERROR`.
 | `PASSAGEM_NOT_FOUND` | 404 | Passagem não encontrada na consulta |
 | `REQUEST_VALIDATION_ERROR` | 422 | Payload ou parâmetro inválido |
 | `HTTP_ERROR` | variável | Compatibilidade com erros HTTP legados |
+| `PERSISTENCE_ERROR` | 500 | Falha de persistência sem detalhes internos |
 
 ## Sucesso
 
