@@ -26,7 +26,8 @@ Definir claramente quem acessa banco e quem controla transação.
 Preencher ao executar a task:
 
 - Branch: `refactor/repositories-transactions`
-- Commits: `4f0ba70` (`refactor: centraliza fronteira transacional`)
+- Commits: `4f0ba70` (`refactor: centraliza fronteira transacional`) e `081a75e`
+  (`docs: registra fronteira transacional`)
 - Testes antes: `111 passed`
 - Testes depois: `115 passed`; cobertura total de `94%`
 - Lint: Ruff e formatter Ruff aprovados pelo pre-commit
