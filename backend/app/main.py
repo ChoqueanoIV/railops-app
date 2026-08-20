@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.errors import registrar_exception_handlers
 from app.core.config import Configuracao, obter_configuracao
 from app.features.auth.controller import router as auth_router
-from app.routers.passagem_router import router as passagem_router
+from app.features.passagens.controller import router as passagem_router
 
 
 def health_check() -> dict[str, str]:

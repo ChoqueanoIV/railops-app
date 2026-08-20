@@ -1,8 +1,8 @@
 import pytest
 from pydantic import ValidationError
 
-from app.models.passagem import LadoLinha
-from app.schemas.passagem_schema import (
+from app.features.passagens.models import LadoLinha
+from app.features.passagens.schemas import (
     PassagemBrisamarEdicaoRequest,
     PassagemBrisamarRequest,
 )

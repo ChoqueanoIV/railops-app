@@ -1,6 +1,6 @@
 # Migrar passagens para features
 
-Status: `TODO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 Migrar Brisamar/TECON de forma incremental após validar o padrão com auth.
@@ -13,20 +13,26 @@ Migrar Brisamar/TECON de forma incremental após validar o padrão com auth.
 - preservar validações existentes.
 
 ## Critérios de aceite
-- [ ] cada fluxo mantém comportamento;
-- [ ] dependências entre Brisamar/TECON são explícitas;
-- [ ] regra não reside em controller;
-- [ ] persistência não reside em service quando pode ser repository;
-- [ ] testes passam.
+- [x] cada fluxo mantém comportamento;
+- [x] dependências entre Brisamar/TECON são explícitas;
+- [x] regra não reside em controller;
+- [x] persistência não reside em service quando pode ser repository;
+- [x] testes passam.
 
 ## Evidências
 
 Preencher ao executar a task:
 
-- Branch:
-- Commits:
-- Testes antes:
-- Testes depois:
-- Lint:
-- Type-check:
-- Observações:
+- Branch: `refactor/passagens-feature`
+- Commits: `bade0be` (`refactor: organiza passagens por feature`) e `4e9de20`
+  (`docs: registra migracao das passagens`)
+- Testes antes: `110 passed`
+- Testes depois: `111 passed`; cobertura total de `94%`
+- Lint: Ruff e formatter Ruff aprovados pelo pre-commit
+- Type-check: `mypy` aprovado no escopo configurado
+- Observações: Brisamar e TECON permanecem explícitos em schemas e métodos do
+  service, compartilhando somente o agregado, edição, histórico e persistência
+  que já eram comuns. Não foi criada herança. Os módulos antigos são adaptadores
+  temporários, e um teste garante que reexportam as mesmas classes, inclusive
+  modelos ORM. As exceções progressivas do mypy apenas acompanharam os novos
+  caminhos canônicos, sem ampliar os códigos desabilitados.

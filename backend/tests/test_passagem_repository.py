@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 import pytest
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.models.passagem import (
+from app.features.passagens.models import (
     EquipeMembro,
     Linha,
     PassagemBrisamarDetalhe,
@@ -19,7 +19,7 @@ from app.models.passagem import (
     Turma,
     Turno,
 )
-from app.repositories.passagem_repository import (
+from app.features.passagens.repository import (
     LinhaRepository,
     PassagemRepository,
     RadioRepository,

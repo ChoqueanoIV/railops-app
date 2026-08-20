@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from app.schemas.passagem_schema import PassagemTeconRequest
+from app.features.passagens.schemas import PassagemTeconRequest
 
 LINHAS_TECON = [
     "Viaduto/DM1A",

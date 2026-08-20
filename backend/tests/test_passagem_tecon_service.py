@@ -7,7 +7,8 @@ import pytest
 from tests.test_passagem_tecon_schema import LINHAS_TECON, dados_tecon_validos
 
 from app.features.auth.models import Usuario
-from app.models.passagem import (
+from app.features.passagens.exceptions import PassagemError
+from app.features.passagens.models import (
     LadoLinha,
     Linha,
     PassagemLinhaOcupacao,
@@ -18,8 +19,11 @@ from app.models.passagem import (
     Turma,
     Turno,
 )
-from app.schemas.passagem_schema import PassagemTeconEdicaoRequest, PassagemTeconRequest
-from app.services.passagem_service import PassagemError, PassagemService
+from app.features.passagens.schemas import (
+    PassagemTeconEdicaoRequest,
+    PassagemTeconRequest,
+)
+from app.features.passagens.service import PassagemService
 
 
 def criar_linhas_tecon() -> list[Linha]:

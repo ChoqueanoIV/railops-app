@@ -34,6 +34,13 @@ backend/
         schemas.py
         service.py
         types.py
+      passagens/
+        controller.py
+        exceptions.py
+        models.py
+        repository.py
+        schemas.py
+        service.py
     main.py
     models/
     repositories/
@@ -50,10 +57,10 @@ backend/
 
 A aplicação possui configuração tipada centralizada e fábrica de bootstrap em
 `app/main.py`. O `main.py` da raiz do backend permanece como entrypoint
-compatível. Autenticação é a primeira área migrada para organização por feature.
-Os módulos antigos de auth em `models`, `repositories`, `routers`, `schemas` e
-`services` são adaptadores temporários que reexportam os símbolos canônicos de
-`app.features.auth`; código de produção novo deve usar a feature diretamente.
+compatível. Autenticação e passagens estão organizadas por feature. Os módulos
+antigos em `models`, `repositories`, `routers`, `schemas` e `services` são
+adaptadores temporários que reexportam os símbolos canônicos de `app.features`;
+código de produção novo deve usar as features diretamente.
 
 ## Testes existentes
 
@@ -67,7 +74,7 @@ O repositório já contém testes de:
 - TECON schema;
 - TECON service.
 
-A suíte atual contém 110 testes e não depende das credenciais do `.env` real.
+A suíte atual contém 111 testes e não depende das credenciais do `.env` real.
 
 ## Frontend
 
