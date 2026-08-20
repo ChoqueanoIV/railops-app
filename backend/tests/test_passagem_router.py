@@ -2,11 +2,11 @@ import uuid
 from unittest.mock import MagicMock
 
 import pytest
-from fastapi import HTTPException
 from tests.test_passagem_repository import criar_passagem_completa_para_snapshot
 from tests.test_passagem_service import criar_dados_edicao_brisamar, criar_dados_validos
 from tests.test_passagem_tecon_service import criar_dados_tecon_request
 
+from app.api.errors import ApiError
 from app.models.usuario import Usuario
 from app.routers import passagem_router
 from app.schemas.passagem_schema import PassagemTeconEdicaoRequest
@@ -43,7 +43,7 @@ def test_criar_passagem_brisamar_converte_erro_de_negocio(monkeypatch):
         MagicMock(side_effect=PassagemError("Dados inválidos.")),
     )
 
-    with pytest.raises(HTTPException) as erro:
+    with pytest.raises(ApiError) as erro:
         passagem_router.criar_passagem_brisamar(
             criar_dados_validos(),
             MagicMock(),
@@ -51,7 +51,8 @@ def test_criar_passagem_brisamar_converte_erro_de_negocio(monkeypatch):
         )
 
     assert erro.value.status_code == 400
-    assert erro.value.detail == "Dados inválidos."
+    assert erro.value.code == "PASSAGEM_INVALID"
+    assert erro.value.message == "Dados inválidos."
 
 
 def test_criar_passagem_tecon_retorna_id_e_mensagem(monkeypatch):
@@ -84,7 +85,7 @@ def test_criar_passagem_tecon_converte_erro_de_negocio(monkeypatch):
         MagicMock(side_effect=PassagemError("Dados do TECON inválidos.")),
     )
 
-    with pytest.raises(HTTPException) as erro:
+    with pytest.raises(ApiError) as erro:
         passagem_router.criar_passagem_tecon(
             criar_dados_tecon_request(),
             MagicMock(),
@@ -92,7 +93,8 @@ def test_criar_passagem_tecon_converte_erro_de_negocio(monkeypatch):
         )
 
     assert erro.value.status_code == 400
-    assert erro.value.detail == "Dados do TECON inválidos."
+    assert erro.value.code == "PASSAGEM_INVALID"
+    assert erro.value.message == "Dados do TECON inválidos."
 
 
 def test_editar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
@@ -131,7 +133,7 @@ def test_editar_passagem_converte_erro_de_negocio(monkeypatch):
         MagicMock(side_effect=PassagemError("Turno encerrado.")),
     )
 
-    with pytest.raises(HTTPException) as erro:
+    with pytest.raises(ApiError) as erro:
         passagem_router.editar_passagem(
             uuid.uuid4(),
             criar_dados_edicao_brisamar(),
@@ -140,7 +142,8 @@ def test_editar_passagem_converte_erro_de_negocio(monkeypatch):
         )
 
     assert erro.value.status_code == 400
-    assert erro.value.detail == "Turno encerrado."
+    assert erro.value.code == "PASSAGEM_UPDATE_INVALID"
+    assert erro.value.message == "Turno encerrado."
 
 
 def test_consultar_passagem_retorna_detalhes_e_permissao(monkeypatch):
@@ -174,9 +177,10 @@ def test_consultar_passagem_inexistente_retorna_404(monkeypatch):
         MagicMock(side_effect=PassagemError("Passagem de serviço não encontrada.")),
     )
 
-    with pytest.raises(HTTPException) as erro:
+    with pytest.raises(ApiError) as erro:
         passagem_router.consultar_passagem(
             uuid.uuid4(), MagicMock(), Usuario(id=uuid.uuid4())
         )
 
     assert erro.value.status_code == 404
+    assert erro.value.code == "PASSAGEM_NOT_FOUND"

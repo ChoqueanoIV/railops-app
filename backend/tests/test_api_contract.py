@@ -43,3 +43,23 @@ def test_openapi_mantem_autenticacao_apenas_nas_rotas_de_passagem():
     ):
         for operacao in caminhos[caminho].values():
             assert operacao["security"] == [{"HTTPBearer": []}]
+
+
+def test_openapi_documenta_erros_conhecidos_com_schema_unico():
+    caminhos = app.openapi()["paths"]
+
+    respostas_esperadas = {
+        ("/auth/primeiro-acesso", "post"): {"400"},
+        ("/auth/login", "post"): {"401"},
+        ("/passagens/brisamar", "post"): {"400", "401"},
+        ("/passagens/tecon", "post"): {"400", "401"},
+        ("/passagens/{passagem_id}", "get"): {"401", "404"},
+        ("/passagens/{passagem_id}", "put"): {"400", "401"},
+    }
+
+    for (caminho, metodo), status_esperados in respostas_esperadas.items():
+        respostas = caminhos[caminho][metodo]["responses"]
+        assert status_esperados <= set(respostas)
+        for status in status_esperados:
+            schema = respostas[status]["content"]["application/json"]["schema"]
+            assert schema["$ref"].endswith("/ErrorResponse")

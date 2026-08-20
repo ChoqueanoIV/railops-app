@@ -1,8 +1,9 @@
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from app.api.errors import ApiError, resposta_erro
 from app.core.database import get_db
 from app.models.usuario import Usuario
 from app.repositories.passagem_repository import (
@@ -73,6 +74,11 @@ def montar_resposta_consulta(passagem, editavel):
     "/brisamar",
     response_model=PassagemCriadaResponse,
     status_code=201,
+    summary="Registrar passagem de serviço do Brisamar",
+    responses={
+        400: resposta_erro("Regra de negócio inválida"),
+        401: resposta_erro("Não autenticado"),
+    },
 )
 def criar_passagem_brisamar(
     dados: PassagemBrisamarRequest,
@@ -88,7 +94,9 @@ def criar_passagem_brisamar(
     try:
         passagem = service.criar_brisamar(dados, usuario_atual)
     except PassagemError as erro:
-        raise HTTPException(status_code=400, detail=str(erro))
+        raise ApiError(
+            status_code=400, code="PASSAGEM_INVALID", message=str(erro)
+        ) from erro
 
     return PassagemCriadaResponse(
         id=passagem.id,
@@ -100,6 +108,11 @@ def criar_passagem_brisamar(
     "/tecon",
     response_model=PassagemCriadaResponse,
     status_code=201,
+    summary="Registrar passagem de serviço do TECON",
+    responses={
+        400: resposta_erro("Regra de negócio inválida"),
+        401: resposta_erro("Não autenticado"),
+    },
 )
 def criar_passagem_tecon(
     dados: PassagemTeconRequest,
@@ -115,7 +128,9 @@ def criar_passagem_tecon(
     try:
         passagem = service.criar_tecon(dados, usuario_atual)
     except PassagemError as erro:
-        raise HTTPException(status_code=400, detail=str(erro))
+        raise ApiError(
+            status_code=400, code="PASSAGEM_INVALID", message=str(erro)
+        ) from erro
 
     return PassagemCriadaResponse(
         id=passagem.id,
@@ -123,7 +138,15 @@ def criar_passagem_tecon(
     )
 
 
-@router.put("/{passagem_id}", response_model=PassagemAtualizadaResponse)
+@router.put(
+    "/{passagem_id}",
+    response_model=PassagemAtualizadaResponse,
+    summary="Editar passagem de serviço",
+    responses={
+        400: resposta_erro("Regra de negócio inválida"),
+        401: resposta_erro("Não autenticado"),
+    },
+)
 def editar_passagem(
     passagem_id: uuid.UUID,
     dados: PassagemBrisamarEdicaoRequest | PassagemTeconEdicaoRequest,
@@ -142,7 +165,9 @@ def editar_passagem(
         else:
             passagem = service.editar_tecon(passagem_id, dados, usuario_atual)
     except PassagemError as erro:
-        raise HTTPException(status_code=400, detail=str(erro))
+        raise ApiError(
+            status_code=400, code="PASSAGEM_UPDATE_INVALID", message=str(erro)
+        ) from erro
 
     return PassagemAtualizadaResponse(
         id=passagem.id,
@@ -150,7 +175,15 @@ def editar_passagem(
     )
 
 
-@router.get("/{passagem_id}", response_model=PassagemConsultaResponse)
+@router.get(
+    "/{passagem_id}",
+    response_model=PassagemConsultaResponse,
+    summary="Consultar passagem de serviço",
+    responses={
+        401: resposta_erro("Não autenticado"),
+        404: resposta_erro("Passagem não encontrada"),
+    },
+)
 def consultar_passagem(
     passagem_id: uuid.UUID,
     db: Session = Depends(get_db),
@@ -164,7 +197,9 @@ def consultar_passagem(
     try:
         passagem = service.obter_por_id(passagem_id)
     except PassagemError as erro:
-        raise HTTPException(status_code=404, detail=str(erro))
+        raise ApiError(
+            status_code=404, code="PASSAGEM_NOT_FOUND", message=str(erro)
+        ) from erro
 
     return montar_resposta_consulta(
         passagem,

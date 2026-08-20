@@ -39,10 +39,11 @@ Ajustar nomes à linguagem de domínio real.
 
 ## Erros
 
-Formato alvo:
+Formato atual de transição:
 
 ```json
 {
+  "detail": "Passagem não encontrada.",
   "error": {
     "code": "PASSAGEM_NOT_FOUND",
     "message": "Passagem não encontrada.",
@@ -50,6 +51,24 @@ Formato alvo:
   }
 }
 ```
+
+O campo `detail` é mantido temporariamente para compatibilidade com o frontend
+legado. Clientes novos devem consumir `error.code`, `error.message` e
+`error.details`. Erros de validação mantêm a lista original em `detail` e usam o
+código `REQUEST_VALIDATION_ERROR`.
+
+### Códigos conhecidos
+
+| Código | Status | Situação |
+|---|---:|---|
+| `INVALID_ACTIVATION_DATA` | 400 | Dados inválidos no primeiro acesso |
+| `INVALID_CREDENTIALS` | 401 | Matrícula ou PIN inválidos |
+| `NOT_AUTHENTICATED` | 401 | Token ausente, inválido ou expirado |
+| `PASSAGEM_INVALID` | 400 | Regra inválida ao criar passagem |
+| `PASSAGEM_UPDATE_INVALID` | 400 | Regra inválida ao editar passagem |
+| `PASSAGEM_NOT_FOUND` | 404 | Passagem não encontrada na consulta |
+| `REQUEST_VALIDATION_ERROR` | 422 | Payload ou parâmetro inválido |
+| `HTTP_ERROR` | variável | Compatibilidade com erros HTTP legados |
 
 ## Sucesso
 
