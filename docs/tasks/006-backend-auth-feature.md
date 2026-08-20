@@ -33,7 +33,8 @@ Criar/organizar:
 Preencher ao executar a task:
 
 - Branch: `refactor/auth-feature`
-- Commits: `893c085` (`refactor: organiza autenticacao por feature`)
+- Commits: `893c085` (`refactor: organiza autenticacao por feature`) e
+  `3e69a0d` (`docs: registra migracao da autenticacao`)
 - Testes antes: `109 passed`
 - Testes depois: `110 passed`; cobertura total de `94%`
 - Lint: Ruff e formatter Ruff aprovados pelo pre-commit
