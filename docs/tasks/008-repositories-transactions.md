@@ -1,6 +1,6 @@
 # Repositories e fronteira transacional
 
-Status: `TODO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 Definir claramente quem acessa banco e quem controla transação.
@@ -15,20 +15,25 @@ Definir claramente quem acessa banco e quem controla transação.
 - preparar testes de integração.
 
 ## Critérios de aceite
-- [ ] sessão não é criada por operação de repository;
-- [ ] responsabilidades de commit são documentadas;
-- [ ] queries relevantes estão encapsuladas;
-- [ ] erros de persistência não vazam cruamente ao HTTP;
-- [ ] integração com PostgreSQL/Alembic permanece.
+- [x] sessão não é criada por operação de repository;
+- [x] responsabilidades de commit são documentadas;
+- [x] queries relevantes estão encapsuladas;
+- [x] erros de persistência não vazam cruamente ao HTTP;
+- [x] integração com PostgreSQL/Alembic permanece.
 
 ## Evidências
 
 Preencher ao executar a task:
 
-- Branch:
-- Commits:
-- Testes antes:
-- Testes depois:
-- Lint:
-- Type-check:
-- Observações:
+- Branch: `refactor/repositories-transactions`
+- Commits: `4f0ba70` (`refactor: centraliza fronteira transacional`) e `081a75e`
+  (`docs: registra fronteira transacional`)
+- Testes antes: `111 passed`
+- Testes depois: `115 passed`; cobertura total de `94%`
+- Lint: Ruff e formatter Ruff aprovados pelo pre-commit
+- Type-check: `mypy` aprovado no escopo configurado
+- Observações: controllers passaram a receber services por dependencies e não
+  importam SQLAlchemy. `TransacaoSQLAlchemy` centraliza commit, rollback e
+  refresh usando a sessão da requisição. Erros internos são convertidos em
+  `PERSISTENCE_ERROR` com mensagem neutra. Engine, metadata e Alembic não foram
+  alterados.

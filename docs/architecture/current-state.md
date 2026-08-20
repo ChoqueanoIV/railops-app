@@ -1,6 +1,6 @@
 # Estado atual observado
 
-Atualizado a partir da branch `refactor/auth-feature` em 19/08/2026.
+Atualizado a partir da branch `refactor/repositories-transactions` em 19/08/2026.
 
 ## Backend
 
@@ -36,11 +36,15 @@ backend/
         types.py
       passagens/
         controller.py
+        dependencies.py
         exceptions.py
         models.py
         repository.py
         schemas.py
         service.py
+    shared/
+      persistence/
+        transactions.py
     main.py
     models/
     repositories/
@@ -74,7 +78,7 @@ O repositório já contém testes de:
 - TECON schema;
 - TECON service.
 
-A suíte atual contém 111 testes e não depende das credenciais do `.env` real.
+A suíte atual contém 115 testes e não depende das credenciais do `.env` real.
 
 ## Frontend
 

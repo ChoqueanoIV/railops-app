@@ -2,8 +2,6 @@ import uuid
 from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
-from sqlalchemy.exc import SQLAlchemyError
-
 from app.features.auth.models import Usuario
 from app.features.passagens.exceptions import PassagemError
 from app.features.passagens.models import (
@@ -223,9 +221,6 @@ class PassagemService:
             self.passagem_repository.registrar_snapshot(passagem, responsavel.id)
             self._aplicar_conteudo(passagem, dados, linhas_por_codigo, terminal)
             return self.passagem_repository.confirmar_edicao(passagem)
-        except SQLAlchemyError:
-            # confirmar_edicao já desfaz a transação quando o commit falha.
-            raise
         except Exception:
             self.passagem_repository.desfazer()
             raise
