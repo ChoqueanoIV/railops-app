@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Text, Time
 
-from app.models.passagem import PassagemServico, PassagemTeconDetalhe
+from app.features.passagens.models import PassagemServico, PassagemTeconDetalhe
 
 
 def test_detalhe_tecon_possui_relacao_um_para_um_com_passagem():

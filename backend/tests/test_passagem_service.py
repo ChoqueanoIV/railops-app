@@ -6,7 +6,8 @@ from zoneinfo import ZoneInfo
 import pytest
 
 from app.features.auth.models import Usuario
-from app.models.passagem import (
+from app.features.passagens.exceptions import PassagemError
+from app.features.passagens.models import (
     EquipeMembro,
     LadoLinha,
     Linha,
@@ -18,11 +19,11 @@ from app.models.passagem import (
     Turma,
     Turno,
 )
-from app.schemas.passagem_schema import (
+from app.features.passagens.schemas import (
     PassagemBrisamarEdicaoRequest,
     PassagemBrisamarRequest,
 )
-from app.services.passagem_service import PassagemError, PassagemService
+from app.features.passagens.service import PassagemService
 
 CODIGOS_BRISAMAR = ["16", "18", "20", "22", "24", "26", "28", "30"]
 

@@ -1,7 +1,7 @@
 from sqlalchemy import DateTime, Integer
 from sqlalchemy.dialects.postgresql import JSONB
 
-from app.models.passagem import (
+from app.features.passagens.models import (
     PassagemServico,
     PassagemServicoHistorico,
     Turma,

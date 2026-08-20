@@ -8,9 +8,9 @@ from tests.test_passagem_tecon_service import criar_dados_tecon_request
 
 from app.api.errors import ApiError
 from app.features.auth.models import Usuario
-from app.routers import passagem_router
-from app.schemas.passagem_schema import PassagemTeconEdicaoRequest
-from app.services.passagem_service import PassagemError
+from app.features.passagens import controller as passagem_controller
+from app.features.passagens.exceptions import PassagemError
+from app.features.passagens.schemas import PassagemTeconEdicaoRequest
 
 
 def test_criar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
@@ -18,13 +18,13 @@ def test_criar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
     passagem = MagicMock(id=passagem_id)
     criar = MagicMock(return_value=passagem)
     monkeypatch.setattr(
-        passagem_router.PassagemService,
+        passagem_controller.PassagemService,
         "criar_brisamar",
         criar,
     )
     usuario = Usuario(id=uuid.uuid4())
 
-    resposta = passagem_router.criar_passagem_brisamar(
+    resposta = passagem_controller.criar_passagem_brisamar(
         criar_dados_validos(),
         MagicMock(),
         usuario,
@@ -38,13 +38,13 @@ def test_criar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
 
 def test_criar_passagem_brisamar_converte_erro_de_negocio(monkeypatch):
     monkeypatch.setattr(
-        passagem_router.PassagemService,
+        passagem_controller.PassagemService,
         "criar_brisamar",
         MagicMock(side_effect=PassagemError("Dados inválidos.")),
     )
 
     with pytest.raises(ApiError) as erro:
-        passagem_router.criar_passagem_brisamar(
+        passagem_controller.criar_passagem_brisamar(
             criar_dados_validos(),
             MagicMock(),
             Usuario(id=uuid.uuid4()),
@@ -60,13 +60,13 @@ def test_criar_passagem_tecon_retorna_id_e_mensagem(monkeypatch):
     passagem = MagicMock(id=passagem_id)
     criar = MagicMock(return_value=passagem)
     monkeypatch.setattr(
-        passagem_router.PassagemService,
+        passagem_controller.PassagemService,
         "criar_tecon",
         criar,
     )
     usuario = Usuario(id=uuid.uuid4())
 
-    resposta = passagem_router.criar_passagem_tecon(
+    resposta = passagem_controller.criar_passagem_tecon(
         criar_dados_tecon_request(),
         MagicMock(),
         usuario,
@@ -80,13 +80,13 @@ def test_criar_passagem_tecon_retorna_id_e_mensagem(monkeypatch):
 
 def test_criar_passagem_tecon_converte_erro_de_negocio(monkeypatch):
     monkeypatch.setattr(
-        passagem_router.PassagemService,
+        passagem_controller.PassagemService,
         "criar_tecon",
         MagicMock(side_effect=PassagemError("Dados do TECON inválidos.")),
     )
 
     with pytest.raises(ApiError) as erro:
-        passagem_router.criar_passagem_tecon(
+        passagem_controller.criar_passagem_tecon(
             criar_dados_tecon_request(),
             MagicMock(),
             Usuario(id=uuid.uuid4()),
@@ -100,11 +100,13 @@ def test_criar_passagem_tecon_converte_erro_de_negocio(monkeypatch):
 def test_editar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
     passagem_id = uuid.uuid4()
     editar = MagicMock(return_value=MagicMock(id=passagem_id))
-    monkeypatch.setattr(passagem_router.PassagemService, "editar_brisamar", editar)
+    monkeypatch.setattr(passagem_controller.PassagemService, "editar_brisamar", editar)
     dados = criar_dados_edicao_brisamar()
     usuario = Usuario(id=uuid.uuid4())
 
-    resposta = passagem_router.editar_passagem(passagem_id, dados, MagicMock(), usuario)
+    resposta = passagem_controller.editar_passagem(
+        passagem_id, dados, MagicMock(), usuario
+    )
 
     assert resposta.id == passagem_id
     assert resposta.mensagem == "Passagem de serviço atualizada com sucesso."
@@ -114,27 +116,27 @@ def test_editar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
 def test_editar_passagem_tecon_encaminha_schema_correto(monkeypatch):
     passagem_id = uuid.uuid4()
     editar = MagicMock(return_value=MagicMock(id=passagem_id))
-    monkeypatch.setattr(passagem_router.PassagemService, "editar_tecon", editar)
+    monkeypatch.setattr(passagem_controller.PassagemService, "editar_tecon", editar)
     dados = criar_dados_tecon_request().model_dump()
     for campo in ("data", "turma", "turno"):
         dados.pop(campo)
     schema = PassagemTeconEdicaoRequest(**dados)
     usuario = Usuario(id=uuid.uuid4())
 
-    passagem_router.editar_passagem(passagem_id, schema, MagicMock(), usuario)
+    passagem_controller.editar_passagem(passagem_id, schema, MagicMock(), usuario)
 
     editar.assert_called_once_with(passagem_id, schema, usuario)
 
 
 def test_editar_passagem_converte_erro_de_negocio(monkeypatch):
     monkeypatch.setattr(
-        passagem_router.PassagemService,
+        passagem_controller.PassagemService,
         "editar_brisamar",
         MagicMock(side_effect=PassagemError("Turno encerrado.")),
     )
 
     with pytest.raises(ApiError) as erro:
-        passagem_router.editar_passagem(
+        passagem_controller.editar_passagem(
             uuid.uuid4(),
             criar_dados_edicao_brisamar(),
             MagicMock(),
@@ -149,17 +151,17 @@ def test_editar_passagem_converte_erro_de_negocio(monkeypatch):
 def test_consultar_passagem_retorna_detalhes_e_permissao(monkeypatch):
     passagem = criar_passagem_completa_para_snapshot()
     monkeypatch.setattr(
-        passagem_router.PassagemService,
+        passagem_controller.PassagemService,
         "obter_por_id",
         MagicMock(return_value=passagem),
     )
     monkeypatch.setattr(
-        passagem_router.PassagemService,
+        passagem_controller.PassagemService,
         "passagem_editavel",
         MagicMock(return_value=True),
     )
 
-    resposta = passagem_router.consultar_passagem(
+    resposta = passagem_controller.consultar_passagem(
         passagem.id, MagicMock(), Usuario(id=passagem.responsavel_id)
     )
 
@@ -172,13 +174,13 @@ def test_consultar_passagem_retorna_detalhes_e_permissao(monkeypatch):
 
 def test_consultar_passagem_inexistente_retorna_404(monkeypatch):
     monkeypatch.setattr(
-        passagem_router.PassagemService,
+        passagem_controller.PassagemService,
         "obter_por_id",
         MagicMock(side_effect=PassagemError("Passagem de serviço não encontrada.")),
     )
 
     with pytest.raises(ApiError) as erro:
-        passagem_router.consultar_passagem(
+        passagem_controller.consultar_passagem(
             uuid.uuid4(), MagicMock(), Usuario(id=uuid.uuid4())
         )
 

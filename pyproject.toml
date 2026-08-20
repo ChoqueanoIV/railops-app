@@ -101,9 +101,9 @@ module = "app.models.*"
 disable_error_code = ["assignment"]
 
 [[tool.mypy.overrides]]
-module = "app.services.passagem_service"
+module = "app.features.passagens.service"
 disable_error_code = ["arg-type", "return-value", "union-attr"]
 
 [[tool.mypy.overrides]]
-module = "app.routers.passagem_router"
+module = "app.features.passagens.controller"
 disable_error_code = ["arg-type", "misc"]

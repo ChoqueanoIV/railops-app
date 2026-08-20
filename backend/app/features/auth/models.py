@@ -9,11 +9,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 
 if TYPE_CHECKING:
-    from app.models.passagem import PassagemServico
+    from app.features.passagens.models import PassagemServico
 
 
 def _modelo_passagem_servico() -> type["PassagemServico"]:
-    from app.models.passagem import PassagemServico
+    from app.features.passagens.models import PassagemServico
 
     return PassagemServico
 

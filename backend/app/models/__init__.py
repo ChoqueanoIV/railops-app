@@ -1,5 +1,5 @@
 from app.features.auth.models import Usuario
-from app.models.passagem import (
+from app.features.passagens.models import (
     EquipeMembro,
     LadoLinha,
     Linha,
