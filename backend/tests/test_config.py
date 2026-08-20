@@ -1,6 +1,12 @@
 import pytest
 
-from app.core.config import ARQUIVO_ENV, PASTA_BACKEND, obter_variavel_obrigatoria
+from app.core.config import (
+    ARQUIVO_ENV,
+    PASTA_BACKEND,
+    AmbienteAplicacao,
+    Configuracao,
+    obter_variavel_obrigatoria,
+)
 
 
 def test_arquivo_env_fica_na_raiz_do_backend():
@@ -9,21 +15,61 @@ def test_arquivo_env_fica_na_raiz_do_backend():
     assert ARQUIVO_ENV.is_absolute()
 
 
-def test_variavel_obrigatoria_rejeita_ausencia(monkeypatch):
-    monkeypatch.delenv("VARIAVEL_TESTE_AUSENTE", raising=False)
-
+def test_variavel_obrigatoria_rejeita_ausencia():
     with pytest.raises(RuntimeError, match="VARIAVEL_TESTE_AUSENTE"):
-        obter_variavel_obrigatoria("VARIAVEL_TESTE_AUSENTE")
+        obter_variavel_obrigatoria("VARIAVEL_TESTE_AUSENTE", {})
 
 
-def test_variavel_obrigatoria_rejeita_valor_vazio(monkeypatch):
-    monkeypatch.setenv("VARIAVEL_TESTE_VAZIA", "   ")
-
+def test_variavel_obrigatoria_rejeita_valor_vazio():
     with pytest.raises(RuntimeError, match="VARIAVEL_TESTE_VAZIA"):
-        obter_variavel_obrigatoria("VARIAVEL_TESTE_VAZIA")
+        obter_variavel_obrigatoria(
+            "VARIAVEL_TESTE_VAZIA", {"VARIAVEL_TESTE_VAZIA": " "}
+        )
 
 
-def test_variavel_obrigatoria_retorna_valor_configurado(monkeypatch):
-    monkeypatch.setenv("VARIAVEL_TESTE", "valor-seguro")
+def test_variavel_obrigatoria_retorna_valor_configurado():
+    assert (
+        obter_variavel_obrigatoria("VARIAVEL_TESTE", {"VARIAVEL_TESTE": " valor "})
+        == "valor"
+    )
 
-    assert obter_variavel_obrigatoria("VARIAVEL_TESTE") == "valor-seguro"
+
+def test_configuracao_carrega_valores_tipados_sem_credenciais_reais():
+    configuracao = Configuracao.carregar(
+        {
+            "DATABASE_URL": "postgresql://teste:teste@localhost/teste",
+            "JWT_SECRET_KEY": "segredo-de-teste",
+            "RAILOPS_ENV": "test",
+            "API_TITLE": "RailOps Teste",
+            "CORS_ORIGINS": "http://localhost:3000, http://localhost:5173",
+        }
+    )
+
+    assert configuracao.ambiente is AmbienteAplicacao.TESTE
+    assert configuracao.titulo_api == "RailOps Teste"
+    assert configuracao.cors_origins == (
+        "http://localhost:3000",
+        "http://localhost:5173",
+    )
+
+
+def test_configuracao_rejeita_ambiente_invalido():
+    with pytest.raises(RuntimeError, match="RAILOPS_ENV inválido"):
+        Configuracao.carregar(
+            {
+                "DATABASE_URL": "postgresql://teste:teste@localhost/teste",
+                "JWT_SECRET_KEY": "segredo-de-teste",
+                "RAILOPS_ENV": "homologacao-invalida",
+            }
+        )
+
+
+def test_configuracao_rejeita_lista_cors_vazia():
+    with pytest.raises(RuntimeError, match="CORS_ORIGINS"):
+        Configuracao.carregar(
+            {
+                "DATABASE_URL": "postgresql://teste:teste@localhost/teste",
+                "JWT_SECRET_KEY": "segredo-de-teste",
+                "CORS_ORIGINS": " , ",
+            }
+        )
