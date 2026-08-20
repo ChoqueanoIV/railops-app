@@ -4,12 +4,11 @@ Atualizado em: 20/08/2026
 
 ## Estado seguro atual
 
-- branch de trabalho: `refactor/repositories-transactions`;
-- pull request aberto: [#26 — fronteira transacional](https://github.com/ChoqueanoIV/railops-app/pull/26);
-- base do PR: `main`;
-- PR sem conflitos e pronto para merge automático;
-- `main` remota antes do PR #26: merge `01a94df`;
-- nenhuma alteração local pendente antes da criação deste checkpoint;
+- branch de continuidade: `main`;
+- PR funcional mais recente: [#26 — fronteira transacional](https://github.com/ChoqueanoIV/railops-app/pull/26), mesclada;
+- merge funcional consolidado na `main`: `b988b08`;
+- nenhuma implementação pendente fora da `main`;
+- worktree limpo antes da criação deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
 ## Tasks concluídas
@@ -21,8 +20,7 @@ Atualizado em: 20/08/2026
 - 005 — contrato de erros e responses: integrada no PR #23;
 - 006 — arquitetura de autenticação por feature: integrada no PR #24;
 - 007 — arquitetura de passagens por feature: integrada no PR #25;
-- 008 — repositories e fronteira transacional: implementação concluída no PR
-  #26, aguardando merge.
+- 008 — repositories e fronteira transacional: integrada no PR #26.
 
 ## Validação da task 008
 
@@ -48,13 +46,13 @@ Atualizado em: 20/08/2026
 
 ## Próximo passo obrigatório
 
-1. revisar o PR #26;
-2. fazer o merge somente se ele continuar sem conflitos;
-3. sincronizar a `main` local com `origin/main`;
-4. confirmar worktree limpo;
-5. ler e executar somente `docs/tasks/009-backend-typing.md`.
+1. sincronizar a `main` local com `origin/main`;
+2. confirmar worktree limpo;
+3. ler `AGENTS.md` e `docs/tasks/009-backend-typing.md`;
+4. executar o baseline completo;
+5. executar somente a task 009.
 
-Não iniciar a task 009 antes do merge e da sincronização da task 008.
+Não combinar a task 009 com tasks posteriores.
 
 ## Restrições de continuidade
 
