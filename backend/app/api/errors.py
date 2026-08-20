@@ -59,9 +59,7 @@ async def tratar_api_error(_request: Request, erro: Exception) -> JSONResponse:
     )
 
 
-async def tratar_validacao(
-    _request: Request, erro: Exception
-) -> JSONResponse:
+async def tratar_validacao(_request: Request, erro: Exception) -> JSONResponse:
     assert isinstance(erro, RequestValidationError)
     detalhes = erro.errors()
     return JSONResponse(

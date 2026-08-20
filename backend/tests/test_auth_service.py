@@ -5,12 +5,12 @@ import pytest
 from jose import jwt
 from pydantic import ValidationError
 
-from app.models.usuario import Usuario
-from app.schemas.auth_schema import LoginRequest, PrimeiroAcessoRequest
-from app.services.auth_service import (
+from app.features.auth.exceptions import AutenticacaoError
+from app.features.auth.models import Usuario
+from app.features.auth.schemas import LoginRequest, PrimeiroAcessoRequest
+from app.features.auth.service import (
     ALGORITHM,
     SECRET_KEY,
-    AutenticacaoError,
     AuthService,
     pwd_context,
 )

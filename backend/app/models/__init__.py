@@ -1,3 +1,4 @@
+from app.features.auth.models import Usuario
 from app.models.passagem import (
     EquipeMembro,
     LadoLinha,
@@ -13,7 +14,6 @@ from app.models.passagem import (
     Turma,
     Turno,
 )
-from app.models.usuario import Usuario
 
 __all__ = [
     "EquipeMembro",

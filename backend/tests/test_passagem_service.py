@@ -5,6 +5,7 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
+from app.features.auth.models import Usuario
 from app.models.passagem import (
     EquipeMembro,
     LadoLinha,
@@ -17,7 +18,6 @@ from app.models.passagem import (
     Turma,
     Turno,
 )
-from app.models.usuario import Usuario
 from app.schemas.passagem_schema import (
     PassagemBrisamarEdicaoRequest,
     PassagemBrisamarRequest,

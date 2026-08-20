@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 
 from sqlalchemy.exc import SQLAlchemyError
 
+from app.features.auth.models import Usuario
 from app.models.passagem import (
     EquipeMembro,
     PassagemBrisamarDetalhe,
@@ -14,7 +15,6 @@ from app.models.passagem import (
     Terminal,
     Turno,
 )
-from app.models.usuario import Usuario
 from app.repositories.passagem_repository import (
     LinhaRepository,
     PassagemRepository,
