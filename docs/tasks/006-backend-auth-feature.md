@@ -1,6 +1,6 @@
 # Migrar autenticação para feature
 
-Status: `TODO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 Usar autenticação como primeira migração arquitetural por feature.
@@ -22,20 +22,23 @@ Criar/organizar:
 - não alterar claims do JWT sem necessidade explícita.
 
 ## Critérios de aceite
-- [ ] controller contém apenas HTTP/orquestração de borda;
-- [ ] regras estão no service;
-- [ ] banco está isolado;
-- [ ] testes de caracterização continuam passando;
-- [ ] imports antigos removidos ou adaptados de forma temporária documentada.
+- [x] controller contém apenas HTTP/orquestração de borda;
+- [x] regras estão no service;
+- [x] banco está isolado;
+- [x] testes de caracterização continuam passando;
+- [x] imports antigos removidos ou adaptados de forma temporária documentada.
 
 ## Evidências
 
 Preencher ao executar a task:
 
-- Branch:
-- Commits:
-- Testes antes:
-- Testes depois:
-- Lint:
-- Type-check:
-- Observações:
+- Branch: `refactor/auth-feature`
+- Commits: `893c085` (`refactor: organiza autenticacao por feature`)
+- Testes antes: `109 passed`
+- Testes depois: `110 passed`; cobertura total de `94%`
+- Lint: Ruff e formatter Ruff aprovados pelo pre-commit
+- Type-check: `mypy` aprovado no escopo configurado
+- Observações: matrícula, PIN, algoritmo HS256, claims `sub`/`matricula`,
+  expiração de 480 minutos, primeiro acesso e contratos HTTP foram preservados.
+  Os módulos antigos permanecem como adaptadores de reexportação temporários e
+  possuem teste de identidade para impedir modelos ou contratos duplicados.

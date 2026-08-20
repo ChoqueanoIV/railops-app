@@ -1,6 +1,6 @@
 # Estado atual observado
 
-Atualizado a partir da `main` local em 18/08/2026.
+Atualizado a partir da branch `refactor/auth-feature` em 19/08/2026.
 
 ## Backend
 
@@ -24,6 +24,16 @@ backend/
     core/
       config.py
       database.py
+    features/
+      auth/
+        controller.py
+        dependencies.py
+        exceptions.py
+        models.py
+        repository.py
+        schemas.py
+        service.py
+        types.py
     main.py
     models/
     repositories/
@@ -40,8 +50,10 @@ backend/
 
 A aplicação possui configuração tipada centralizada e fábrica de bootstrap em
 `app/main.py`. O `main.py` da raiz do backend permanece como entrypoint
-compatível. A base já possui separação por camadas; o trabalho proposto é
-amadurecer contratos e organização, não reconstruir do zero.
+compatível. Autenticação é a primeira área migrada para organização por feature.
+Os módulos antigos de auth em `models`, `repositories`, `routers`, `schemas` e
+`services` são adaptadores temporários que reexportam os símbolos canônicos de
+`app.features.auth`; código de produção novo deve usar a feature diretamente.
 
 ## Testes existentes
 
@@ -55,7 +67,7 @@ O repositório já contém testes de:
 - TECON schema;
 - TECON service.
 
-A suíte atual contém 105 testes e não depende das credenciais do `.env` real.
+A suíte atual contém 110 testes e não depende das credenciais do `.env` real.
 
 ## Frontend
 
