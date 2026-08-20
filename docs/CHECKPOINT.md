@@ -1,14 +1,14 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 18/08/2026
+Atualizado em: 19/08/2026
 
 ## Estado seguro atual
 
-- branch de trabalho: `refactor/typed-config-bootstrap`;
-- pull request aberto: [#22 — configuração tipada e bootstrap](https://github.com/ChoqueanoIV/railops-app/pull/22);
+- branch de trabalho: `refactor/api-response-errors`;
+- pull request aberto: [#23 — contratos de erro da API](https://github.com/ChoqueanoIV/railops-app/pull/23);
 - base do PR: `main`;
 - PR sem conflitos e pronto para merge automático;
-- `main` remota antes do PR #22: merge `b8fe079`;
+- `main` remota antes do PR #23: merge `3c1b1c9`;
 - nenhuma alteração local pendente antes da criação deste checkpoint;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -17,48 +17,48 @@ Atualizado em: 18/08/2026
 - 001 — baseline e testes de caracterização: integrada no PR #19;
 - 002 — tooling Python e `pyproject.toml`: integrada no PR #20;
 - 003 — dependências reproduzíveis: integrada no PR #21;
-- 004 — configuração tipada e bootstrap: implementação concluída no PR #22,
+- 004 — configuração tipada e bootstrap: integrada no PR #22;
+- 005 — contrato de erros e responses: implementação concluída no PR #23,
   aguardando merge.
 
-## Validação da task 004
+## Validação da task 005
 
-- 105 testes aprovados;
+- 109 testes aprovados;
 - cobertura total de 94%;
-- `ruff check .` aprovado;
-- `ruff format --check .` aprovado;
-- `mypy` aprovado em 22 arquivos de produção;
+- `ruff check backend` aprovado;
+- formatter Ruff aprovado;
+- `mypy` aprovado no escopo configurado;
 - pre-commit aprovado;
-- inventário, autenticação e respostas OpenAPI preservados;
+- status HTTP, `detail` legado e corpos de sucesso preservados;
+- erros conhecidos documentados no OpenAPI;
 - Swagger mantido em `/docs`;
-- nenhuma regra de negócio ou contrato HTTP alterado.
+- nenhuma regra de negócio alterada; compatibilidade HTTP legada preservada.
 
-## O que foi entregue na task 004
+## O que foi entregue na task 005
 
-- configuração tipada e imutável em `backend/app/core/config.py`;
-- variáveis de banco, JWT, ambiente, título e CORS centralizadas;
-- fábrica `criar_app` e bootstrap em `backend/app/main.py`;
-- compatibilidade temporária mantida em `backend/main.py`;
-- `backend/.env.example` sem credenciais reais;
-- testes isolados do `.env` local;
-- README principal com instalação reproduzível, migrations, execução do backend
-  e frontend, criação opcional de usuário e roteiro de avaliação manual;
-- documentação do estado atual atualizada.
+- envelope tipado `error.code/message/details` para erros da API;
+- campo `detail` mantido durante a transição do frontend legado;
+- exception handlers centralizados em `backend/app/api/errors.py`;
+- routers sem dependência direta de `HTTPException` para erros conhecidos;
+- códigos estáveis para autenticação, validação e passagens;
+- summaries e responses relevantes registrados no OpenAPI;
+- documentação dos contratos e evidências atualizada.
 
 ## Próximo passo obrigatório
 
-1. revisar o PR #22;
+1. revisar o PR #23;
 2. fazer o merge somente se ele continuar sem conflitos;
 3. sincronizar a `main` local com `origin/main`;
 4. confirmar worktree limpo;
-5. ler e executar somente `docs/tasks/005-api-response-errors.md`.
+5. ler e executar somente `docs/tasks/006-backend-auth-feature.md`.
 
-Não iniciar a task 005 antes do merge e da sincronização da task 004.
+Não iniciar a task 006 antes do merge e da sincronização da task 005.
 
 ## Restrições de continuidade
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar contratos HTTP fora dos critérios explícitos da task 005;
+- não alterar contratos HTTP fora dos critérios explícitos da task 006;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.

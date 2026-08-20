@@ -26,7 +26,8 @@ Padronizar a borda HTTP sem espalhar regras de transporte.
 Preencher ao executar a task:
 
 - Branch: `refactor/api-response-errors`
-- Commits: `7308abe` (`refactor: padroniza erros da API`)
+- Commits: `7308abe` (`refactor: padroniza erros da API`) e `dfa8808`
+  (`docs: registra evidencias dos contratos HTTP`)
 - Testes antes: `105 passed`
 - Testes depois: `109 passed`; cobertura total de `94%`
 - Lint: `ruff check backend` e hooks Ruff do pre-commit aprovados
