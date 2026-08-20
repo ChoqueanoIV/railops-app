@@ -1,10 +1,8 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
 
 from app.api.errors import ApiError, resposta_erro
-from app.core.database import get_db
+from app.features.auth.dependencies import obter_auth_service
 from app.features.auth.exceptions import AutenticacaoError
-from app.features.auth.repository import UsuarioRepository
 from app.features.auth.schemas import (
     LoginRequest,
     LoginResponse,
@@ -21,8 +19,10 @@ router = APIRouter(prefix="/auth", tags=["Autenticação"])
     summary="Definir PIN no primeiro acesso",
     responses={400: resposta_erro("Dados de ativação inválidos")},
 )
-def primeiro_acesso(dados: PrimeiroAcessoRequest, db: Session = Depends(get_db)):
-    service = AuthService(UsuarioRepository(db))
+def primeiro_acesso(
+    dados: PrimeiroAcessoRequest,
+    service: AuthService = Depends(obter_auth_service),
+):
     try:
         service.primeiro_acesso(dados.matricula, dados.codigo_ativacao, dados.pin)
     except AutenticacaoError as erro:
@@ -40,8 +40,10 @@ def primeiro_acesso(dados: PrimeiroAcessoRequest, db: Session = Depends(get_db))
     summary="Autenticar usuário",
     responses={401: resposta_erro("Credenciais inválidas")},
 )
-def login(dados: LoginRequest, db: Session = Depends(get_db)):
-    service = AuthService(UsuarioRepository(db))
+def login(
+    dados: LoginRequest,
+    service: AuthService = Depends(obter_auth_service),
+):
     try:
         token = service.login(dados.matricula, dados.pin)
     except AutenticacaoError as erro:

@@ -9,8 +9,10 @@ from app.api.errors import (
     ApiError,
     tratar_api_error,
     tratar_http_exception,
+    tratar_persistencia,
     tratar_validacao,
 )
+from app.shared.persistence.transactions import PersistenciaError
 
 
 def conteudo_json(resposta) -> dict:
@@ -71,3 +73,14 @@ def test_http_exception_legada_recebe_envelope_sem_perder_detail():
         "message": "Acesso negado.",
         "details": None,
     }
+
+
+def test_erro_de_persistencia_nao_expoe_detalhe_interno():
+    erro = PersistenciaError("detalhe interno do banco")
+
+    resposta = asyncio.run(tratar_persistencia(MagicMock(), erro))
+    conteudo = conteudo_json(resposta)
+
+    assert resposta.status_code == 500
+    assert conteudo["error"]["code"] == "PERSISTENCE_ERROR"
+    assert "detalhe interno" not in conteudo["detail"]

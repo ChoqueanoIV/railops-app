@@ -8,6 +8,10 @@ from app.features.auth.exceptions import AutenticacaoError
 from app.features.auth.schemas import LoginRequest, PrimeiroAcessoRequest
 
 
+def criar_service() -> auth_controller.AuthService:
+    return auth_controller.AuthService(MagicMock())
+
+
 def test_primeiro_acesso_retorna_status_sem_expor_usuario(monkeypatch):
     ativar = MagicMock()
     monkeypatch.setattr(auth_controller.AuthService, "primeiro_acesso", ativar)
@@ -15,7 +19,7 @@ def test_primeiro_acesso_retorna_status_sem_expor_usuario(monkeypatch):
         matricula="30032552", codigo_ativacao="123456", pin="4321"
     )
 
-    resposta = auth_controller.primeiro_acesso(dados, MagicMock())
+    resposta = auth_controller.primeiro_acesso(dados, criar_service())
 
     assert resposta == {"mensagem": "PIN definido com sucesso"}
     ativar.assert_called_once_with("30032552", "123456", "4321")
@@ -33,7 +37,7 @@ def test_primeiro_acesso_converte_erro_de_negocio_em_400(monkeypatch):
             PrimeiroAcessoRequest(
                 matricula="30032552", codigo_ativacao="123456", pin="4321"
             ),
-            MagicMock(),
+            criar_service(),
         )
 
     assert erro.value.status_code == 400
@@ -49,7 +53,7 @@ def test_login_retorna_token_bearer(monkeypatch):
     )
 
     resposta = auth_controller.login(
-        LoginRequest(matricula="30032552", pin="4321"), MagicMock()
+        LoginRequest(matricula="30032552", pin="4321"), criar_service()
     )
 
     assert resposta.access_token == "jwt-de-caracterizacao"
@@ -65,7 +69,7 @@ def test_login_converte_erro_de_credencial_em_401(monkeypatch):
 
     with pytest.raises(ApiError) as erro:
         auth_controller.login(
-            LoginRequest(matricula="30032552", pin="4321"), MagicMock()
+            LoginRequest(matricula="30032552", pin="4321"), criar_service()
         )
 
     assert erro.value.status_code == 401

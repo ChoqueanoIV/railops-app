@@ -12,6 +12,10 @@ from app.features.auth.service import AuthService
 bearer_scheme = HTTPBearer(auto_error=False)
 
 
+def obter_auth_service(db: Session = Depends(get_db)) -> AuthService:
+    return AuthService(UsuarioRepository(db))
+
+
 def obter_usuario_atual(
     credenciais: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
     db: Session = Depends(get_db),
@@ -24,8 +28,7 @@ def obter_usuario_atual(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    repository = UsuarioRepository(db)
-    service = AuthService(repository)
+    service = obter_auth_service(db)
 
     try:
         return service.validar_token(credenciais.credentials)

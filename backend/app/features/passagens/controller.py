@@ -1,18 +1,12 @@
 import uuid
 
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
 
 from app.api.errors import ApiError, resposta_erro
-from app.core.database import get_db
 from app.features.auth.dependencies import obter_usuario_atual
 from app.features.auth.models import Usuario
+from app.features.passagens.dependencies import obter_passagem_service
 from app.features.passagens.exceptions import PassagemError
-from app.features.passagens.repository import (
-    LinhaRepository,
-    PassagemRepository,
-    RadioRepository,
-)
 from app.features.passagens.schemas import (
     PassagemAtualizadaResponse,
     PassagemBrisamarEdicaoRequest,
@@ -83,15 +77,9 @@ def montar_resposta_consulta(passagem, editavel):
 )
 def criar_passagem_brisamar(
     dados: PassagemBrisamarRequest,
-    db: Session = Depends(get_db),
+    service: PassagemService = Depends(obter_passagem_service),
     usuario_atual: Usuario = Depends(obter_usuario_atual),
 ):
-    service = PassagemService(
-        PassagemRepository(db),
-        LinhaRepository(db),
-        RadioRepository(db),
-    )
-
     try:
         passagem = service.criar_brisamar(dados, usuario_atual)
     except PassagemError as erro:
@@ -117,15 +105,9 @@ def criar_passagem_brisamar(
 )
 def criar_passagem_tecon(
     dados: PassagemTeconRequest,
-    db: Session = Depends(get_db),
+    service: PassagemService = Depends(obter_passagem_service),
     usuario_atual: Usuario = Depends(obter_usuario_atual),
 ):
-    service = PassagemService(
-        PassagemRepository(db),
-        LinhaRepository(db),
-        RadioRepository(db),
-    )
-
     try:
         passagem = service.criar_tecon(dados, usuario_atual)
     except PassagemError as erro:
@@ -151,15 +133,9 @@ def criar_passagem_tecon(
 def editar_passagem(
     passagem_id: uuid.UUID,
     dados: PassagemBrisamarEdicaoRequest | PassagemTeconEdicaoRequest,
-    db: Session = Depends(get_db),
+    service: PassagemService = Depends(obter_passagem_service),
     usuario_atual: Usuario = Depends(obter_usuario_atual),
 ):
-    service = PassagemService(
-        PassagemRepository(db),
-        LinhaRepository(db),
-        RadioRepository(db),
-    )
-
     try:
         if isinstance(dados, PassagemBrisamarEdicaoRequest):
             passagem = service.editar_brisamar(passagem_id, dados, usuario_atual)
@@ -187,14 +163,9 @@ def editar_passagem(
 )
 def consultar_passagem(
     passagem_id: uuid.UUID,
-    db: Session = Depends(get_db),
+    service: PassagemService = Depends(obter_passagem_service),
     usuario_atual: Usuario = Depends(obter_usuario_atual),
 ):
-    service = PassagemService(
-        PassagemRepository(db),
-        LinhaRepository(db),
-        RadioRepository(db),
-    )
     try:
         passagem = service.obter_por_id(passagem_id)
     except PassagemError as erro:

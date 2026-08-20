@@ -5,6 +5,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
+from app.shared.persistence.transactions import PersistenciaError
+
 
 class ErrorDetail(BaseModel):
     code: str
@@ -88,10 +90,25 @@ async def tratar_http_exception(_request: Request, erro: Exception) -> JSONRespo
     )
 
 
+async def tratar_persistencia(_request: Request, erro: Exception) -> JSONResponse:
+    assert isinstance(erro, PersistenciaError)
+    mensagem = "Não foi possível concluir a operação. Tente novamente."
+    return JSONResponse(
+        status_code=500,
+        content=_conteudo_erro(
+            code="PERSISTENCE_ERROR",
+            message=mensagem,
+            details=None,
+            legacy_detail=mensagem,
+        ),
+    )
+
+
 def registrar_exception_handlers(aplicacao: FastAPI) -> None:
     aplicacao.add_exception_handler(ApiError, tratar_api_error)
     aplicacao.add_exception_handler(RequestValidationError, tratar_validacao)
     aplicacao.add_exception_handler(HTTPException, tratar_http_exception)
+    aplicacao.add_exception_handler(PersistenciaError, tratar_persistencia)
 
 
 def resposta_erro(descricao: str) -> dict[str, object]:

@@ -24,6 +24,7 @@ from app.features.passagens.repository import (
     PassagemRepository,
     RadioRepository,
 )
+from app.shared.persistence.transactions import PersistenciaError
 
 
 def test_linha_repository_lista_catalogo_ordenado_por_terminal():
@@ -86,7 +87,7 @@ def test_passagem_repository_desfaz_transacao_quando_commit_falha():
     repository = PassagemRepository(db)
     passagem = PassagemServico()
 
-    with pytest.raises(SQLAlchemyError, match="falha simulada"):
+    with pytest.raises(PersistenciaError, match="concluir a operação"):
         repository.salvar(passagem)
 
     db.rollback.assert_called_once_with()
@@ -198,7 +199,7 @@ def test_passagem_repository_desfaz_snapshot_e_edicao_quando_commit_falha():
     db.commit.side_effect = SQLAlchemyError("falha simulada")
     repository = PassagemRepository(db)
 
-    with pytest.raises(SQLAlchemyError, match="falha simulada"):
+    with pytest.raises(PersistenciaError, match="concluir a operação"):
         repository.confirmar_edicao(PassagemServico())
 
     db.rollback.assert_called_once_with()

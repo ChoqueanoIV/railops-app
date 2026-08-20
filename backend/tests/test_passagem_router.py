@@ -26,7 +26,7 @@ def test_criar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
 
     resposta = passagem_controller.criar_passagem_brisamar(
         criar_dados_validos(),
-        MagicMock(),
+        criar_service(),
         usuario,
     )
 
@@ -46,7 +46,7 @@ def test_criar_passagem_brisamar_converte_erro_de_negocio(monkeypatch):
     with pytest.raises(ApiError) as erro:
         passagem_controller.criar_passagem_brisamar(
             criar_dados_validos(),
-            MagicMock(),
+            criar_service(),
             Usuario(id=uuid.uuid4()),
         )
 
@@ -68,7 +68,7 @@ def test_criar_passagem_tecon_retorna_id_e_mensagem(monkeypatch):
 
     resposta = passagem_controller.criar_passagem_tecon(
         criar_dados_tecon_request(),
-        MagicMock(),
+        criar_service(),
         usuario,
     )
 
@@ -88,7 +88,7 @@ def test_criar_passagem_tecon_converte_erro_de_negocio(monkeypatch):
     with pytest.raises(ApiError) as erro:
         passagem_controller.criar_passagem_tecon(
             criar_dados_tecon_request(),
-            MagicMock(),
+            criar_service(),
             Usuario(id=uuid.uuid4()),
         )
 
@@ -105,7 +105,7 @@ def test_editar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
     usuario = Usuario(id=uuid.uuid4())
 
     resposta = passagem_controller.editar_passagem(
-        passagem_id, dados, MagicMock(), usuario
+        passagem_id, dados, criar_service(), usuario
     )
 
     assert resposta.id == passagem_id
@@ -123,7 +123,7 @@ def test_editar_passagem_tecon_encaminha_schema_correto(monkeypatch):
     schema = PassagemTeconEdicaoRequest(**dados)
     usuario = Usuario(id=uuid.uuid4())
 
-    passagem_controller.editar_passagem(passagem_id, schema, MagicMock(), usuario)
+    passagem_controller.editar_passagem(passagem_id, schema, criar_service(), usuario)
 
     editar.assert_called_once_with(passagem_id, schema, usuario)
 
@@ -139,7 +139,7 @@ def test_editar_passagem_converte_erro_de_negocio(monkeypatch):
         passagem_controller.editar_passagem(
             uuid.uuid4(),
             criar_dados_edicao_brisamar(),
-            MagicMock(),
+            criar_service(),
             Usuario(id=uuid.uuid4()),
         )
 
@@ -162,7 +162,7 @@ def test_consultar_passagem_retorna_detalhes_e_permissao(monkeypatch):
     )
 
     resposta = passagem_controller.consultar_passagem(
-        passagem.id, MagicMock(), Usuario(id=passagem.responsavel_id)
+        passagem.id, criar_service(), Usuario(id=passagem.responsavel_id)
     )
 
     assert resposta.id == passagem.id
@@ -181,8 +181,12 @@ def test_consultar_passagem_inexistente_retorna_404(monkeypatch):
 
     with pytest.raises(ApiError) as erro:
         passagem_controller.consultar_passagem(
-            uuid.uuid4(), MagicMock(), Usuario(id=uuid.uuid4())
+            uuid.uuid4(), criar_service(), Usuario(id=uuid.uuid4())
         )
 
     assert erro.value.status_code == 404
     assert erro.value.code == "PASSAGEM_NOT_FOUND"
+
+
+def criar_service() -> passagem_controller.PassagemService:
+    return passagem_controller.PassagemService(MagicMock(), MagicMock(), MagicMock())

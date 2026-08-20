@@ -3,7 +3,6 @@ import uuid
 from datetime import date, datetime, time
 
 from sqlalchemy import func
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session, selectinload
 
 from app.features.passagens.models import (
@@ -15,6 +14,7 @@ from app.features.passagens.models import (
     Radio,
     Terminal,
 )
+from app.shared.persistence.transactions import Transacao, TransacaoSQLAlchemy
 
 
 class LinhaRepository:
@@ -46,18 +46,15 @@ class RadioRepository:
 
 
 class PassagemRepository:
-    def __init__(self, db: Session):
+    def __init__(self, db: Session, transacao: Transacao | None = None):
         self.db = db
+        self.transacao = transacao or TransacaoSQLAlchemy(db)
 
     def salvar(self, passagem: PassagemServico) -> PassagemServico:
-        try:
-            self.db.add(passagem)
-            self.db.commit()
-            self.db.refresh(passagem)
-            return passagem
-        except SQLAlchemyError:
-            self.db.rollback()
-            raise
+        self.db.add(passagem)
+        self.transacao.confirmar()
+        self.transacao.atualizar(passagem)
+        return passagem
 
     def buscar_para_edicao(self, passagem_id: uuid.UUID) -> PassagemServico | None:
         return (
@@ -115,16 +112,12 @@ class PassagemRepository:
         return historico
 
     def confirmar_edicao(self, passagem: PassagemServico) -> PassagemServico:
-        try:
-            self.db.commit()
-            self.db.refresh(passagem)
-            return passagem
-        except SQLAlchemyError:
-            self.db.rollback()
-            raise
+        self.transacao.confirmar()
+        self.transacao.atualizar(passagem)
+        return passagem
 
     def desfazer(self) -> None:
-        self.db.rollback()
+        self.transacao.desfazer()
 
     @classmethod
     def montar_snapshot(cls, passagem: PassagemServico) -> dict:
