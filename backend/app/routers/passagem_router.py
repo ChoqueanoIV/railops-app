@@ -5,13 +5,13 @@ from sqlalchemy.orm import Session
 
 from app.api.errors import ApiError, resposta_erro
 from app.core.database import get_db
-from app.models.usuario import Usuario
+from app.features.auth.dependencies import obter_usuario_atual
+from app.features.auth.models import Usuario
 from app.repositories.passagem_repository import (
     LinhaRepository,
     PassagemRepository,
     RadioRepository,
 )
-from app.routers.dependencies import obter_usuario_atual
 from app.schemas.passagem_schema import (
     PassagemAtualizadaResponse,
     PassagemBrisamarEdicaoRequest,

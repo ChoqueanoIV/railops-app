@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo
 import pytest
 from tests.test_passagem_tecon_schema import LINHAS_TECON, dados_tecon_validos
 
+from app.features.auth.models import Usuario
 from app.models.passagem import (
     LadoLinha,
     Linha,
@@ -17,7 +18,6 @@ from app.models.passagem import (
     Turma,
     Turno,
 )
-from app.models.usuario import Usuario
 from app.schemas.passagem_schema import PassagemTeconEdicaoRequest, PassagemTeconRequest
 from app.services.passagem_service import PassagemError, PassagemService
 

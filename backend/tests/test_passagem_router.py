@@ -7,7 +7,7 @@ from tests.test_passagem_service import criar_dados_edicao_brisamar, criar_dados
 from tests.test_passagem_tecon_service import criar_dados_tecon_request
 
 from app.api.errors import ApiError
-from app.models.usuario import Usuario
+from app.features.auth.models import Usuario
 from app.routers import passagem_router
 from app.schemas.passagem_schema import PassagemTeconEdicaoRequest
 from app.services.passagem_service import PassagemError
