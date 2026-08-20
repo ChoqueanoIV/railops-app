@@ -24,7 +24,8 @@ Migrar Brisamar/TECON de forma incremental após validar o padrão com auth.
 Preencher ao executar a task:
 
 - Branch: `refactor/passagens-feature`
-- Commits: `bade0be` (`refactor: organiza passagens por feature`)
+- Commits: `bade0be` (`refactor: organiza passagens por feature`) e `4e9de20`
+  (`docs: registra migracao das passagens`)
 - Testes antes: `110 passed`
 - Testes depois: `111 passed`; cobertura total de `94%`
 - Lint: Ruff e formatter Ruff aprovados pelo pre-commit
