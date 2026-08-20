@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.errors import registrar_exception_handlers
 from app.core.config import Configuracao, obter_configuracao
 from app.routers.auth_router import router as auth_router
 from app.routers.passagem_router import router as passagem_router
@@ -13,6 +14,7 @@ def health_check() -> dict[str, str]:
 def criar_app(configuracao: Configuracao | None = None) -> FastAPI:
     configuracao_ativa = configuracao or obter_configuracao()
     aplicacao = FastAPI(title=configuracao_ativa.titulo_api)
+    registrar_exception_handlers(aplicacao)
 
     aplicacao.add_middleware(
         CORSMiddleware,
