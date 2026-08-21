@@ -24,7 +24,9 @@ Aumentar confiabilidade por type hints sem uma reescrita total.
 Preencher ao executar a task:
 
 - Branch: `refactor/backend-typing`
-- Commits: `e91109b` (`refactor: fortalece tipagem do backend`)
+- Commits: `e91109b` (`refactor: fortalece tipagem do backend`) e `43a9f68`
+  (`docs: registra tipagem progressiva`)
+- Pull request: [#28](https://github.com/ChoqueanoIV/railops-app/pull/28)
 - Testes antes: `115 passed`
 - Testes depois: `116 passed`; cobertura total de `94%`
 - Lint: Ruff e formatter Ruff aprovados pelo pre-commit
