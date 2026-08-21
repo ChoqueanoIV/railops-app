@@ -28,8 +28,10 @@ Padronizar execução local e preparar deploy futuro.
 Preencher ao executar a task:
 
 - Branch: `chore/docker-ambiente-local`
-- Commits: `b7dd2db` (`chore: padroniza ambiente local com Docker`) e `a58c52a`
-  (`docs: registra ambiente Docker local`)
+- Commits: `b7dd2db` (`chore: padroniza ambiente local com Docker`), `a58c52a`
+  (`docs: registra ambiente Docker local`) e `fcb2b94`
+  (`docs: confirma validacao do ambiente Docker`)
+- PR: [#30 — ambiente Docker local](https://github.com/ChoqueanoIV/railops-app/pull/30)
 - Testes antes: `117 passed`; cobertura total de `94%`
 - Testes depois: `120 passed`; cobertura total de `94%`
 - Lint: Ruff e formatter Ruff aprovados
