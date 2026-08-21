@@ -4,11 +4,10 @@ Atualizado em: 21/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `test/reorganiza-suite-cobertura`;
-- PR aberta: [#29 — reorganização da suíte e cobertura](https://github.com/ChoqueanoIV/railops-app/pull/29);
-- base da PR: `main`;
-- checkpoint consolidado na `main` antes da PR: `b1cdd39`;
-- implementação e documentação da task 010 concluídas, aguardando merge;
+- branch de continuidade: `main`;
+- PR funcional mais recente: [#29 — reorganização da suíte e cobertura](https://github.com/ChoqueanoIV/railops-app/pull/29), mesclada;
+- merge funcional consolidado na `main`: `ed5dc28`;
+- nenhuma implementação pendente fora da `main`;
 - worktree limpo antes da atualização deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -23,11 +22,7 @@ Atualizado em: 21/08/2026
 - 007 — arquitetura de passagens por feature: integrada no PR #25;
 - 008 — repositories e fronteira transacional: integrada no PR #26.
 - 009 — tipagem progressiva do backend: integrada no PR #28.
-
-## Task em revisão
-
-- 010 — reorganização dos testes e cobertura: implementação concluída no PR
-  #29, aguardando merge.
+- 010 — reorganização dos testes e cobertura: integrada no PR #29.
 
 ## Validação da task 010
 
@@ -51,15 +46,13 @@ Atualizado em: 21/08/2026
 
 ## Próximo passo obrigatório
 
-1. revisar e mesclar o PR #29;
-2. sincronizar a `main` local com `origin/main`;
-3. confirmar worktree limpo;
-4. ler `AGENTS.md` e `docs/tasks/011-docker-local-env.md`;
-5. executar o baseline completo;
-6. executar somente a task 011.
+1. sincronizar a `main` local com `origin/main`;
+2. confirmar worktree limpo;
+3. ler `AGENTS.md` e `docs/tasks/011-docker-local-env.md`;
+4. executar o baseline completo;
+5. executar somente a task 011.
 
-Não iniciar a task 011 antes do merge da task 010 e não combiná-la com tasks
-posteriores.
+Não combinar a task 011 com tasks posteriores.
 
 ## Restrições de continuidade
 
