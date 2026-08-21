@@ -4,10 +4,10 @@ Atualizado em: 21/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
-- PR funcional mais recente: [#30 — ambiente Docker local](https://github.com/ChoqueanoIV/railops-app/pull/30), mesclada;
-- merge funcional consolidado na `main`: `864f09a`;
-- nenhuma implementação pendente fora da `main`;
+- branch de continuidade: `feat/shell-react-typescript`;
+- PR em revisão: [#31 — shell React + TypeScript](https://github.com/ChoqueanoIV/railops-app/pull/31), com base em `main`;
+- checkpoint da `main` anterior à PR: `f957a7b`;
+- implementação e documentação da task 012 concluídas, aguardando merge;
 - worktree limpo antes da atualização deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -25,45 +25,50 @@ Atualizado em: 21/08/2026
 - 010 — reorganização dos testes e cobertura: integrada no PR #29.
 - 011 — Docker e ambiente local: integrada no PR #30.
 
-## Validação da task 011
+## Task em revisão
 
-- 120 testes aprovados;
-- cobertura total de 94%;
-- `ruff check backend` aprovado;
-- formatter Ruff aprovado;
-- `mypy backend` aprovado em 52 arquivos;
-- pre-commit aprovado;
-- imagem do backend construída com Docker Engine 29.7.2 e Compose v5.4.0;
-- PostgreSQL e backend saudáveis no Compose;
-- migrations aplicadas até `d7e9f2a3b4c5 (head)`;
-- backend executado como usuário não-root `uid=999(railops)`;
-- `/health` aprovado, `/docs` retornou HTTP 200 e OpenAPI identificado como
-  `RailOps API`;
+- 012 — shell React + TypeScript: concluída no PR #31, aguardando revisão e
+  merge.
+
+## Validação da task 012
+
+- `npm run dev` respondeu HTTP 200;
+- build Vite aprovado;
+- ESLint e Prettier aprovados;
+- type-check TypeScript aprovado;
+- 2 testes Vitest aprovados;
+- auditoria npm sem vulnerabilidades;
+- 120 testes do backend aprovados;
+- Ruff, formatter Ruff, mypy e pre-commit aprovados;
+- nenhum HTML, CSS ou JavaScript legado alterado;
 - nenhuma regra de negócio ou contrato HTTP alterado.
 
-## O que foi entregue na task 011
+## O que foi entregue na task 012
 
-- Dockerfile multi-stage para o backend com usuário não-root;
-- `.dockerignore` e configuração externa de ambiente;
-- PostgreSQL opcional via Docker Compose;
-- healthchecks do banco e da API;
-- migrations Alembic antes da inicialização do Uvicorn;
-- instruções de execução, validação e solução de problemas documentadas.
+- shell React + TypeScript isolado em `frontend/react`;
+- Vite, React Router, ESLint, Prettier, Vitest e Testing Library;
+- alias `@/` e estrutura inicial feature-first;
+- `.env.example`, scripts de qualidade e lockfile reproduzível;
+- frontend legado preservado e ainda executável durante a transição;
+- instruções de execução e estado arquitetural atualizados.
 
 ## Próximo passo obrigatório
 
-1. confirmar worktree limpo;
-2. ler `AGENTS.md` e `docs/tasks/012-react-shell.md`;
-3. executar o baseline completo;
-4. executar somente a task 012.
+1. revisar e mesclar o PR #31;
+2. sincronizar a `main` local com `origin/main`;
+3. confirmar worktree limpo;
+4. ler `AGENTS.md` e `docs/tasks/013-react-api-auth.md`;
+5. executar o baseline completo;
+6. executar somente a task 013.
 
-Não combinar a task 012 com tasks posteriores.
+Não iniciar a task 013 antes do merge do PR #31 nem combiná-la com tasks
+posteriores.
 
 ## Restrições de continuidade
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar contratos HTTP fora dos critérios explícitos da task 012;
+- não alterar contratos HTTP fora dos critérios explícitos da task 013;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.

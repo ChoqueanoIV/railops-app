@@ -207,6 +207,12 @@ tempCodeRunnerFile.py
 # Ruff stuff:
 .ruff_cache/
 
+# Node / Vite
+node_modules/
+frontend/react/dist/
+frontend/react/coverage/
+frontend/react/.env.local
+
 # PyPI configuration file
 .pypirc
 

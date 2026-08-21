@@ -1,6 +1,6 @@
 # Criar shell React + TypeScript
 
-Status: `TODO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 Criar a base moderna do frontend sem migrar os fluxos existentes ainda.
@@ -20,21 +20,27 @@ Criar a base moderna do frontend sem migrar os fluxos existentes ainda.
 - scripts de qualidade.
 
 ## Critérios de aceite
-- [ ] `npm run dev` funciona;
-- [ ] `npm run build` funciona;
-- [ ] `npm run lint` funciona;
-- [ ] `npm run typecheck` funciona;
-- [ ] `npm test` funciona;
-- [ ] frontend legado ainda pode ser executado durante transição.
+- [x] `npm run dev` funciona;
+- [x] `npm run build` funciona;
+- [x] `npm run lint` funciona;
+- [x] `npm run typecheck` funciona;
+- [x] `npm test` funciona;
+- [x] frontend legado ainda pode ser executado durante transição.
 
 ## Evidências
 
 Preencher ao executar a task:
 
-- Branch:
-- Commits:
-- Testes antes:
-- Testes depois:
-- Lint:
-- Type-check:
-- Observações:
+- Branch: `feat/shell-react-typescript`
+- Commits: `03bf960` (`feat: cria shell React com TypeScript e Vite`) e `dac6b6d`
+  (`docs: registra evidencias da task 012`)
+- PR: [#31 — shell React + TypeScript](https://github.com/ChoqueanoIV/railops-app/pull/31)
+- Testes antes: backend com `120 passed`; frontend legado sem suíte automatizada
+- Testes depois: Vitest com `2 passed`; backend com `120 passed`
+- Lint: ESLint aprovado
+- Type-check: TypeScript aprovado com `tsc -b`
+- Build: Vite aprovado; servidor de desenvolvimento respondeu HTTP 200
+- Formatação: Prettier aprovado
+- Observações: shell criado em `frontend/react` para manter os HTML, CSS e
+  JavaScript legados executáveis e sem alterações. Nenhum fluxo, contrato HTTP
+  ou regra de negócio foi migrado nesta task.
