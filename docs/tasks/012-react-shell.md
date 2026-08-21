@@ -32,7 +32,9 @@ Criar a base moderna do frontend sem migrar os fluxos existentes ainda.
 Preencher ao executar a task:
 
 - Branch: `feat/shell-react-typescript`
-- Commit: `03bf960` (`feat: cria shell React com TypeScript e Vite`)
+- Commits: `03bf960` (`feat: cria shell React com TypeScript e Vite`) e `dac6b6d`
+  (`docs: registra evidencias da task 012`)
+- PR: [#31 — shell React + TypeScript](https://github.com/ChoqueanoIV/railops-app/pull/31)
 - Testes antes: backend com `120 passed`; frontend legado sem suíte automatizada
 - Testes depois: Vitest com `2 passed`; backend com `120 passed`
 - Lint: ESLint aprovado
