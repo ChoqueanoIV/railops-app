@@ -4,7 +4,6 @@ from unittest.mock import MagicMock
 from zoneinfo import ZoneInfo
 
 import pytest
-from tests.test_passagem_tecon_schema import LINHAS_TECON, dados_tecon_validos
 
 from app.features.auth.models import Usuario
 from app.features.passagens.exceptions import PassagemError
@@ -24,6 +23,7 @@ from app.features.passagens.schemas import (
     PassagemTeconRequest,
 )
 from app.features.passagens.service import PassagemService
+from tests.unit.test_passagem_tecon_schema import LINHAS_TECON, dados_tecon_validos
 
 
 def criar_linhas_tecon() -> list[Linha]:
