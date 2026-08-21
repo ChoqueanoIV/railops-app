@@ -32,7 +32,7 @@ Criar a base moderna do frontend sem migrar os fluxos existentes ainda.
 Preencher ao executar a task:
 
 - Branch: `feat/shell-react-typescript`
-- Commits: preencher após o commit da implementação
+- Commit: `03bf960` (`feat: cria shell React com TypeScript e Vite`)
 - Testes antes: backend com `120 passed`; frontend legado sem suíte automatizada
 - Testes depois: Vitest com `2 passed`; backend com `120 passed`
 - Lint: ESLint aprovado
