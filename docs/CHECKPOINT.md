@@ -4,11 +4,10 @@ Atualizado em: 21/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `refactor/backend-typing`;
-- PR funcional aberta: [#28 — tipagem progressiva do backend](https://github.com/ChoqueanoIV/railops-app/pull/28);
-- base da PR: `main`;
-- merge consolidado na `main` antes da PR: `0b9a971`;
-- implementação e documentação da task 009 concluídas, aguardando revisão e merge;
+- branch de continuidade: `main`;
+- PR funcional mais recente: [#28 — tipagem progressiva do backend](https://github.com/ChoqueanoIV/railops-app/pull/28), mesclada;
+- merge funcional consolidado na `main`: `7355871`;
+- nenhuma implementação pendente fora da `main`;
 - worktree limpo antes da atualização deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -22,11 +21,7 @@ Atualizado em: 21/08/2026
 - 006 — arquitetura de autenticação por feature: integrada no PR #24;
 - 007 — arquitetura de passagens por feature: integrada no PR #25;
 - 008 — repositories e fronteira transacional: integrada no PR #26.
-
-## Task em revisão
-
-- 009 — tipagem progressiva do backend: implementação concluída no PR #28,
-  aguardando merge.
+- 009 — tipagem progressiva do backend: integrada no PR #28.
 
 ## Validação da task 009
 
@@ -51,15 +46,13 @@ Atualizado em: 21/08/2026
 
 ## Próximo passo obrigatório
 
-1. revisar e mesclar o PR #28;
-2. sincronizar a `main` local com `origin/main`;
-3. confirmar worktree limpo;
-4. ler `AGENTS.md` e `docs/tasks/010-tests-structure-coverage.md`;
-5. executar o baseline completo;
-6. executar somente a task 010.
+1. sincronizar a `main` local com `origin/main`;
+2. confirmar worktree limpo;
+3. ler `AGENTS.md` e `docs/tasks/010-tests-structure-coverage.md`;
+4. executar o baseline completo;
+5. executar somente a task 010.
 
-Não iniciar a task 010 antes do merge da task 009 e não combiná-la com tasks
-posteriores.
+Não combinar a task 010 com tasks posteriores.
 
 ## Restrições de continuidade
 
