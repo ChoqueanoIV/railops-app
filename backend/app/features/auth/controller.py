@@ -22,7 +22,7 @@ router = APIRouter(prefix="/auth", tags=["Autenticação"])
 def primeiro_acesso(
     dados: PrimeiroAcessoRequest,
     service: AuthService = Depends(obter_auth_service),
-):
+) -> dict[str, str]:
     try:
         service.primeiro_acesso(dados.matricula, dados.codigo_ativacao, dados.pin)
     except AutenticacaoError as erro:
@@ -43,7 +43,7 @@ def primeiro_acesso(
 def login(
     dados: LoginRequest,
     service: AuthService = Depends(obter_auth_service),
-):
+) -> LoginResponse:
     try:
         token = service.login(dados.matricula, dados.pin)
     except AutenticacaoError as erro:

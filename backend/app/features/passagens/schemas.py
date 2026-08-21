@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, time
+from typing import Self
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -13,7 +14,7 @@ class SchemaBase(BaseModel):
 
     @field_validator("*", mode="before")
     @classmethod
-    def remover_espacos_antes_da_tipagem(cls, valor):
+    def remover_espacos_antes_da_tipagem(cls, valor: object) -> object:
         return valor.strip() if isinstance(valor, str) else valor
 
 
@@ -46,7 +47,7 @@ class RadioUsoRequest(SchemaBase):
     falha_descricao: str | None = None
 
     @model_validator(mode="after")
-    def validar_descricao_falha(self):
+    def validar_descricao_falha(self) -> Self:
         if self.apresentou_falha and not self.falha_descricao:
             raise ValueError(
                 "A descrição da falha é obrigatória quando o rádio apresentou falha."
@@ -68,7 +69,7 @@ class PassagemBrisamarRequest(SchemaBase):
     radios_utilizados: list[RadioUsoRequest] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def validar_justificativa_mobile(self):
+    def validar_justificativa_mobile(self) -> Self:
         if not self.mobile_utilizado and not self.mobile_justificativa:
             raise ValueError(
                 "A justificativa é obrigatória quando o Mobile não foi utilizado."
@@ -87,7 +88,7 @@ class PassagemBrisamarEdicaoRequest(SchemaBase):
     radios_utilizados: list[RadioUsoRequest] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def validar_justificativa_mobile(self):
+    def validar_justificativa_mobile(self) -> Self:
         if not self.mobile_utilizado and not self.mobile_justificativa:
             raise ValueError(
                 "A justificativa é obrigatória quando o Mobile não foi utilizado."
@@ -134,7 +135,7 @@ class TeconDetalheRequest(SchemaBase):
     area2_termino: time | None = None
 
     @model_validator(mode="after")
-    def validar_atendimento_tecon(self):
+    def validar_atendimento_tecon(self) -> Self:
         campos_especificos = (
             self.carga_mal_posicionada,
             self.carga_mal_posicionada_descricao,
@@ -204,7 +205,7 @@ class PassagemTeconRequest(SchemaBase):
     radios_utilizados: list[RadioUsoRequest] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def validar_justificativa_mobile(self):
+    def validar_justificativa_mobile(self) -> Self:
         if not self.mobile_utilizado and not self.mobile_justificativa:
             raise ValueError(
                 "A justificativa é obrigatória quando o Mobile não foi utilizado."
@@ -223,7 +224,7 @@ class PassagemTeconEdicaoRequest(SchemaBase):
     radios_utilizados: list[RadioUsoRequest] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def validar_justificativa_mobile(self):
+    def validar_justificativa_mobile(self) -> Self:
         if not self.mobile_utilizado and not self.mobile_justificativa:
             raise ValueError(
                 "A justificativa é obrigatória quando o Mobile não foi utilizado."

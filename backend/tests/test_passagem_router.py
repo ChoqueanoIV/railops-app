@@ -10,6 +10,7 @@ from app.api.errors import ApiError
 from app.features.auth.models import Usuario
 from app.features.passagens import controller as passagem_controller
 from app.features.passagens.exceptions import PassagemError
+from app.features.passagens.models import PassagemTeconDetalhe, Terminal
 from app.features.passagens.schemas import PassagemTeconEdicaoRequest
 
 
@@ -170,6 +171,24 @@ def test_consultar_passagem_retorna_detalhes_e_permissao(monkeypatch):
     assert resposta.detalhe.radios_operantes == 4
     assert resposta.ocupacoes_linhas[0].codigo_linha == "22"
     assert resposta.radios_utilizados[0].numero == "R-01"
+
+
+def test_montar_resposta_consulta_preserva_detalhe_tecon():
+    passagem = criar_passagem_completa_para_snapshot()
+    passagem.terminal = Terminal.TECON
+    passagem.detalhe_brisamar = None
+    passagem.detalhe_tecon = PassagemTeconDetalhe(
+        houve_atendimento=False,
+        carga_mal_posicionada=None,
+        area1_atendida=None,
+        area2_atendida=None,
+    )
+
+    resposta = passagem_controller.montar_resposta_consulta(passagem, False)
+
+    assert resposta.terminal == Terminal.TECON
+    assert resposta.detalhe.houve_atendimento is False
+    assert resposta.editavel is False
 
 
 def test_consultar_passagem_inexistente_retorna_404(monkeypatch):

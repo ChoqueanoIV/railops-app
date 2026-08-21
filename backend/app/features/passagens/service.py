@@ -6,6 +6,7 @@ from app.features.auth.models import Usuario
 from app.features.passagens.exceptions import PassagemError
 from app.features.passagens.models import (
     EquipeMembro,
+    Linha,
     PassagemBrisamarDetalhe,
     PassagemLinhaOcupacao,
     PassagemRadioUso,
@@ -27,6 +28,7 @@ from app.features.passagens.schemas import (
 )
 
 FUSO_OPERACAO = ZoneInfo("America/Sao_Paulo")
+PassagemEdicaoRequest = PassagemBrisamarEdicaoRequest | PassagemTeconEdicaoRequest
 
 
 class PassagemService:
@@ -166,6 +168,7 @@ class PassagemService:
         passagem = self.passagem_repository.buscar_para_edicao(passagem_id)
         try:
             self.validar_permissao_edicao(passagem, responsavel, agora)
+            assert passagem is not None
             return passagem
         except PassagemError:
             self.passagem_repository.desfazer()
@@ -208,10 +211,18 @@ class PassagemService:
     ) -> PassagemServico:
         return self._editar(passagem_id, dados, responsavel, Terminal.TECON, agora)
 
-    def _editar(self, passagem_id, dados, responsavel, terminal, agora):
+    def _editar(
+        self,
+        passagem_id: uuid.UUID,
+        dados: PassagemEdicaoRequest,
+        responsavel: Usuario,
+        terminal: Terminal,
+        agora: datetime | None,
+    ) -> PassagemServico:
         try:
             passagem = self.passagem_repository.buscar_para_edicao(passagem_id)
             self.validar_permissao_edicao(passagem, responsavel, agora)
+            assert passagem is not None
             if passagem.terminal != terminal:
                 raise PassagemError(
                     f"Os dados informados não correspondem ao terminal {passagem.terminal.value}."
@@ -225,7 +236,11 @@ class PassagemService:
             self.passagem_repository.desfazer()
             raise
 
-    def _validar_linhas(self, dados, terminal):
+    def _validar_linhas(
+        self,
+        dados: PassagemEdicaoRequest,
+        terminal: Terminal,
+    ) -> dict[str, Linha]:
         linhas = self.linha_repository.listar_por_terminal(terminal)
         linhas_por_codigo = {linha.codigo: linha for linha in linhas}
         codigos = [item.codigo_linha for item in dados.ocupacoes_linhas]
@@ -247,7 +262,13 @@ class PassagemService:
                 )
         return linhas_por_codigo
 
-    def _aplicar_conteudo(self, passagem, dados, linhas_por_codigo, terminal):
+    def _aplicar_conteudo(
+        self,
+        passagem: PassagemServico,
+        dados: PassagemEdicaoRequest,
+        linhas_por_codigo: dict[str, Linha],
+        terminal: Terminal,
+    ) -> None:
         passagem.observacoes = dados.observacoes
         passagem.relatorio_ocorrencias = dados.relatorio_ocorrencias
         passagem.mobile_utilizado = dados.mobile_utilizado

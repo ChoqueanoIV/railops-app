@@ -6,15 +6,27 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session, selectinload
 
 from app.features.passagens.models import (
+    EquipeMembro,
     Linha,
+    PassagemBrisamarDetalhe,
     PassagemLinhaOcupacao,
     PassagemRadioUso,
     PassagemServico,
     PassagemServicoHistorico,
+    PassagemTeconDetalhe,
     Radio,
     Terminal,
 )
 from app.shared.persistence.transactions import Transacao, TransacaoSQLAlchemy
+
+RegistroSnapshot = (
+    PassagemServico
+    | PassagemBrisamarDetalhe
+    | PassagemTeconDetalhe
+    | EquipeMembro
+    | PassagemLinhaOcupacao
+    | PassagemRadioUso
+)
 
 
 class LinhaRepository:
@@ -120,7 +132,7 @@ class PassagemRepository:
         self.transacao.desfazer()
 
     @classmethod
-    def montar_snapshot(cls, passagem: PassagemServico) -> dict:
+    def montar_snapshot(cls, passagem: PassagemServico) -> dict[str, object]:
         detalhe = passagem.detalhe_brisamar or passagem.detalhe_tecon
         return {
             "passagem": cls._colunas_json(passagem),
@@ -143,14 +155,14 @@ class PassagemRepository:
         }
 
     @classmethod
-    def _colunas_json(cls, registro) -> dict:
+    def _colunas_json(cls, registro: RegistroSnapshot) -> dict[str, object]:
         return {
             coluna.name: cls._valor_json(getattr(registro, coluna.name))
             for coluna in registro.__table__.columns
         }
 
     @staticmethod
-    def _valor_json(valor):
+    def _valor_json(valor: object) -> object:
         if isinstance(valor, enum.Enum):
             return valor.value
         if isinstance(valor, uuid.UUID):
