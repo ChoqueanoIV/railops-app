@@ -66,6 +66,10 @@ docker compose --env-file .env.docker down
 O volume `railops_postgres_data` preserva o banco. Use `down -v` somente quando
 quiser apagar deliberadamente todos os dados locais do PostgreSQL.
 
+Esse fluxo foi validado com Docker Engine 29.7.2 e Compose v5.4.0: banco e API
+ficaram saudáveis, as migrations chegaram ao `head` e Swagger respondeu HTTP
+200.
+
 ## Subir o projeto no Windows
 
 ### 1. Pré-requisitos

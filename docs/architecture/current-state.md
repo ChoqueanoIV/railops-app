@@ -99,9 +99,10 @@ PostgreSQL local opcional, aguarda a saúde do banco e executa as migrations
 Alembic antes de iniciar o Uvicorn. Segredos são exigidos em tempo de execução
 por `.env.docker`, que permanece ignorado; somente o exemplo é versionado.
 
-A estrutura, os requisitos de segurança e a cadeia Alembic foram validados por
-testes e geração SQL offline. O build e a subida real do Compose ainda precisam
-ser confirmados em uma máquina com Docker disponível.
+A estrutura e os requisitos de segurança foram validados por testes. O build
+da imagem, a subida real do Compose, os healthchecks, a cadeia Alembic até
+`head`, o usuário não-root e Swagger HTTP 200 foram confirmados localmente com
+Docker Desktop e WSL 2.
 
 ## Frontend
 
