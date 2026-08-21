@@ -4,10 +4,10 @@ Atualizado em: 21/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `feat/shell-react-typescript`;
-- PR em revisão: [#31 — shell React + TypeScript](https://github.com/ChoqueanoIV/railops-app/pull/31), com base em `main`;
-- checkpoint da `main` anterior à PR: `f957a7b`;
-- implementação e documentação da task 012 concluídas, aguardando merge;
+- branch de continuidade: `main`;
+- PR funcional mais recente: [#31 — shell React + TypeScript](https://github.com/ChoqueanoIV/railops-app/pull/31), mesclada;
+- merge funcional consolidado na `main`: `30e3890`;
+- nenhuma implementação pendente fora da `main`;
 - worktree limpo antes da atualização deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -24,11 +24,7 @@ Atualizado em: 21/08/2026
 - 009 — tipagem progressiva do backend: integrada no PR #28.
 - 010 — reorganização dos testes e cobertura: integrada no PR #29.
 - 011 — Docker e ambiente local: integrada no PR #30.
-
-## Task em revisão
-
-- 012 — shell React + TypeScript: concluída no PR #31, aguardando revisão e
-  merge.
+- 012 — shell React + TypeScript: integrada no PR #31.
 
 ## Validação da task 012
 
@@ -54,15 +50,12 @@ Atualizado em: 21/08/2026
 
 ## Próximo passo obrigatório
 
-1. revisar e mesclar o PR #31;
-2. sincronizar a `main` local com `origin/main`;
-3. confirmar worktree limpo;
-4. ler `AGENTS.md` e `docs/tasks/013-react-api-auth.md`;
-5. executar o baseline completo;
-6. executar somente a task 013.
+1. confirmar worktree limpo;
+2. ler `AGENTS.md` e `docs/tasks/013-react-api-auth.md`;
+3. executar o baseline completo;
+4. executar somente a task 013.
 
-Não iniciar a task 013 antes do merge do PR #31 nem combiná-la com tasks
-posteriores.
+Não combinar a task 013 com tasks posteriores.
 
 ## Restrições de continuidade
 
