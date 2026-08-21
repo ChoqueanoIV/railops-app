@@ -30,6 +30,42 @@ ferroviária do Pátio Brisamar e do Terminal TECON.
 | Qualidade | Pytest, pytest-cov, Ruff, mypy e pre-commit |
 | Dependências | `pyproject.toml`, `uv` e `uv.lock` |
 
+## Subir com Docker Compose
+
+Esse é o caminho mais curto para executar API e PostgreSQL localmente. Instale
+Docker Desktop com suporte ao Compose e, na raiz do repositório, crie o arquivo
+de variáveis local:
+
+```powershell
+Copy-Item .env.docker.example .env.docker
+```
+
+Substitua `POSTGRES_PASSWORD` e `JWT_SECRET_KEY` em `.env.docker`. Use uma senha
+de banco compatível com URL (sem caracteres que precisem de codificação) e
+nunca versione esse arquivo. Depois execute:
+
+```powershell
+docker compose --env-file .env.docker up --build -d
+docker compose --env-file .env.docker ps
+```
+
+O PostgreSQL precisa ficar saudável antes do backend. Ao iniciar, o backend
+executa `alembic upgrade head` e somente então abre a API como usuário não-root.
+Confira:
+
+- health check: `http://127.0.0.1:8000/health`;
+- Swagger: `http://127.0.0.1:8000/docs`;
+- logs: `docker compose --env-file .env.docker logs -f backend`.
+
+Para encerrar sem apagar os dados:
+
+```powershell
+docker compose --env-file .env.docker down
+```
+
+O volume `railops_postgres_data` preserva o banco. Use `down -v` somente quando
+quiser apagar deliberadamente todos os dados locais do PostgreSQL.
+
 ## Subir o projeto no Windows
 
 ### 1. Pré-requisitos
@@ -201,7 +237,7 @@ py -3.13 -m uv run pre-commit run --all-files
 
 Estado validado deste checkpoint:
 
-- 105 testes aprovados;
+- 120 testes aprovados;
 - cobertura total de 94%;
 - lint, formatter, type-check e pre-commit aprovados.
 
@@ -221,10 +257,12 @@ railops-app/
 │   │   └── main.py           # fábrica e bootstrap da aplicação
 │   ├── tests/                # testes automatizados
 │   ├── .env.example
+│   ├── Dockerfile
 │   ├── alembic.ini
 │   └── main.py               # entrypoint compatível temporário
 ├── frontend/                 # interface legada HTML/CSS/JavaScript
 ├── docs/                     # arquitetura, padrões, tasks e checkpoint
+├── compose.yaml              # API e PostgreSQL para desenvolvimento local
 ├── pyproject.toml            # manifesto e ferramentas Python
 ├── uv.lock                   # versões reproduzíveis
 └── README.md
@@ -255,14 +293,15 @@ manualmente.
 - **CORS no navegador:** confira se a origem exata do frontend está em
   `CORS_ORIGINS`.
 - **Banco vazio:** aplique `alembic upgrade head` e prepare um usuário de teste.
+- **Compose não inicia:** confirme Docker Desktop ativo, revise `.env.docker` e
+  execute `docker compose --env-file .env.docker logs backend db`.
 
 ## Limitações atuais e próximos passos
 
 - frontend ainda é HTML/CSS/JavaScript e será migrado incrementalmente para
   React + TypeScript;
-- ainda não há Docker, CI remoto ou deploy público;
-- contrato unificado de erros e reorganização backend por feature são as
-  próximas etapas técnicas;
+- a configuração Docker existe, mas ainda não há CI remoto ou deploy público;
+- o frontend React e a automação de qualidade são as próximas etapas técnicas;
 - consultas com filtros, exportações e relatórios permanecem no roadmap.
 
 O estado seguro e a retomada do desenvolvimento estão em
