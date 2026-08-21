@@ -4,10 +4,10 @@ Atualizado em: 21/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `chore/docker-ambiente-local`;
-- PR em revisão: [#30 — ambiente Docker local](https://github.com/ChoqueanoIV/railops-app/pull/30), com base em `main`;
-- checkpoint da `main` anterior à PR: `fa762e6`;
-- implementação e documentação da task 011 concluídas, aguardando merge;
+- branch de continuidade: `main`;
+- PR funcional mais recente: [#30 — ambiente Docker local](https://github.com/ChoqueanoIV/railops-app/pull/30), mesclada;
+- merge funcional consolidado na `main`: `864f09a`;
+- nenhuma implementação pendente fora da `main`;
 - worktree limpo antes da atualização deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -23,11 +23,7 @@ Atualizado em: 21/08/2026
 - 008 — repositories e fronteira transacional: integrada no PR #26.
 - 009 — tipagem progressiva do backend: integrada no PR #28.
 - 010 — reorganização dos testes e cobertura: integrada no PR #29.
-
-## Task em revisão
-
-- 011 — Docker e ambiente local: concluída no PR #30, aguardando revisão e
-  merge.
+- 011 — Docker e ambiente local: integrada no PR #30.
 
 ## Validação da task 011
 
@@ -56,15 +52,12 @@ Atualizado em: 21/08/2026
 
 ## Próximo passo obrigatório
 
-1. revisar e mesclar o PR #30;
-2. sincronizar a `main` local com `origin/main`;
-3. confirmar worktree limpo;
-4. ler `AGENTS.md` e `docs/tasks/012-react-shell.md`;
-5. executar o baseline completo;
-6. executar somente a task 012.
+1. confirmar worktree limpo;
+2. ler `AGENTS.md` e `docs/tasks/012-react-shell.md`;
+3. executar o baseline completo;
+4. executar somente a task 012.
 
-Não iniciar a task 012 antes do merge do PR #30 nem combiná-la com tasks
-posteriores.
+Não combinar a task 012 com tasks posteriores.
 
 ## Restrições de continuidade
 
