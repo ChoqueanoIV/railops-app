@@ -31,7 +31,9 @@ Adicionar:
 Preencher ao executar a task:
 
 - Branch: `test/reorganiza-suite-cobertura`
-- Commits: `bdeade3` (`test: reorganiza suite e cobertura`)
+- Commits: `bdeade3` (`test: reorganiza suite e cobertura`) e `1bc3853`
+  (`docs: registra reorganizacao dos testes`)
+- Pull request: [#29](https://github.com/ChoqueanoIV/railops-app/pull/29)
 - Testes antes: `116 passed`; cobertura total de `94%`
 - Testes depois: `117 passed`; cobertura total de `94%`
 - Grupos: `83 unit`, `13 integration` e `21 api`, todos executáveis por marker
