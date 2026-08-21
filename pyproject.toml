@@ -59,6 +59,11 @@ constraint-dependencies = [
 pythonpath = ["backend"]
 testpaths = ["backend/tests"]
 addopts = "--strict-markers"
+markers = [
+    "unit: testes isolados de regras e componentes",
+    "integration: testes das fronteiras entre componentes",
+    "api: testes de contratos HTTP e bootstrap",
+]
 
 [tool.coverage.run]
 branch = true
@@ -95,3 +100,4 @@ no_implicit_optional = true
 show_error_codes = true
 warn_redundant_casts = true
 warn_unused_configs = true
+exclude = ["^backend/tests/"]

@@ -2,9 +2,6 @@ import uuid
 from unittest.mock import MagicMock
 
 import pytest
-from tests.test_passagem_repository import criar_passagem_completa_para_snapshot
-from tests.test_passagem_service import criar_dados_edicao_brisamar, criar_dados_validos
-from tests.test_passagem_tecon_service import criar_dados_tecon_request
 
 from app.api.errors import ApiError
 from app.features.auth.models import Usuario
@@ -12,6 +9,14 @@ from app.features.passagens import controller as passagem_controller
 from app.features.passagens.exceptions import PassagemError
 from app.features.passagens.models import PassagemTeconDetalhe, Terminal
 from app.features.passagens.schemas import PassagemTeconEdicaoRequest
+from tests.integration.test_passagem_repository import (
+    criar_passagem_completa_para_snapshot,
+)
+from tests.unit.test_passagem_service import (
+    criar_dados_edicao_brisamar,
+    criar_dados_validos,
+)
+from tests.unit.test_passagem_tecon_service import criar_dados_tecon_request
 
 
 def test_criar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):

@@ -47,6 +47,9 @@ Execute os checks pelo ambiente gerenciado:
 ```powershell
 py -3.13 -m uv run pytest
 py -3.13 -m uv run pytest --cov=backend/app --cov-report=term-missing
+py -3.13 -m uv run pytest -m unit
+py -3.13 -m uv run pytest -m integration
+py -3.13 -m uv run pytest -m api
 py -3.13 -m uv run ruff check .
 py -3.13 -m uv run ruff format --check .
 py -3.13 -m uv run mypy

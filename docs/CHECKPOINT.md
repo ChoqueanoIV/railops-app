@@ -4,10 +4,11 @@ Atualizado em: 21/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
-- PR funcional mais recente: [#28 — tipagem progressiva do backend](https://github.com/ChoqueanoIV/railops-app/pull/28), mesclada;
-- merge funcional consolidado na `main`: `7355871`;
-- nenhuma implementação pendente fora da `main`;
+- branch de continuidade: `test/reorganiza-suite-cobertura`;
+- PR aberta: [#29 — reorganização da suíte e cobertura](https://github.com/ChoqueanoIV/railops-app/pull/29);
+- base da PR: `main`;
+- checkpoint consolidado na `main` antes da PR: `b1cdd39`;
+- implementação e documentação da task 010 concluídas, aguardando merge;
 - worktree limpo antes da atualização deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -23,42 +24,48 @@ Atualizado em: 21/08/2026
 - 008 — repositories e fronteira transacional: integrada no PR #26.
 - 009 — tipagem progressiva do backend: integrada no PR #28.
 
-## Validação da task 009
+## Task em revisão
 
-- 116 testes aprovados;
+- 010 — reorganização dos testes e cobertura: implementação concluída no PR
+  #29, aguardando merge.
+
+## Validação da task 010
+
+- 117 testes aprovados;
 - cobertura total de 94%;
+- 83 testes unitários, 13 de integração e 21 de API aprovados isoladamente;
 - `ruff check backend` aprovado;
 - formatter Ruff aprovado;
-- `mypy` aprovado em 45 arquivos, com `disallow_untyped_defs = true` e sem
-  exceções por módulo;
+- `mypy backend` aprovado em 52 arquivos;
 - pre-commit aprovado;
-- nenhuma regra de negócio ou contrato HTTP alterado.
+- nenhuma linha da aplicação, regra de negócio ou contrato HTTP alterado.
 
-## O que foi entregue na task 009
+## O que foi entregue na task 010
 
-- assinaturas completas obrigatórias no código de produção;
-- remoção dos overrides de `mypy` por módulo;
-- controllers, validators, repositories e service de passagens tipados;
-- schemas tipados para respostas de equipe, linhas, rádios e detalhes dos
-  terminais Brisamar e TECON;
-- unions, mapas, snapshots e retornos internos com tipos concretos;
-- nenhum `Any`, cast ou `type: ignore` introduzido.
+- suíte organizada em pacotes `unit`, `integration`, `api` e `fixtures`;
+- markers registrados para execução seletiva dos três grupos;
+- fixtures tipadas de configuração da aplicação e banco de teste;
+- proteção explícita contra configuração do banco de produção;
+- relatório de cobertura de statements e branches preservado;
+- comandos e estratégia de testes documentados.
 
 ## Próximo passo obrigatório
 
-1. sincronizar a `main` local com `origin/main`;
-2. confirmar worktree limpo;
-3. ler `AGENTS.md` e `docs/tasks/010-tests-structure-coverage.md`;
-4. executar o baseline completo;
-5. executar somente a task 010.
+1. revisar e mesclar o PR #29;
+2. sincronizar a `main` local com `origin/main`;
+3. confirmar worktree limpo;
+4. ler `AGENTS.md` e `docs/tasks/011-docker-local-env.md`;
+5. executar o baseline completo;
+6. executar somente a task 011.
 
-Não combinar a task 010 com tasks posteriores.
+Não iniciar a task 011 antes do merge da task 010 e não combiná-la com tasks
+posteriores.
 
 ## Restrições de continuidade
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar contratos HTTP fora dos critérios explícitos da task 010;
+- não alterar contratos HTTP fora dos critérios explícitos da task 011;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.
