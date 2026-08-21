@@ -1,6 +1,6 @@
 # Estado atual observado
 
-Atualizado a partir da branch `refactor/backend-typing` em 21/08/2026.
+Atualizado a partir da branch `test/reorganiza-suite-cobertura` em 21/08/2026.
 
 ## Backend
 
@@ -52,6 +52,10 @@ backend/
     schemas/
     services/
   tests/
+    api/
+    fixtures/
+    integration/
+    unit/
   alembic.ini
   .env.example
   main.py
@@ -68,7 +72,9 @@ código de produção novo deve usar as features diretamente.
 
 ## Testes existentes
 
-O repositório já contém testes de:
+Os testes do backend estão organizados em pacotes `unit`, `integration`, `api`
+e `fixtures`, com markers equivalentes para execução seletiva. O repositório
+contém testes de:
 - auth service;
 - passagem repository;
 - passagem router;
@@ -78,7 +84,9 @@ O repositório já contém testes de:
 - TECON schema;
 - TECON service.
 
-A suíte atual contém 116 testes e não depende das credenciais do `.env` real.
+A suíte atual contém 117 testes, mantém cobertura total de 94% e não depende
+das credenciais do `.env` real. A fixture de banco exige `RAILOPS_ENV=test` e o
+banco `railops_test`, reduzindo o risco de execução contra produção.
 
 ## Frontend
 
