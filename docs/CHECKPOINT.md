@@ -1,14 +1,15 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 20/08/2026
+Atualizado em: 21/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
-- PR funcional mais recente: [#26 — fronteira transacional](https://github.com/ChoqueanoIV/railops-app/pull/26), mesclada;
-- merge funcional consolidado na `main`: `b988b08`;
-- nenhuma implementação pendente fora da `main`;
-- worktree limpo antes da criação deste checkpoint documental;
+- branch de continuidade: `refactor/backend-typing`;
+- PR funcional aberta: [#28 — tipagem progressiva do backend](https://github.com/ChoqueanoIV/railops-app/pull/28);
+- base da PR: `main`;
+- merge consolidado na `main` antes da PR: `0b9a971`;
+- implementação e documentação da task 009 concluídas, aguardando revisão e merge;
+- worktree limpo antes da atualização deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
 ## Tasks concluídas
@@ -22,43 +23,49 @@ Atualizado em: 20/08/2026
 - 007 — arquitetura de passagens por feature: integrada no PR #25;
 - 008 — repositories e fronteira transacional: integrada no PR #26.
 
-## Validação da task 008
+## Task em revisão
 
-- 115 testes aprovados;
+- 009 — tipagem progressiva do backend: implementação concluída no PR #28,
+  aguardando merge.
+
+## Validação da task 009
+
+- 116 testes aprovados;
 - cobertura total de 94%;
 - `ruff check backend` aprovado;
 - formatter Ruff aprovado;
-- `mypy` aprovado no escopo configurado;
+- `mypy` aprovado em 45 arquivos, com `disallow_untyped_defs = true` e sem
+  exceções por módulo;
 - pre-commit aprovado;
-- regras e contratos HTTP preservados;
-- PostgreSQL, metadata e Alembic preservados;
-- Swagger mantido em `/docs`;
-- nenhuma regra de negócio alterada; compatibilidade HTTP legada preservada.
+- nenhuma regra de negócio ou contrato HTTP alterado.
 
-## O que foi entregue na task 008
+## O que foi entregue na task 009
 
-- `TransacaoSQLAlchemy` centralizando commit, rollback e refresh;
-- uma sessão compartilhada por requisição;
-- services injetados nos controllers, sem SQLAlchemy na borda HTTP;
-- falhas de banco convertidas em `PERSISTENCE_ERROR` neutro;
-- responsabilidades documentadas em `docs/architecture/transactions.md`;
-- testes específicos da fronteira transacional e do tratamento HTTP.
+- assinaturas completas obrigatórias no código de produção;
+- remoção dos overrides de `mypy` por módulo;
+- controllers, validators, repositories e service de passagens tipados;
+- schemas tipados para respostas de equipe, linhas, rádios e detalhes dos
+  terminais Brisamar e TECON;
+- unions, mapas, snapshots e retornos internos com tipos concretos;
+- nenhum `Any`, cast ou `type: ignore` introduzido.
 
 ## Próximo passo obrigatório
 
-1. sincronizar a `main` local com `origin/main`;
-2. confirmar worktree limpo;
-3. ler `AGENTS.md` e `docs/tasks/009-backend-typing.md`;
-4. executar o baseline completo;
-5. executar somente a task 009.
+1. revisar e mesclar o PR #28;
+2. sincronizar a `main` local com `origin/main`;
+3. confirmar worktree limpo;
+4. ler `AGENTS.md` e `docs/tasks/010-tests-structure-coverage.md`;
+5. executar o baseline completo;
+6. executar somente a task 010.
 
-Não combinar a task 009 com tasks posteriores.
+Não iniciar a task 010 antes do merge da task 009 e não combiná-la com tasks
+posteriores.
 
 ## Restrições de continuidade
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar contratos HTTP fora dos critérios explícitos da task 009;
+- não alterar contratos HTTP fora dos critérios explícitos da task 010;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.

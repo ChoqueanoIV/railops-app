@@ -1,6 +1,6 @@
 # Estado atual observado
 
-Atualizado a partir da branch `refactor/repositories-transactions` em 19/08/2026.
+Atualizado a partir da branch `refactor/backend-typing` em 21/08/2026.
 
 ## Backend
 
@@ -78,7 +78,7 @@ O repositório já contém testes de:
 - TECON schema;
 - TECON service.
 
-A suíte atual contém 115 testes e não depende das credenciais do `.env` real.
+A suíte atual contém 116 testes e não depende das credenciais do `.env` real.
 
 ## Frontend
 
@@ -92,5 +92,6 @@ O backend usa `pyproject.toml` como manifesto, grupos separados para runtime,
 testes e desenvolvimento, e `uv.lock` versionado. Os arquivos requirements são
 exports compatíveis gerados a partir do mesmo lockfile.
 
-A base de qualidade inclui Ruff, formatter do Ruff, mypy, pytest-cov e
-pre-commit. A automação remota de CI ainda é uma etapa futura.
+A base de qualidade inclui Ruff, formatter do Ruff, mypy com assinaturas
+obrigatórias e sem exceções por módulo, pytest-cov e pre-commit. A automação
+remota de CI ainda é uma etapa futura.

@@ -1,6 +1,6 @@
 # Tipagem progressiva do backend
 
-Status: `TODO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 Aumentar confiabilidade por type hints sem uma reescrita total.
@@ -14,19 +14,25 @@ Aumentar confiabilidade por type hints sem uma reescrita total.
 - tratar Optional corretamente.
 
 ## Critérios de aceite
-- [ ] módulos migrados passam no mypy;
-- [ ] nenhum `ignore` amplo;
-- [ ] contratos entre camadas são claros;
-- [ ] type hints não alteram comportamento.
+- [x] módulos migrados passam no mypy;
+- [x] nenhum `ignore` amplo;
+- [x] contratos entre camadas são claros;
+- [x] type hints não alteram comportamento.
 
 ## Evidências
 
 Preencher ao executar a task:
 
-- Branch:
-- Commits:
-- Testes antes:
-- Testes depois:
-- Lint:
-- Type-check:
-- Observações:
+- Branch: `refactor/backend-typing`
+- Commits: `e91109b` (`refactor: fortalece tipagem do backend`) e `43a9f68`
+  (`docs: registra tipagem progressiva`)
+- Pull request: [#28](https://github.com/ChoqueanoIV/railops-app/pull/28)
+- Testes antes: `115 passed`
+- Testes depois: `116 passed`; cobertura total de `94%`
+- Lint: Ruff e formatter Ruff aprovados pelo pre-commit
+- Type-check: `mypy` aprovado em 45 arquivos, com `disallow_untyped_defs = true`
+  e sem overrides por módulo
+- Observações: controllers, validators, snapshots e métodos internos de
+  passagens receberam contratos concretos. A montagem da consulta agora usa
+  schemas tipados para equipe, linhas, rádios e detalhes Brisamar/TECON. Nenhum
+  `Any`, cast ou `type: ignore` foi introduzido e os contratos HTTP permaneceram.
