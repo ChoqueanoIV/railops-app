@@ -25,7 +25,7 @@ ferroviária do Pátio Brisamar e do Terminal TECON.
 |---|---|
 | Backend | Python 3.13, FastAPI e Pydantic |
 | Persistência | PostgreSQL, SQLAlchemy e Alembic |
-| Frontend atual | HTML, CSS e JavaScript |
+| Frontend | React + TypeScript (shell) e HTML/CSS/JavaScript (fluxos legados) |
 | Autenticação | JWT, Passlib e bcrypt |
 | Qualidade | Pytest, pytest-cov, Ruff, mypy e pre-commit |
 | Dependências | `pyproject.toml`, `uv` e `uv.lock` |
@@ -76,6 +76,7 @@ ficaram saudáveis, as migrations chegaram ao `head` e Swagger respondeu HTTP
 
 - Git;
 - Python 3.13;
+- Node.js 24 e npm 11;
 - PostgreSQL acessível, local ou hospedado;
 - PowerShell.
 
@@ -156,7 +157,7 @@ O health check deve responder:
 {"status": "ok"}
 ```
 
-### 6. Iniciar o frontend
+### 6. Iniciar o frontend legado
 
 Abra outro PowerShell na raiz do projeto:
 
@@ -166,6 +167,28 @@ py -3.13 -m uv run python -m http.server 3000 --directory frontend
 
 Acesse `http://127.0.0.1:3000`. Não abra os arquivos HTML diretamente pelo
 Explorer; o servidor HTTP evita diferenças de origem e carregamento.
+
+### 7. Iniciar o shell React
+
+O shell moderno é independente dos fluxos legados. Em outro PowerShell:
+
+```powershell
+Set-Location frontend\react
+npm ci
+Copy-Item .env.example .env.local
+npm run dev
+```
+
+Acesse `http://127.0.0.1:5173`. Nesta etapa o shell confirma somente a base
+React; login e integração com a API serão migrados incrementalmente. Para
+validar a qualidade do frontend moderno:
+
+```powershell
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
 
 ## Criar um usuário para avaliação
 
@@ -239,6 +262,16 @@ py -3.13 -m uv run mypy
 py -3.13 -m uv run pre-commit run --all-files
 ```
 
+Para o shell React, execute os comandos dentro de `frontend/react`:
+
+```powershell
+npm run lint
+npm run format:check
+npm run typecheck
+npm test
+npm run build
+```
+
 Estado validado deste checkpoint:
 
 - 120 testes aprovados;
@@ -264,7 +297,11 @@ railops-app/
 │   ├── Dockerfile
 │   ├── alembic.ini
 │   └── main.py               # entrypoint compatível temporário
-├── frontend/                 # interface legada HTML/CSS/JavaScript
+├── frontend/
+│   ├── react/                # shell React + TypeScript isolado
+│   ├── css/                  # estilos legados
+│   ├── js/                   # scripts legados
+│   └── *.html                # telas legadas ainda operacionais
 ├── docs/                     # arquitetura, padrões, tasks e checkpoint
 ├── compose.yaml              # API e PostgreSQL para desenvolvimento local
 ├── pyproject.toml            # manifesto e ferramentas Python
@@ -302,10 +339,10 @@ manualmente.
 
 ## Limitações atuais e próximos passos
 
-- frontend ainda é HTML/CSS/JavaScript e será migrado incrementalmente para
-  React + TypeScript;
+- shell React + TypeScript criado; os fluxos ainda usam o frontend legado até
+  serem migrados e validados incrementalmente;
 - a configuração Docker existe, mas ainda não há CI remoto ou deploy público;
-- o frontend React e a automação de qualidade são as próximas etapas técnicas;
+- cliente de API e autenticação no React são a próxima etapa técnica;
 - consultas com filtros, exportações e relatórios permanecem no roadmap.
 
 O estado seguro e a retomada do desenvolvimento estão em

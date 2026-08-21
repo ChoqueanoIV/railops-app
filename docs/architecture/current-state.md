@@ -1,6 +1,6 @@
 # Estado atual observado
 
-Atualizado a partir da branch `chore/docker-ambiente-local` em 21/08/2026.
+Atualizado a partir da branch `feat/shell-react-typescript` em 21/08/2026.
 
 ## Backend
 
@@ -106,9 +106,15 @@ Docker Desktop e WSL 2.
 
 ## Frontend
 
-O README descreve o frontend atual como HTML, CSS e JavaScript.
+O shell moderno está isolado em `frontend/react`, com React, TypeScript, Vite,
+React Router, ESLint, Prettier, Vitest e Testing Library. O alias `@/` aponta
+para `src/`, e a estrutura inicial separa aplicação, rotas, features, estilos e
+infraestrutura de testes.
 
-A modernização para React + TypeScript deve ser tratada como migração incremental, não substituição imediata.
+Os arquivos HTML, CSS e JavaScript anteriores permanecem intactos e continuam
+responsáveis pelos fluxos operacionais. O shell ainda não possui autenticação
+nem acesso à API; essa integração pertence à task 013. A modernização continua
+incremental, sem substituição prematura do legado.
 
 ## Dependências
 
