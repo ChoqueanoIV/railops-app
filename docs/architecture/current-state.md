@@ -1,6 +1,6 @@
 # Estado atual observado
 
-Atualizado a partir da branch `test/reorganiza-suite-cobertura` em 21/08/2026.
+Atualizado a partir da branch `chore/docker-ambiente-local` em 21/08/2026.
 
 ## Backend
 
@@ -61,6 +61,9 @@ backend/
   main.py
   requirements.txt
   requirements-dev.txt
+compose.yaml
+.dockerignore
+.env.docker.example
 ```
 
 A aplicação possui configuração tipada centralizada e fábrica de bootstrap em
@@ -84,9 +87,22 @@ contém testes de:
 - TECON schema;
 - TECON service.
 
-A suíte atual contém 117 testes, mantém cobertura total de 94% e não depende
+A suíte atual contém 120 testes, mantém cobertura total de 94% e não depende
 das credenciais do `.env` real. A fixture de banco exige `RAILOPS_ENV=test` e o
 banco `railops_test`, reduzindo o risco de execução contra produção.
+
+## Ambiente Docker
+
+O backend possui imagem multi-stage baseada em Python 3.13, executada por
+usuário não-root e com healthcheck em `/health`. O `compose.yaml` fornece um
+PostgreSQL local opcional, aguarda a saúde do banco e executa as migrations
+Alembic antes de iniciar o Uvicorn. Segredos são exigidos em tempo de execução
+por `.env.docker`, que permanece ignorado; somente o exemplo é versionado.
+
+A estrutura e os requisitos de segurança foram validados por testes. O build
+da imagem, a subida real do Compose, os healthchecks, a cadeia Alembic até
+`head`, o usuário não-root e Swagger HTTP 200 foram confirmados localmente com
+Docker Desktop e WSL 2.
 
 ## Frontend
 

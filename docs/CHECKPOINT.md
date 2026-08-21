@@ -4,10 +4,10 @@ Atualizado em: 21/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
-- PR funcional mais recente: [#29 — reorganização da suíte e cobertura](https://github.com/ChoqueanoIV/railops-app/pull/29), mesclada;
-- merge funcional consolidado na `main`: `ed5dc28`;
-- nenhuma implementação pendente fora da `main`;
+- branch de continuidade: `chore/docker-ambiente-local`;
+- PR em revisão: [#30 — ambiente Docker local](https://github.com/ChoqueanoIV/railops-app/pull/30), com base em `main`;
+- checkpoint da `main` anterior à PR: `fa762e6`;
+- implementação e documentação da task 011 concluídas, aguardando merge;
 - worktree limpo antes da atualização deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -24,41 +24,53 @@ Atualizado em: 21/08/2026
 - 009 — tipagem progressiva do backend: integrada no PR #28.
 - 010 — reorganização dos testes e cobertura: integrada no PR #29.
 
-## Validação da task 010
+## Task em revisão
 
-- 117 testes aprovados;
+- 011 — Docker e ambiente local: concluída no PR #30, aguardando revisão e
+  merge.
+
+## Validação da task 011
+
+- 120 testes aprovados;
 - cobertura total de 94%;
-- 83 testes unitários, 13 de integração e 21 de API aprovados isoladamente;
 - `ruff check backend` aprovado;
 - formatter Ruff aprovado;
 - `mypy backend` aprovado em 52 arquivos;
 - pre-commit aprovado;
-- nenhuma linha da aplicação, regra de negócio ou contrato HTTP alterado.
+- imagem do backend construída com Docker Engine 29.7.2 e Compose v5.4.0;
+- PostgreSQL e backend saudáveis no Compose;
+- migrations aplicadas até `d7e9f2a3b4c5 (head)`;
+- backend executado como usuário não-root `uid=999(railops)`;
+- `/health` aprovado, `/docs` retornou HTTP 200 e OpenAPI identificado como
+  `RailOps API`;
+- nenhuma regra de negócio ou contrato HTTP alterado.
 
-## O que foi entregue na task 010
+## O que foi entregue na task 011
 
-- suíte organizada em pacotes `unit`, `integration`, `api` e `fixtures`;
-- markers registrados para execução seletiva dos três grupos;
-- fixtures tipadas de configuração da aplicação e banco de teste;
-- proteção explícita contra configuração do banco de produção;
-- relatório de cobertura de statements e branches preservado;
-- comandos e estratégia de testes documentados.
+- Dockerfile multi-stage para o backend com usuário não-root;
+- `.dockerignore` e configuração externa de ambiente;
+- PostgreSQL opcional via Docker Compose;
+- healthchecks do banco e da API;
+- migrations Alembic antes da inicialização do Uvicorn;
+- instruções de execução, validação e solução de problemas documentadas.
 
 ## Próximo passo obrigatório
 
-1. sincronizar a `main` local com `origin/main`;
-2. confirmar worktree limpo;
-3. ler `AGENTS.md` e `docs/tasks/011-docker-local-env.md`;
-4. executar o baseline completo;
-5. executar somente a task 011.
+1. revisar e mesclar o PR #30;
+2. sincronizar a `main` local com `origin/main`;
+3. confirmar worktree limpo;
+4. ler `AGENTS.md` e `docs/tasks/012-react-shell.md`;
+5. executar o baseline completo;
+6. executar somente a task 012.
 
-Não combinar a task 011 com tasks posteriores.
+Não iniciar a task 012 antes do merge do PR #30 nem combiná-la com tasks
+posteriores.
 
 ## Restrições de continuidade
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar contratos HTTP fora dos critérios explícitos da task 011;
+- não alterar contratos HTTP fora dos critérios explícitos da task 012;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.
