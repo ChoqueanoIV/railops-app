@@ -116,9 +116,14 @@ header bearer, normalização do envelope de erro e tratamento de 401/403. Login
 primeiro acesso, sessão em `sessionStorage`, logout e proteção da rota inicial
 usam os contratos existentes do backend.
 
-Os arquivos HTML, CSS e JavaScript anteriores permanecem intactos. Brisamar,
-TECON e os demais fluxos operacionais continuam no legado e serão tratados na
-task 014. A modernização permanece incremental, sem substituição prematura.
+As rotas React protegidas agora cobrem seleção de terminal, criação e edição
+das passagens do Brisamar e TECON e a confirmação do registro. Os formulários
+usam tipos alinhados aos schemas da API e o cliente HTTP central; regras de
+domínio e autorização de edição permanecem no backend.
+
+Os arquivos HTML, CSS e JavaScript anteriores permanecem intactos como fallback
+temporário, permitindo validação operacional antes de sua remoção em uma etapa
+posterior. Histórico, filtros e relatórios ainda não possuem telas dedicadas.
 
 ## Dependências
 

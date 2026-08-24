@@ -1,14 +1,14 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 23/08/2026
+Atualizado em: 24/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
+- branch funcional atual: `feat/migra-telas-react`;
 - PR funcional mais recente: [#32 — autenticação no React](https://github.com/ChoqueanoIV/railops-app/pull/32), mesclada;
 - merge funcional consolidado na `main`: `192fe1e`;
-- nenhuma implementação pendente fora da `main`;
-- worktree limpo antes da atualização deste checkpoint documental;
+- implementação da task 014 pronta para revisão e abertura de PR;
+- commit funcional da task 014: `1a5c0bf`;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
 ## Tasks concluídas
@@ -26,36 +26,38 @@ Atualizado em: 23/08/2026
 - 011 — Docker e ambiente local: integrada no PR #30.
 - 012 — shell React + TypeScript: integrada no PR #31.
 - 013 — cliente API e autenticação no React: integrada no PR #32.
+- 014 — migração incremental das telas: concluída na branch
+  `feat/migra-telas-react`, aguardando PR.
 
-## Validação da task 013
+## Validação da task 014
 
-- 10 testes React aprovados;
+- 13 testes React aprovados;
 - build Vite aprovado;
 - ESLint e Prettier aprovados;
 - type-check TypeScript aprovado;
 - servidor Vite respondeu HTTP 200;
 - 120 testes do backend aprovados;
 - Ruff, formatter Ruff, mypy e pre-commit aprovados;
-- nenhum arquivo do backend ou frontend legado alterado;
+- nenhum arquivo do backend ou frontend legado alterado ou removido;
 - nenhuma regra de negócio ou contrato HTTP alterado.
 
-## O que foi entregue na task 013
+## O que foi entregue na task 014
 
-- cliente HTTP central tipado com base URL por ambiente e timeout;
-- headers JSON e bearer normalizados;
-- parsing controlado do envelope de erro e tratamento de 401/403;
-- login e primeiro acesso integrados aos contratos existentes;
-- sessão JWT em `sessionStorage`, logout e rotas protegidas;
-- testes dos fluxos críticos e documentação atualizada.
+- seleção de Brisamar ou TECON após autenticação;
+- formulários React tipados para os dois terminais;
+- criação e edição conectadas ao cliente HTTP central;
+- campos imutáveis preservados na edição;
+- estados de carregamento, erro, envio e confirmação;
+- legado preservado como fallback para validação operacional.
 
 ## Próximo passo obrigatório
 
-1. confirmar worktree limpo;
-2. ler `AGENTS.md` e `docs/tasks/014-react-screen-migration.md`;
-3. executar o baseline completo;
-4. executar somente a task 014.
+1. revisar o diff e publicar a branch `feat/migra-telas-react`;
+2. abrir e revisar o PR da task 014;
+3. mesclar somente após checks verdes;
+4. criar checkpoint na `main` e iniciar somente a task 015.
 
-Não combinar a task 014 com tasks posteriores.
+Não combinar a task 015 com tasks posteriores.
 
 ## Restrições de continuidade
 

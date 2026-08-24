@@ -1,6 +1,6 @@
 # Migração incremental das telas
 
-Status: `TODO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 Substituir HTML/JS legado por React por fluxo, preservando paridade.
@@ -20,19 +20,27 @@ Substituir HTML/JS legado por React por fluxo, preservando paridade.
 - remover legado apenas daquela tela após validação.
 
 ## Critérios de aceite
-- [ ] nenhuma remoção prematura;
-- [ ] regras continuam no backend quando são de domínio;
-- [ ] formulário tipado;
-- [ ] estados de loading/error/success tratados.
+- [x] nenhuma remoção prematura;
+- [x] regras continuam no backend quando são de domínio;
+- [x] formulário tipado;
+- [x] estados de loading/error/success tratados.
 
 ## Evidências
 
 Preencher ao executar a task:
 
-- Branch:
-- Commits:
-- Testes antes:
-- Testes depois:
-- Lint:
-- Type-check:
-- Observações:
+- Branch: `feat/migra-telas-react`
+- Commits: `1a5c0bf` (`feat: migra passagens operacionais para React`) e o
+  commit documental desta evidência
+- Testes antes: backend com `120 passed`; React com `10 passed`
+- Testes depois: React com `13 passed`; backend com `120 passed`
+- Lint: ESLint e Ruff aprovados
+- Type-check: TypeScript e mypy aprovados
+- Build: Vite aprovado
+- Formatação: Prettier e formatter Ruff aprovados
+- Observações: seleção de terminal, formulários tipados de Brisamar e
+  TECON, criação, consulta para edição e confirmação foram migrados para
+  rotas React protegidas. Os payloads e campos imutáveis preservam os contratos
+  existentes; validações de domínio continuam no backend. Nenhum arquivo do
+  backend ou do frontend legado foi removido ou alterado. A aplicação local
+  respondeu no navegador e o redirecionamento sem sessão foi validado.
