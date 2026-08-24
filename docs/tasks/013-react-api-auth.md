@@ -28,7 +28,9 @@ Centralizar comunicação com backend e migrar o primeiro fluxo React.
 Preencher ao executar a task:
 
 - Branch: `feat/react-api-auth`
-- Commit: `6937873` (`feat: integra autenticacao ao frontend React`)
+- Commits: `6937873` (`feat: integra autenticacao ao frontend React`) e `ceba359`
+  (`docs: registra evidencias da task 013`)
+- PR: [#32 — autenticação no React](https://github.com/ChoqueanoIV/railops-app/pull/32)
 - Testes antes: backend com `120 passed`; React com `2 passed`
 - Testes depois: React com `10 passed`; backend com `120 passed`
 - Lint: ESLint e Ruff aprovados

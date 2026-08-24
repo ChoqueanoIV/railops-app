@@ -1,13 +1,13 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 21/08/2026
+Atualizado em: 23/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
-- PR funcional mais recente: [#31 — shell React + TypeScript](https://github.com/ChoqueanoIV/railops-app/pull/31), mesclada;
-- merge funcional consolidado na `main`: `30e3890`;
-- nenhuma implementação pendente fora da `main`;
+- branch de continuidade: `feat/react-api-auth`;
+- PR em revisão: [#32 — autenticação no React](https://github.com/ChoqueanoIV/railops-app/pull/32), com base em `main`;
+- checkpoint da `main` anterior à PR: `fa7d83c`;
+- implementação e documentação da task 013 concluídas, aguardando merge;
 - worktree limpo antes da atualização deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -26,42 +26,49 @@ Atualizado em: 21/08/2026
 - 011 — Docker e ambiente local: integrada no PR #30.
 - 012 — shell React + TypeScript: integrada no PR #31.
 
-## Validação da task 012
+## Task em revisão
 
-- `npm run dev` respondeu HTTP 200;
+- 013 — cliente API e autenticação no React: concluída no PR #32, aguardando
+  revisão e merge.
+
+## Validação da task 013
+
+- 10 testes React aprovados;
 - build Vite aprovado;
 - ESLint e Prettier aprovados;
 - type-check TypeScript aprovado;
-- 2 testes Vitest aprovados;
-- auditoria npm sem vulnerabilidades;
+- servidor Vite respondeu HTTP 200;
 - 120 testes do backend aprovados;
 - Ruff, formatter Ruff, mypy e pre-commit aprovados;
-- nenhum HTML, CSS ou JavaScript legado alterado;
+- nenhum arquivo do backend ou frontend legado alterado;
 - nenhuma regra de negócio ou contrato HTTP alterado.
 
-## O que foi entregue na task 012
+## O que foi entregue na task 013
 
-- shell React + TypeScript isolado em `frontend/react`;
-- Vite, React Router, ESLint, Prettier, Vitest e Testing Library;
-- alias `@/` e estrutura inicial feature-first;
-- `.env.example`, scripts de qualidade e lockfile reproduzível;
-- frontend legado preservado e ainda executável durante a transição;
-- instruções de execução e estado arquitetural atualizados.
+- cliente HTTP central tipado com base URL por ambiente e timeout;
+- headers JSON e bearer normalizados;
+- parsing controlado do envelope de erro e tratamento de 401/403;
+- login e primeiro acesso integrados aos contratos existentes;
+- sessão JWT em `sessionStorage`, logout e rotas protegidas;
+- testes dos fluxos críticos e documentação atualizada.
 
 ## Próximo passo obrigatório
 
-1. confirmar worktree limpo;
-2. ler `AGENTS.md` e `docs/tasks/013-react-api-auth.md`;
-3. executar o baseline completo;
-4. executar somente a task 013.
+1. revisar e mesclar o PR #32;
+2. sincronizar a `main` local com `origin/main`;
+3. confirmar worktree limpo;
+4. ler `AGENTS.md` e `docs/tasks/014-react-screen-migration.md`;
+5. executar o baseline completo;
+6. executar somente a task 014.
 
-Não combinar a task 013 com tasks posteriores.
+Não iniciar a task 014 antes do merge do PR #32 nem combiná-la com tasks
+posteriores.
 
 ## Restrições de continuidade
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar contratos HTTP fora dos critérios explícitos da task 013;
+- não alterar contratos HTTP fora dos critérios explícitos da task 014;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.
