@@ -28,7 +28,7 @@ Centralizar comunicação com backend e migrar o primeiro fluxo React.
 Preencher ao executar a task:
 
 - Branch: `feat/react-api-auth`
-- Commits: preencher após o commit da implementação
+- Commit: `6937873` (`feat: integra autenticacao ao frontend React`)
 - Testes antes: backend com `120 passed`; React com `2 passed`
 - Testes depois: React com `10 passed`; backend com `120 passed`
 - Lint: ESLint e Ruff aprovados
