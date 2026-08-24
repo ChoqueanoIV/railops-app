@@ -179,9 +179,10 @@ Copy-Item .env.example .env.local
 npm run dev
 ```
 
-Acesse `http://127.0.0.1:5173`. Nesta etapa o shell confirma somente a base
-React; login e integração com a API serão migrados incrementalmente. Para
-validar a qualidade do frontend moderno:
+Acesse `http://127.0.0.1:5173`. O React já oferece login, primeiro acesso e
+proteção da rota inicial usando os contratos atuais da API. As telas
+operacionais de Brisamar e TECON continuam no frontend legado até a migração
+incremental. Para validar a qualidade do frontend moderno:
 
 ```powershell
 npm run lint
@@ -329,8 +330,9 @@ manualmente.
 - **Erro de `DATABASE_URL`:** confira `backend/.env`, host, porta, nome do banco e
   exigência de TLS.
 - **Erro de `JWT_SECRET_KEY`:** defina uma chave não vazia no `.env`.
-- **Frontend não conecta:** confirme que a API está em `127.0.0.1:8000` e o
-  frontend em `127.0.0.1:3000`.
+- **Frontend não conecta:** confirme que a API está em `127.0.0.1:8000`, o
+  legado em `127.0.0.1:3000` ou o React em `127.0.0.1:5173` e confira
+  `frontend/react/.env.local`.
 - **CORS no navegador:** confira se a origem exata do frontend está em
   `CORS_ORIGINS`.
 - **Banco vazio:** aplique `alembic upgrade head` e prepare um usuário de teste.
@@ -339,10 +341,10 @@ manualmente.
 
 ## Limitações atuais e próximos passos
 
-- shell React + TypeScript criado; os fluxos ainda usam o frontend legado até
-  serem migrados e validados incrementalmente;
+- login e primeiro acesso já estão disponíveis no React; Brisamar, TECON e os
+  demais fluxos continuam no frontend legado até serem migrados e validados;
 - a configuração Docker existe, mas ainda não há CI remoto ou deploy público;
-- cliente de API e autenticação no React são a próxima etapa técnica;
+- migração incremental das telas operacionais é a próxima etapa técnica;
 - consultas com filtros, exportações e relatórios permanecem no roadmap.
 
 O estado seguro e a retomada do desenvolvimento estão em

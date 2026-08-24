@@ -1,6 +1,6 @@
 # Cliente API tipado e autenticação React
 
-Status: `TODO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 Centralizar comunicação com backend e migrar o primeiro fluxo React.
@@ -17,20 +17,26 @@ Centralizar comunicação com backend e migrar o primeiro fluxo React.
 - testes.
 
 ## Critérios de aceite
-- [ ] componentes não espalham `fetch`;
-- [ ] auth funciona contra API existente;
-- [ ] erros são exibidos de forma controlada;
-- [ ] tokens não são logados;
-- [ ] fluxo possui testes.
+- [x] componentes não espalham `fetch`;
+- [x] auth funciona contra API existente;
+- [x] erros são exibidos de forma controlada;
+- [x] tokens não são logados;
+- [x] fluxo possui testes.
 
 ## Evidências
 
 Preencher ao executar a task:
 
-- Branch:
-- Commits:
-- Testes antes:
-- Testes depois:
-- Lint:
-- Type-check:
-- Observações:
+- Branch: `feat/react-api-auth`
+- Commits: preencher após o commit da implementação
+- Testes antes: backend com `120 passed`; React com `2 passed`
+- Testes depois: React com `10 passed`; backend com `120 passed`
+- Lint: ESLint e Ruff aprovados
+- Type-check: TypeScript e mypy aprovados
+- Build: Vite aprovado
+- Formatação: Prettier e formatter Ruff aprovados
+- Observações: cliente HTTP central, login, primeiro acesso, JWT em
+  `sessionStorage`, logout, 401/403 e rotas protegidas implementados contra os
+  contratos existentes. Nenhum arquivo do backend ou do frontend legado foi
+  alterado. O ajuste `endOfLine: auto` estabiliza o Prettier após checkout no
+  Windows sem mudar conteúdo funcional.
