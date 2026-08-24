@@ -4,10 +4,10 @@ Atualizado em: 23/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `feat/react-api-auth`;
-- PR em revisão: [#32 — autenticação no React](https://github.com/ChoqueanoIV/railops-app/pull/32), com base em `main`;
-- checkpoint da `main` anterior à PR: `fa7d83c`;
-- implementação e documentação da task 013 concluídas, aguardando merge;
+- branch de continuidade: `main`;
+- PR funcional mais recente: [#32 — autenticação no React](https://github.com/ChoqueanoIV/railops-app/pull/32), mesclada;
+- merge funcional consolidado na `main`: `192fe1e`;
+- nenhuma implementação pendente fora da `main`;
 - worktree limpo antes da atualização deste checkpoint documental;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -25,11 +25,7 @@ Atualizado em: 23/08/2026
 - 010 — reorganização dos testes e cobertura: integrada no PR #29.
 - 011 — Docker e ambiente local: integrada no PR #30.
 - 012 — shell React + TypeScript: integrada no PR #31.
-
-## Task em revisão
-
-- 013 — cliente API e autenticação no React: concluída no PR #32, aguardando
-  revisão e merge.
+- 013 — cliente API e autenticação no React: integrada no PR #32.
 
 ## Validação da task 013
 
@@ -54,15 +50,12 @@ Atualizado em: 23/08/2026
 
 ## Próximo passo obrigatório
 
-1. revisar e mesclar o PR #32;
-2. sincronizar a `main` local com `origin/main`;
-3. confirmar worktree limpo;
-4. ler `AGENTS.md` e `docs/tasks/014-react-screen-migration.md`;
-5. executar o baseline completo;
-6. executar somente a task 014.
+1. confirmar worktree limpo;
+2. ler `AGENTS.md` e `docs/tasks/014-react-screen-migration.md`;
+3. executar o baseline completo;
+4. executar somente a task 014.
 
-Não iniciar a task 014 antes do merge do PR #32 nem combiná-la com tasks
-posteriores.
+Não combinar a task 014 com tasks posteriores.
 
 ## Restrições de continuidade
 
