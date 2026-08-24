@@ -27,10 +27,11 @@ describe('shell React', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole('heading', { name: 'RailOps' })).toBeVisible();
     expect(
-      screen.getByText(/frontend legado durante a migração/i),
+      screen.getByRole('heading', { name: 'Selecione o terminal' }),
     ).toBeVisible();
+    expect(screen.getByRole('link', { name: /Pátio Brisamar/i })).toBeVisible();
+    expect(screen.getByRole('link', { name: /Terminal TECON/i })).toBeVisible();
   });
 
   it('encerra a sessão sem expor o token', async () => {
