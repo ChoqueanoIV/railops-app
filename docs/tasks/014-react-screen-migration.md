@@ -30,8 +30,9 @@ Substituir HTML/JS legado por React por fluxo, preservando paridade.
 Preencher ao executar a task:
 
 - Branch: `feat/migra-telas-react`
-- Commits: `1a5c0bf` (`feat: migra passagens operacionais para React`) e o
-  commit documental desta evidência
+- Commits: `1a5c0bf` (`feat: migra passagens operacionais para React`) e
+  `c13e44f` (`docs: registra evidencias da task 014`)
+- PR: [#33 — migração das passagens para React](https://github.com/ChoqueanoIV/railops-app/pull/33)
 - Testes antes: backend com `120 passed`; React com `10 passed`
 - Testes depois: React com `13 passed`; backend com `120 passed`
 - Lint: ESLint e Ruff aprovados

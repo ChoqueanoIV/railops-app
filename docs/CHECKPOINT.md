@@ -4,10 +4,11 @@ Atualizado em: 24/08/2026
 
 ## Estado seguro atual
 
-- branch funcional atual: `feat/migra-telas-react`;
-- PR funcional mais recente: [#32 — autenticação no React](https://github.com/ChoqueanoIV/railops-app/pull/32), mesclada;
-- merge funcional consolidado na `main`: `192fe1e`;
-- implementação da task 014 pronta para revisão e abertura de PR;
+- branch de continuidade: `main`;
+- PR funcional mais recente: [#33 — migração das passagens para React](https://github.com/ChoqueanoIV/railops-app/pull/33), mesclada;
+- merge funcional consolidado na `main`: `ad88f08`;
+- nenhuma implementação pendente fora da `main`;
+- worktree limpo antes da atualização deste checkpoint documental;
 - commit funcional da task 014: `1a5c0bf`;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
 
@@ -26,8 +27,7 @@ Atualizado em: 24/08/2026
 - 011 — Docker e ambiente local: integrada no PR #30.
 - 012 — shell React + TypeScript: integrada no PR #31.
 - 013 — cliente API e autenticação no React: integrada no PR #32.
-- 014 — migração incremental das telas: concluída na branch
-  `feat/migra-telas-react`, aguardando PR.
+- 014 — migração incremental das telas: integrada no PR #33.
 
 ## Validação da task 014
 
@@ -52,10 +52,10 @@ Atualizado em: 24/08/2026
 
 ## Próximo passo obrigatório
 
-1. revisar o diff e publicar a branch `feat/migra-telas-react`;
-2. abrir e revisar o PR da task 014;
-3. mesclar somente após checks verdes;
-4. criar checkpoint na `main` e iniciar somente a task 015.
+1. confirmar worktree limpo e `main` sincronizada;
+2. ler `AGENTS.md` e `docs/tasks/015-ci-quality.md`;
+3. executar o baseline completo;
+4. executar somente a task 015.
 
 Não combinar a task 015 com tasks posteriores.
 
@@ -63,7 +63,7 @@ Não combinar a task 015 com tasks posteriores.
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar contratos HTTP fora dos critérios explícitos da task 014;
+- não alterar contratos HTTP fora dos critérios explícitos da task 015;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.
