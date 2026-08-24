@@ -36,7 +36,7 @@ describe('autenticação React', () => {
     await user.click(screen.getByRole('button', { name: 'Entrar' }));
 
     expect(
-      await screen.findByRole('heading', { name: 'RailOps' }),
+      await screen.findByRole('heading', { name: 'Selecione o terminal' }),
     ).toBeVisible();
     expect(sessionStorage.getItem('access_token')).toBe('jwt-valido');
     expect(fetchMock).toHaveBeenCalledWith(
