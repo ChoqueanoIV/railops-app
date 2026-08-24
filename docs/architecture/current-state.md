@@ -1,6 +1,6 @@
 # Estado atual observado
 
-Atualizado a partir da branch `feat/shell-react-typescript` em 21/08/2026.
+Atualizado a partir da branch `feat/react-api-auth` em 23/08/2026.
 
 ## Backend
 
@@ -111,10 +111,14 @@ React Router, ESLint, Prettier, Vitest e Testing Library. O alias `@/` aponta
 para `src/`, e a estrutura inicial separa aplicação, rotas, features, estilos e
 infraestrutura de testes.
 
-Os arquivos HTML, CSS e JavaScript anteriores permanecem intactos e continuam
-responsáveis pelos fluxos operacionais. O shell ainda não possui autenticação
-nem acesso à API; essa integração pertence à task 013. A modernização continua
-incremental, sem substituição prematura do legado.
+O React possui cliente HTTP central tipado com base URL por ambiente, timeout,
+header bearer, normalização do envelope de erro e tratamento de 401/403. Login,
+primeiro acesso, sessão em `sessionStorage`, logout e proteção da rota inicial
+usam os contratos existentes do backend.
+
+Os arquivos HTML, CSS e JavaScript anteriores permanecem intactos. Brisamar,
+TECON e os demais fluxos operacionais continuam no legado e serão tratados na
+task 014. A modernização permanece incremental, sem substituição prematura.
 
 ## Dependências
 

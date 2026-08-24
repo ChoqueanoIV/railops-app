@@ -1,13 +1,28 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 
 import { App } from '@/app/App';
 
 describe('shell React', () => {
-  it('apresenta o RailOps e informa que o legado continua disponível', () => {
+  it('redireciona uma sessão ausente para o login', () => {
     render(
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/terminal']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'Acessar o RailOps' }),
+    ).toBeVisible();
+  });
+
+  it('apresenta o shell para uma sessão autenticada', () => {
+    sessionStorage.setItem('access_token', 'jwt-de-teste');
+
+    render(
+      <MemoryRouter initialEntries={['/terminal']}>
         <App />
       </MemoryRouter>,
     );
@@ -18,13 +33,21 @@ describe('shell React', () => {
     ).toBeVisible();
   });
 
-  it('redireciona rotas desconhecidas para o shell', () => {
+  it('encerra a sessão sem expor o token', async () => {
+    const user = userEvent.setup();
+    sessionStorage.setItem('access_token', 'jwt-de-teste');
+
     render(
-      <MemoryRouter initialEntries={['/rota-inexistente']}>
+      <MemoryRouter initialEntries={['/terminal']}>
         <App />
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole('heading', { name: 'RailOps' })).toBeVisible();
+    await user.click(screen.getByRole('button', { name: 'Sair' }));
+
+    expect(
+      await screen.findByRole('heading', { name: 'Acessar o RailOps' }),
+    ).toBeVisible();
+    expect(sessionStorage.getItem('access_token')).toBeNull();
   });
 });
