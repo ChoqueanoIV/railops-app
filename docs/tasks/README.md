@@ -23,6 +23,16 @@ Executar na ordem sugerida, salvo dependência explícita diferente.
 | 017 | Observabilidade, segurança e hardening | 010, 011 |
 | 018 | ADRs e governança arquitetural | contínua |
 
+As tasks 001–018 formam o pacote técnico concluído. A segunda fase está
+descrita no [`roadmap do produto`](../ROADMAP.md).
+
+| ID | Task | Dependência |
+|---|---|---|
+| 019 | Homologação operacional e de UX | 001–018 |
+
+As entregas 020–026 ainda são propostas condicionadas às decisões de negócio
+registradas no roadmap. Criar a task detalhada somente após aprovar seu gate.
+
 ## Como pedir uma task ao Codex
 
 Exemplo:
