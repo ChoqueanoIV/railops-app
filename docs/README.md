@@ -4,21 +4,38 @@ Este diretório organiza a evolução técnica do `railops-app`.
 
 ## Índice
 
-- `CHECKPOINT.md` — estado seguro e próximo passo para retomar o projeto.
-- `architecture/current-state.md` — leitura do estado atual.
-- `architecture/target-architecture.md` — arquitetura alvo.
-- `architecture/migration-strategy.md` — como migrar sem big bang.
-- `standards/api.md` — padrão REST.
-- `standards/backend.md` — padrões Python/FastAPI.
-- `standards/frontend.md` — padrões React/TypeScript.
-- `standards/testing.md` — estratégia de testes.
-- `standards/dependencies.md` — gestão de dependências.
-- `standards/git.md` — commits e entrega.
-- `tasks/` — backlog executável para o Codex.
+- [`CHECKPOINT.md`](CHECKPOINT.md) — estado seguro e próximo passo.
+- [`architecture/current-state.md`](architecture/current-state.md) — estado
+  implementado e validado.
+- [`architecture/baseline.md`](architecture/baseline.md) — regras de negócio
+  protegidas pela caracterização.
+- [`architecture/target-architecture.md`](architecture/target-architecture.md)
+  — arquitetura alvo.
+- [`architecture/migration-strategy.md`](architecture/migration-strategy.md) —
+  migração incremental sem big bang.
+- [`standards/api.md`](standards/api.md) — padrão REST.
+- [`standards/backend.md`](standards/backend.md) — padrões Python/FastAPI.
+- [`standards/frontend.md`](standards/frontend.md) — padrões React/TypeScript.
+- [`standards/testing.md`](standards/testing.md) — estratégia de testes.
+- [`standards/dependencies.md`](standards/dependencies.md) — dependências.
+- [`standards/git.md`](standards/git.md) — commits e entrega.
+- [`tasks/README.md`](tasks/README.md) — backlog executável.
+
+Para instalar e executar o sistema, incluindo Docker, frontend React, usuário
+de demonstração e troubleshooting, consulte o [`README principal`](../README.md).
+
+## Estado resumido
+
+- backend FastAPI organizado por features, com PostgreSQL e Alembic;
+- frontend React com autenticação e fluxos de Brisamar e TECON;
+- 123 testes backend, 13 testes frontend e cobertura backend de 93,70%;
+- lint, formatter, type-check, build, pre-commit, Docker e CI validados;
+- legado e adaptadores preservados temporariamente para uma remoção segura;
+- sem deploy público, consulta de histórico, filtros, exportações ou relatórios.
 
 ## Como executar o plano
 
-1. Comece por `tasks/README.md`.
+1. Comece por [`tasks/README.md`](tasks/README.md).
 2. Trabalhe em apenas uma task por vez.
 3. Crie branch específica.
 4. Peça ao Codex para ler `AGENTS.md` e a task.
