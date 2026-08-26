@@ -132,5 +132,6 @@ testes e desenvolvimento, e `uv.lock` versionado. Os arquivos requirements são
 exports compatíveis gerados a partir do mesmo lockfile.
 
 A base de qualidade inclui Ruff, formatter do Ruff, mypy com assinaturas
-obrigatórias e sem exceções por módulo, pytest-cov e pre-commit. A automação
-remota de CI ainda é uma etapa futura.
+obrigatórias e sem exceções por módulo, pytest-cov e pre-commit. O GitHub
+Actions executa jobs independentes de backend e frontend em pull requests e na
+`main`, com instalação lockada, PostgreSQL descartável, cobertura e build.
