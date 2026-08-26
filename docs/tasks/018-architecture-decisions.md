@@ -32,7 +32,7 @@ Criar `docs/adr/NNNN-titulo.md` com:
 Preencher ao executar a task:
 
 - Branch: `docs/adrs-governanca`
-- Commits: preenchido após o commit da entrega.
+- Commits: `89d4048` (`docs: registra decisoes arquiteturais do projeto`).
 - Testes antes: backend 133 aprovados, cobertura 94,06%; frontend 13 aprovados.
 - Testes depois: backend 133 aprovados, cobertura 94,06%; frontend 13 aprovados.
 - Lint: Ruff, Ruff format, pre-commit, ESLint e Prettier aprovados.
