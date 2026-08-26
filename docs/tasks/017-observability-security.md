@@ -29,7 +29,7 @@ Aumentar maturidade operacional sem mudar regra funcional.
 Preencher ao executar a task:
 
 - Branch: `feat/observabilidade-seguranca`
-- Commits: preenchido após o commit da entrega.
+- Commits: `1cd5756` (`feat: reforca observabilidade e seguranca da api`).
 - Testes antes: backend 123 aprovados, cobertura 93,70%; frontend 13 aprovados.
 - Testes depois: backend 133 aprovados, cobertura 94,06%; frontend 13 aprovados.
 - Lint: Ruff, Ruff format, pre-commit, ESLint e Prettier aprovados.
