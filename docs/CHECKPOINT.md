@@ -4,11 +4,11 @@ Atualizado em: 25/08/2026
 
 ## Estado seguro atual
 
-- branch funcional atual: `ci/qualidade-pr`;
-- PR em revisão: [#34 — CI de qualidade](https://github.com/ChoqueanoIV/railops-app/pull/34), com jobs de backend e frontend aprovados;
-- PR funcional mais recente: [#33 — migração das passagens para React](https://github.com/ChoqueanoIV/railops-app/pull/33), mesclada;
-- merge funcional consolidado na `main`: `ad88f08`;
-- implementação da task 015 pronta para merge no PR #34;
+- branch de continuidade: `main`;
+- PR funcional mais recente: [#34 — CI de qualidade](https://github.com/ChoqueanoIV/railops-app/pull/34), mesclada;
+- merge funcional consolidado na `main`: `5b4a316`;
+- nenhuma implementação pendente fora da `main`;
+- worktree limpo antes da atualização deste checkpoint documental;
 - commit funcional da task 015: `1bd6321`;
 - commit funcional da task 014: `1a5c0bf`;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
@@ -29,8 +29,7 @@ Atualizado em: 25/08/2026
 - 012 — shell React + TypeScript: integrada no PR #31.
 - 013 — cliente API e autenticação no React: integrada no PR #32.
 - 014 — migração incremental das telas: integrada no PR #33.
-- 015 — CI de qualidade: concluída na branch `ci/qualidade-pr`, aguardando
-  merge do PR #34.
+- 015 — CI de qualidade: integrada no PR #34.
 
 ## Validação da task 015
 
@@ -55,18 +54,18 @@ Atualizado em: 25/08/2026
 
 ## Próximo passo obrigatório
 
-1. revisar e mesclar o PR #34;
-2. sincronizar a `main` e criar o checkpoint pós-merge;
-3. ler `AGENTS.md` e `docs/tasks/016-readme-docs.md`;
+1. confirmar worktree limpo e `main` sincronizada;
+2. ler `AGENTS.md` e `docs/tasks/016-readme-docs.md`;
+3. executar o baseline completo;
 4. executar somente a task 016.
 
-Não iniciar a task 016 antes do merge e do checkpoint da task 015.
+Não combinar a task 016 com tasks posteriores.
 
 ## Restrições de continuidade
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar contratos HTTP fora dos critérios explícitos da task 015;
+- não alterar contratos HTTP fora dos critérios explícitos da task 016;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.
