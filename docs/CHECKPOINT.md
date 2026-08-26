@@ -68,8 +68,10 @@ execução.
 
 1. confirmar worktree limpo e `main` sincronizada;
 2. ler `AGENTS.md`, este checkpoint e `docs/tasks/README.md`;
-3. revisar `docs/ROADMAP.md` e `docs/tasks/019-operational-validation.md`;
-4. executar somente a homologação da Task 019 antes de ampliar o produto.
+3. ler a evidência em `docs/validation/019-technical-homologation.md`;
+4. corrigir em task isolada o handler que transforma validação `422` em `500`;
+5. retomar somente a homologação da Task 019;
+6. obter validação humana e decisões de produto antes de concluir a task.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.

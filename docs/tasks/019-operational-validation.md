@@ -1,6 +1,6 @@
 # Homologação operacional e de UX
 
-Status: `TODO`
+Status: `EM ANDAMENTO`
 
 ## Objetivo
 
@@ -29,22 +29,28 @@ representativas do uso real, antes de criar novas funcionalidades.
 
 ## Critérios de aceite
 
-- [ ] instalação reproduzida a partir do README em ambiente limpo;
+- [x] instalação reproduzida a partir do README em ambiente limpo;
 - [ ] fluxos críticos executados e resultados registrados;
-- [ ] regras protegidas pelo baseline permanecem equivalentes;
-- [ ] problemas encontrados possuem passos de reprodução e severidade;
+- [x] regras protegidas pelo baseline permanecem equivalentes;
+- [x] problemas encontrados possuem passos de reprodução e severidade;
 - [ ] decisões necessárias para a Task 020 estão documentadas;
-- [ ] checkpoint indica claramente o próximo passo aprovado.
+- [x] checkpoint indica claramente o próximo passo aprovado.
 
 ## Evidências
 
 Preencher ao executar a task:
 
-- Branch:
-- Ambiente:
-- Participantes/perfis:
-- Fluxos aprovados:
-- Defeitos encontrados:
-- Decisões de produto:
-- Testes automatizados:
-- Observações:
+- Branch: `test/homologacao-operacional`.
+- Ambiente: Docker Desktop, PostgreSQL 17, backend containerizado e React/Vite
+  local; migration no `head`.
+- Participantes/perfis: homologação técnica automatizada pelo mantenedor;
+  avaliação com usuários representativos ainda pendente.
+- Fluxos aprovados: primeiro acesso, login, logout, proteção de rota, Brisamar,
+  TECON sem atendimento, consulta, edição autorizada e modo somente leitura.
+- Defeitos encontrados: handler de validação pode transformar `422` em `500`;
+  severidade alta e reprodução em
+  [`../validation/019-technical-homologation.md`](../validation/019-technical-homologation.md).
+- Decisões de produto: gates da Task 020 ainda dependem dos usuários.
+- Testes automatizados: backend 133 aprovados e 94% de cobertura; frontend 13
+  aprovados; lint, formato, tipos e builds aprovados.
+- Observações: nenhuma correção ou regra de negócio foi alterada nesta etapa.
