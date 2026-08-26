@@ -37,7 +37,7 @@ Fazer o README representar o projeto maduro e executável.
 Preencher ao executar a task:
 
 - Branch: `docs/readme-final`
-- Commits: preenchido após o commit da entrega.
+- Commits: `e8047ab` (`docs: consolida guia de execução do projeto`).
 - Testes antes: backend 123 aprovados, cobertura 93,70%; frontend 13 aprovados.
 - Testes depois: backend 123 aprovados, cobertura 93,70%; frontend 13 aprovados.
 - Lint: Ruff, Ruff format, pre-commit, ESLint e Prettier aprovados.
