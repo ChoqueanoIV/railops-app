@@ -1,0 +1,105 @@
+name: Qualidade
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: postgresql://railops_test:railops_test@localhost:5432/railops_test
+      JWT_SECRET_KEY: segredo-ficticio-exclusivo-para-ci
+      RAILOPS_ENV: test
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: railops_test
+          POSTGRES_USER: railops_test
+          POSTGRES_PASSWORD: railops_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U railops_test -d railops_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Obter código-fonte
+        uses: actions/checkout@v7
+
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: Configurar uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Instalar dependências bloqueadas
+        run: uv sync --frozen
+
+      - name: Verificar lint
+        run: uv run --frozen ruff check .
+
+      - name: Verificar formatação
+        run: uv run --frozen ruff format --check .
+
+      - name: Verificar tipos
+        run: uv run --frozen mypy backend
+
+      - name: Executar testes e cobertura
+        run: uv run --frozen pytest --cov=backend/app --cov-report=term-missing
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend/react
+
+    steps:
+      - name: Obter código-fonte
+        uses: actions/checkout@v7
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/react/package-lock.json
+
+      - name: Instalar dependências bloqueadas
+        run: npm ci
+
+      - name: Verificar formatação
+        run: npm run format:check
+
+      - name: Verificar lint
+        run: npm run lint
+
+      - name: Verificar tipos
+        run: npm run typecheck
+
+      - name: Executar testes
+        run: npm test
+
+      - name: Gerar build
+        run: npm run build

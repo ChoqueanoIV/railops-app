@@ -345,8 +345,9 @@ manualmente.
   edição e confirmação já estão disponíveis no React;
 - o frontend legado permanece versionado como fallback temporário até a
   validação operacional das telas React;
-- a configuração Docker existe, mas ainda não há CI remoto ou deploy público;
-- automação da qualidade em CI é a próxima etapa técnica;
+- a configuração Docker e o CI remoto existem, mas ainda não há deploy
+  público;
+- consolidação do README e da documentação final é a próxima etapa técnica;
 - consultas com filtros, exportações e relatórios permanecem no roadmap.
 
 O estado seguro e a retomada do desenvolvimento estão em
