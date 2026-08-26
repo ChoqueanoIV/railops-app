@@ -5,10 +5,11 @@ Atualizado em: 26/08/2026
 ## Estado seguro atual
 
 - branch de continuidade: `main`;
-- PR mais recente: [#37 — decisões arquiteturais e governança](https://github.com/ChoqueanoIV/railops-app/pull/37), mesclada;
-- merge consolidado na `main`: `060ef13`;
+- PR mais recente: [#38 — roadmap da fase 2](https://github.com/ChoqueanoIV/railops-app/pull/38), mesclada;
+- merge consolidado na `main`: `a0d2b1a`;
 - nenhuma implementação pendente fora da `main`;
 - worktree limpo antes da atualização deste checkpoint documental;
+- commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
 - commit principal da task 016: `e8047ab`;
