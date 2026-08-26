@@ -19,6 +19,8 @@ Este diretório organiza a evolução técnica do `railops-app`.
 - [`standards/testing.md`](standards/testing.md) — estratégia de testes.
 - [`standards/dependencies.md`](standards/dependencies.md) — dependências.
 - [`standards/git.md`](standards/git.md) — commits e entrega.
+- [`adr/README.md`](adr/README.md) — decisões arquiteturais aceitas e sua
+  governança.
 - [`tasks/README.md`](tasks/README.md) — backlog executável.
 
 Para instalar e executar o sistema, incluindo Docker, frontend React, usuário
