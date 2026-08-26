@@ -67,6 +67,7 @@ O backend aguarda o banco, aplica `alembic upgrade head` e inicia como usuário
 não-root. Verifique:
 
 - health: `http://127.0.0.1:8000/health`;
+- readiness do banco: `http://127.0.0.1:8000/ready`;
 - Swagger: `http://127.0.0.1:8000/docs`;
 - logs: `docker compose --env-file .env.docker logs -f backend`.
 
@@ -105,7 +106,7 @@ Use valores locais ou de um banco descartável:
 
 ```dotenv
 DATABASE_URL=postgresql://railops_local:senha-falsa@localhost:5432/railops
-JWT_SECRET_KEY=exemplo-local-substitua-por-um-segredo-longo
+JWT_SECRET_KEY=exemplo-local-substitua-por-32-bytes-ou-mais
 RAILOPS_ENV=development
 API_TITLE=RailOps API
 CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
@@ -123,6 +124,7 @@ py -3.13 -m uv run uvicorn app.main:app --reload --app-dir backend
 
 - API: `http://127.0.0.1:8000`;
 - health: `http://127.0.0.1:8000/health`;
+- readiness do banco: `http://127.0.0.1:8000/ready`;
 - Swagger: `http://127.0.0.1:8000/docs`;
 - OpenAPI: `http://127.0.0.1:8000/openapi.json`.
 
@@ -204,10 +206,15 @@ npm run build
 
 Estado validado neste checkpoint:
 
-- backend: 123 testes e cobertura real de 93,70% (94% arredondado);
+- backend: 133 testes e cobertura real de 94,06% (94% arredondado);
 - frontend: 13 testes;
 - formatter, lint, type-check, build e pre-commit aprovados;
 - CI executa jobs independentes de backend e frontend em PRs e na `main`.
+
+Cada resposta inclui `X-Request-ID` e headers defensivos. A API escreve logs
+JSON com metadados operacionais, sem payloads, PINs, tokens ou credenciais. Em
+`production`, o segredo JWT deve possuir pelo menos 32 bytes e CORS não aceita
+`*`.
 
 ## Estrutura do repositório
 

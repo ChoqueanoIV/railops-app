@@ -29,11 +29,13 @@ Variáveis esperadas devem falhar cedo quando ausentes, salvo valores realmente 
 - evitar query em service/controller;
 - evitar lazy-loading inesperado em response.
 
-## Logging
+## Logging e respostas operacionais
 
-Adicionar logging estruturado progressivamente.
-
-Nunca logar secrets.
+- usar logs JSON com evento e metadados explicitamente permitidos;
+- correlacionar requisição e resposta por `X-Request-ID` validado;
+- nunca registrar payload, Authorization, PIN, token, hash ou segredo;
+- usar `/health` para liveness e `/ready` para prontidão do banco;
+- devolver erro 500 genérico ao cliente e registrar contexto seguro no servidor.
 
 ## Imports
 

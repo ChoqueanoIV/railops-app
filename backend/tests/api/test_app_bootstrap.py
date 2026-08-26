@@ -11,5 +11,6 @@ def test_criar_app_mantem_rotas_publicas_do_baseline(app_teste: FastAPI):
     rotas = set(app_teste.openapi()["paths"])
 
     assert "/health" in rotas
+    assert "/ready" in rotas
     assert "/auth/login" in rotas
     assert "/passagens/brisamar" in rotas

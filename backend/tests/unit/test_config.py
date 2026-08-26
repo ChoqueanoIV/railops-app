@@ -73,3 +73,27 @@ def test_configuracao_rejeita_lista_cors_vazia():
                 "CORS_ORIGINS": " , ",
             }
         )
+
+
+def test_producao_exige_segredo_jwt_com_ao_menos_32_bytes():
+    with pytest.raises(RuntimeError, match="32 bytes"):
+        Configuracao.carregar(
+            {
+                "DATABASE_URL": "postgresql://localhost/railops",
+                "JWT_SECRET_KEY": "curto",
+                "RAILOPS_ENV": "production",
+                "CORS_ORIGINS": "https://railops.example",
+            }
+        )
+
+
+def test_producao_rejeita_cors_aberto_para_qualquer_origem():
+    with pytest.raises(RuntimeError, match="não permite"):
+        Configuracao.carregar(
+            {
+                "DATABASE_URL": "postgresql://localhost/railops",
+                "JWT_SECRET_KEY": "s" * 32,
+                "RAILOPS_ENV": "production",
+                "CORS_ORIGINS": "*",
+            }
+        )

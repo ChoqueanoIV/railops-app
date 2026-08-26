@@ -1,3 +1,4 @@
+import logging
 from collections.abc import Mapping
 
 from fastapi import FastAPI, HTTPException, Request
@@ -5,7 +6,10 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
+from app.core.middleware import REQUEST_ID_HEADER, SECURITY_HEADERS
 from app.shared.persistence.transactions import PersistenciaError
+
+logger = logging.getLogger("railops.errors")
 
 
 class ErrorDetail(BaseModel):
@@ -90,8 +94,18 @@ async def tratar_http_exception(_request: Request, erro: Exception) -> JSONRespo
     )
 
 
-async def tratar_persistencia(_request: Request, erro: Exception) -> JSONResponse:
+async def tratar_persistencia(request: Request, erro: Exception) -> JSONResponse:
     assert isinstance(erro, PersistenciaError)
+    logger.exception(
+        "persistence_error",
+        exc_info=True,
+        extra={
+            "request_id": getattr(request.state, "request_id", "unavailable"),
+            "method": request.method,
+            "path": request.url.path,
+            "status_code": 500,
+        },
+    )
     mensagem = "Não foi possível concluir a operação. Tente novamente."
     return JSONResponse(
         status_code=500,
@@ -104,11 +118,38 @@ async def tratar_persistencia(_request: Request, erro: Exception) -> JSONRespons
     )
 
 
+async def tratar_erro_inesperado(request: Request, erro: Exception) -> JSONResponse:
+    request_id = getattr(request.state, "request_id", "unavailable")
+    logger.exception(
+        "unexpected_error",
+        exc_info=True,
+        extra={
+            "request_id": request_id,
+            "method": request.method,
+            "path": request.url.path,
+            "status_code": 500,
+        },
+    )
+    mensagem = "Erro interno do servidor."
+    headers = {REQUEST_ID_HEADER: request_id, **SECURITY_HEADERS}
+    return JSONResponse(
+        status_code=500,
+        content=_conteudo_erro(
+            code="INTERNAL_SERVER_ERROR",
+            message=mensagem,
+            details=None,
+            legacy_detail=mensagem,
+        ),
+        headers=headers,
+    )
+
+
 def registrar_exception_handlers(aplicacao: FastAPI) -> None:
     aplicacao.add_exception_handler(ApiError, tratar_api_error)
     aplicacao.add_exception_handler(RequestValidationError, tratar_validacao)
     aplicacao.add_exception_handler(HTTPException, tratar_http_exception)
     aplicacao.add_exception_handler(PersistenciaError, tratar_persistencia)
+    aplicacao.add_exception_handler(Exception, tratar_erro_inesperado)
 
 
 def resposta_erro(descricao: str) -> dict[str, object]:

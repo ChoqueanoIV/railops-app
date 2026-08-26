@@ -9,6 +9,7 @@ def test_dockerfile_executa_backend_com_usuario_nao_root() -> None:
     assert "USER railops" in dockerfile
     assert "app.main:app" in dockerfile
     assert "HEALTHCHECK" in dockerfile
+    assert "/ready" in dockerfile
     assert "COPY backend/.env" not in dockerfile
 
 
@@ -20,6 +21,7 @@ def test_compose_exige_segredos_e_executa_migration_antes_da_api() -> None:
     assert "alembic upgrade head && exec uvicorn" in compose
     assert "condition: service_healthy" in compose
     assert "read_only: true" in compose
+    assert "/ready" in compose
 
 
 def test_contexto_docker_exclui_arquivos_sensiveis_e_testes() -> None:
