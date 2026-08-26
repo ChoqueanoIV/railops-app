@@ -37,8 +37,9 @@ Atualizado em: 26/08/2026
 - 017 — observabilidade, segurança e hardening: integrada no PR #36.
 - 018 — ADRs e governança arquitetural: integrada no PR #37.
 
-O backlog técnico descrito em `docs/tasks/README.md` foi integralmente executado;
-não existe uma task 019 definida.
+O pacote técnico das tasks 001–018 foi integralmente executado. A segunda fase
+está proposta em `docs/ROADMAP.md`, e a Task 019 foi definida sem iniciar sua
+execução.
 
 ## Validação da task 018
 
@@ -66,10 +67,11 @@ não existe uma task 019 definida.
 
 1. confirmar worktree limpo e `main` sincronizada;
 2. ler `AGENTS.md`, este checkpoint e `docs/tasks/README.md`;
-3. revisar o produto executável e as necessidades funcionais ainda desejadas;
-4. definir e documentar um novo roadmap antes de alterar código.
+3. revisar `docs/ROADMAP.md` e `docs/tasks/019-operational-validation.md`;
+4. executar somente a homologação da Task 019 antes de ampliar o produto.
 
-Não iniciar uma suposta task 019: ela não existe no backlog atual.
+Não implementar os itens 020–026 antes da homologação e da aprovação de seus
+gates de negócio.
 
 ## Restrições de continuidade
 
