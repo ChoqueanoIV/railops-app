@@ -5,10 +5,11 @@ Atualizado em: 25/08/2026
 ## Estado seguro atual
 
 - branch de continuidade: `main`;
-- PR funcional mais recente: [#34 — CI de qualidade](https://github.com/ChoqueanoIV/railops-app/pull/34), mesclada;
-- merge funcional consolidado na `main`: `5b4a316`;
+- PR mais recente: [#35 — README e documentação final](https://github.com/ChoqueanoIV/railops-app/pull/35), mesclada;
+- merge consolidado na `main`: `2d4d2c5`;
 - nenhuma implementação pendente fora da `main`;
 - worktree limpo antes da atualização deste checkpoint documental;
+- commit principal da task 016: `e8047ab`;
 - commit funcional da task 015: `1bd6321`;
 - commit funcional da task 014: `1a5c0bf`;
 - autoria Git configurada como `Leandro CHOQUE <leandro.cristine1@gmail.com>`.
@@ -30,42 +31,44 @@ Atualizado em: 25/08/2026
 - 013 — cliente API e autenticação no React: integrada no PR #32.
 - 014 — migração incremental das telas: integrada no PR #33.
 - 015 — CI de qualidade: integrada no PR #34.
+- 016 — README e documentação final: integrada no PR #35.
 
-## Validação da task 015
+## Validação da task 016
 
-- jobs remotos `Backend` e `Frontend` aprovados na primeira execução;
+- jobs remotos `Backend` e `Frontend` aprovados no PR;
 - 123 testes do backend e 13 testes React aprovados;
 - build Vite aprovado;
 - ESLint e Prettier aprovados;
 - type-check TypeScript aprovado;
 - cobertura real de `93,70%`, reportada de forma arredondada como `94%`;
 - Ruff, formatter Ruff, mypy e pre-commit aprovados;
-- nenhum arquivo de produção alterado;
+- links Markdown internos versionados validados;
+- nenhum código de produção alterado;
 - nenhuma regra de negócio ou contrato HTTP alterado.
 
-## O que foi entregue na task 015
+## O que foi entregue na task 016
 
-- workflow para pull requests e `main`;
-- jobs independentes para backend e frontend;
-- instalação reproduzível a partir dos dois lockfiles;
-- PostgreSQL efêmero e ambiente de testes sem secrets reais;
-- lint, formatação, type-check, testes, cobertura e build bloqueantes;
-- testes estruturais do contrato de CI.
+- README alinhado ao MVP React e ao CI existentes;
+- instruções validadas para instalação local, Docker, migrations e execução;
+- usuário de demonstração com imports canônicos e segredos fictícios;
+- árvore do repositório, stack, qualidade, fluxo Git e troubleshooting atuais;
+- índice técnico e estado arquitetural sincronizados;
+- exemplos de CORS alinhados ao frontend React em desenvolvimento.
 
 ## Próximo passo obrigatório
 
 1. confirmar worktree limpo e `main` sincronizada;
-2. ler `AGENTS.md` e `docs/tasks/016-readme-docs.md`;
+2. ler `AGENTS.md` e `docs/tasks/017-observability-security.md`;
 3. executar o baseline completo;
-4. executar somente a task 016.
+4. executar somente a task 017.
 
-Não combinar a task 016 com tasks posteriores.
+Não combinar a task 017 com tasks posteriores.
 
 ## Restrições de continuidade
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar contratos HTTP fora dos critérios explícitos da task 016;
+- não alterar contratos HTTP fora dos critérios explícitos da task 017;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.
