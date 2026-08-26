@@ -1,6 +1,6 @@
 # Refatorar README e documentação
 
-Status: `TODO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 Fazer o README representar o projeto maduro e executável.
@@ -26,20 +26,23 @@ Fazer o README representar o projeto maduro e executável.
 - roadmap.
 
 ## Critérios de aceite
-- [ ] comandos foram realmente validados;
-- [ ] árvore de pastas está atual;
-- [ ] nada planejado aparece como já concluído;
-- [ ] segredos são exemplos falsos;
-- [ ] links internos funcionam.
+- [x] comandos foram realmente validados;
+- [x] árvore de pastas está atual;
+- [x] nada planejado aparece como já concluído;
+- [x] segredos são exemplos falsos;
+- [x] links internos funcionam.
 
 ## Evidências
 
 Preencher ao executar a task:
 
-- Branch:
-- Commits:
-- Testes antes:
-- Testes depois:
-- Lint:
-- Type-check:
-- Observações:
+- Branch: `docs/readme-final`
+- Commits: preenchido após o commit da entrega.
+- Testes antes: backend 123 aprovados, cobertura 93,70%; frontend 13 aprovados.
+- Testes depois: backend 123 aprovados, cobertura 93,70%; frontend 13 aprovados.
+- Lint: Ruff, Ruff format, pre-commit, ESLint e Prettier aprovados.
+- Type-check: mypy e TypeScript aprovados; build Vite aprovado.
+- Observações: README, índice técnico, estado atual e exemplos de CORS foram
+  alinhados ao React e ao CI existentes. Todos os links Markdown internos
+  versionados apontam para caminhos existentes. Nenhuma regra de negócio ou
+  implementação da aplicação foi alterada.

@@ -1,6 +1,6 @@
 # Estado atual observado
 
-Atualizado a partir da branch `feat/react-api-auth` em 23/08/2026.
+Atualizado a partir do checkpoint da Task 015 em 25/08/2026.
 
 ## Backend
 
@@ -87,7 +87,8 @@ contém testes de:
 - TECON schema;
 - TECON service.
 
-A suíte atual contém 120 testes, mantém cobertura total de 94% e não depende
+A suíte atual contém 123 testes, mantém cobertura real de 93,70% (94%
+arredondado) e não depende
 das credenciais do `.env` real. A fixture de banco exige `RAILOPS_ENV=test` e o
 banco `railops_test`, reduzindo o risco de execução contra produção.
 
@@ -106,7 +107,7 @@ Docker Desktop e WSL 2.
 
 ## Frontend
 
-O shell moderno está isolado em `frontend/react`, com React, TypeScript, Vite,
+O frontend moderno está isolado em `frontend/react`, com React, TypeScript, Vite,
 React Router, ESLint, Prettier, Vitest e Testing Library. O alias `@/` aponta
 para `src/`, e a estrutura inicial separa aplicação, rotas, features, estilos e
 infraestrutura de testes.
@@ -116,7 +117,7 @@ header bearer, normalização do envelope de erro e tratamento de 401/403. Login
 primeiro acesso, sessão em `sessionStorage`, logout e proteção da rota inicial
 usam os contratos existentes do backend.
 
-As rotas React protegidas agora cobrem seleção de terminal, criação e edição
+As rotas React protegidas cobrem seleção de terminal, criação e edição
 das passagens do Brisamar e TECON e a confirmação do registro. Os formulários
 usam tipos alinhados aos schemas da API e o cliente HTTP central; regras de
 domínio e autorização de edição permanecem no backend.
@@ -124,6 +125,9 @@ domínio e autorização de edição permanecem no backend.
 Os arquivos HTML, CSS e JavaScript anteriores permanecem intactos como fallback
 temporário, permitindo validação operacional antes de sua remoção em uma etapa
 posterior. Histórico, filtros e relatórios ainda não possuem telas dedicadas.
+
+A suíte React contém 13 testes. Prettier, ESLint, TypeScript e o build Vite são
+executados localmente e pelo GitHub Actions.
 
 ## Dependências
 

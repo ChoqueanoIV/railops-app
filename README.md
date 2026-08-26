@@ -1,176 +1,134 @@
 # RailOps
 
-Sistema web para digitalizar a passagem de serviço entre turnos na operação
-ferroviária do Pátio Brisamar e do Terminal TECON.
+Sistema web para digitalizar a passagem de serviço entre turnos no Pátio
+Brisamar e no Terminal TECON, preservando as regras operacionais existentes.
 
-> **Status:** MVP funcional em evolução. Login, primeiro acesso, passagens de
-> Brisamar e TECON, edição e histórico já estão implementados. Ainda não há
-> deploy público nem pipeline de CI.
+> **Status:** MVP funcional, testado e com CI. Login, primeiro acesso, seleção
+> de terminal, criação, edição e confirmação de passagens estão disponíveis no
+> React. A API preserva o estado anterior de cada edição. Ainda não há deploy
+> público nem telas dedicadas para histórico, filtros ou relatórios.
 
-## O que já pode ser testado
+## Funcionalidades disponíveis
 
-- primeiro acesso por matrícula, código de ativação e definição de PIN;
-- login com token JWT;
-- seleção do Pátio Brisamar ou Terminal TECON;
-- criação de passagem de serviço para os dois terminais;
-- validações operacionais específicas de Brisamar e TECON;
-- edição da passagem dentro da janela permitida;
-- preservação do estado anterior no histórico;
-- API documentada por Swagger/OpenAPI;
-- persistência PostgreSQL com migrations Alembic.
+- primeiro acesso com matrícula, código de ativação e definição de PIN;
+- login JWT e rotas protegidas;
+- passagens específicas para Brisamar e TECON;
+- data operacional baseada no início do turno, inclusive no turno noturno;
+- validações de domínio e janela de edição no backend;
+- confirmação do registro e histórico persistido das edições;
+- PostgreSQL versionado por migrations Alembic;
+- Swagger/OpenAPI, testes automatizados e GitHub Actions.
 
-## Stack
+As regras protegidas pela caracterização estão em
+[`docs/architecture/baseline.md`](docs/architecture/baseline.md).
+
+## Arquitetura e stack
 
 | Camada | Tecnologia |
 |---|---|
 | Backend | Python 3.13, FastAPI e Pydantic |
 | Persistência | PostgreSQL, SQLAlchemy e Alembic |
-| Frontend | React + TypeScript (shell) e HTML/CSS/JavaScript (fluxos legados) |
+| Frontend | React 19, TypeScript, Vite e React Router |
 | Autenticação | JWT, Passlib e bcrypt |
-| Qualidade | Pytest, pytest-cov, Ruff, mypy e pre-commit |
-| Dependências | `pyproject.toml`, `uv` e `uv.lock` |
+| Qualidade | Pytest, Vitest, Testing Library, Ruff, mypy, ESLint e Prettier |
+| Automação | Docker Compose, pre-commit e GitHub Actions |
+| Dependências | `pyproject.toml`, `uv.lock` e `package-lock.json` |
 
-## Subir com Docker Compose
+O backend está organizado por features (`auth` e `passagens`) e mantém
+adaptadores temporários para imports antigos. O React usa uma API tipada e
+centralizada. Os HTML/CSS/JavaScript anteriores permanecem apenas como fallback
+durante a validação operacional.
 
-Esse é o caminho mais curto para executar API e PostgreSQL localmente. Instale
-Docker Desktop com suporte ao Compose e, na raiz do repositório, crie o arquivo
-de variáveis local:
+## Execução rápida com Docker
+
+Esse fluxo sobe PostgreSQL e API. O React é iniciado separadamente.
+
+### Requisitos
+
+- Git;
+- Docker Desktop com Docker Compose;
+- Node.js 24 e npm 11 para o frontend.
+
+Na raiz do clone:
 
 ```powershell
 Copy-Item .env.docker.example .env.docker
 ```
 
-Substitua `POSTGRES_PASSWORD` e `JWT_SECRET_KEY` em `.env.docker`. Use uma senha
-de banco compatível com URL (sem caracteres que precisem de codificação) e
-nunca versione esse arquivo. Depois execute:
+Substitua `POSTGRES_PASSWORD` e `JWT_SECRET_KEY` em `.env.docker`. Nunca
+versione esse arquivo. Depois:
 
 ```powershell
 docker compose --env-file .env.docker up --build -d
 docker compose --env-file .env.docker ps
 ```
 
-O PostgreSQL precisa ficar saudável antes do backend. Ao iniciar, o backend
-executa `alembic upgrade head` e somente então abre a API como usuário não-root.
-Confira:
+O backend aguarda o banco, aplica `alembic upgrade head` e inicia como usuário
+não-root. Verifique:
 
-- health check: `http://127.0.0.1:8000/health`;
+- health: `http://127.0.0.1:8000/health`;
 - Swagger: `http://127.0.0.1:8000/docs`;
 - logs: `docker compose --env-file .env.docker logs -f backend`.
 
-Para encerrar sem apagar os dados:
+Para parar sem apagar o banco:
 
 ```powershell
 docker compose --env-file .env.docker down
 ```
 
-O volume `railops_postgres_data` preserva o banco. Use `down -v` somente quando
-quiser apagar deliberadamente todos os dados locais do PostgreSQL.
+O volume `railops_postgres_data` preserva os dados. `down -v` também apaga o
+volume e deve ser usado somente quando essa perda for intencional.
 
-Esse fluxo foi validado com Docker Engine 29.7.2 e Compose v5.4.0: banco e API
-ficaram saudáveis, as migrations chegaram ao `head` e Swagger respondeu HTTP
-200.
+## Execução local no Windows
 
-## Subir o projeto no Windows
+### 1. Requisitos e dependências
 
-### 1. Pré-requisitos
-
-- Git;
-- Python 3.13;
-- Node.js 24 e npm 11;
-- PostgreSQL acessível, local ou hospedado;
-- PowerShell.
-
-Clone o repositório:
+- Git, Python 3.13, PostgreSQL, Node.js 24, npm 11 e PowerShell;
+- [`uv`](https://docs.astral.sh/uv/getting-started/installation/).
 
 ```powershell
 git clone https://github.com/ChoqueanoIV/railops-app.git
 Set-Location railops-app
-```
-
-### 2. Instalar o uv e as dependências
-
-Instale o `uv` no perfil do usuário:
-
-```powershell
 py -3.13 -m pip install --user uv
-```
-
-Reabra o terminal caso o comando não seja localizado. Na raiz do projeto,
-reconstrua o ambiente usando as versões exatas do lockfile:
-
-```powershell
 py -3.13 -m uv sync --frozen
 ```
 
-### 3. Configurar o ambiente
+O último comando usa as versões exatas de `uv.lock`.
 
-Crie o arquivo local a partir do exemplo:
+### 2. Configurar backend e banco
 
 ```powershell
 Copy-Item backend\.env.example backend\.env
 ```
 
-Preencha `backend/.env`:
+Use valores locais ou de um banco descartável:
 
 ```dotenv
-DATABASE_URL=postgresql://usuario:senha@host:5432/railops
-JWT_SECRET_KEY=substitua-por-um-segredo-longo-e-aleatorio
+DATABASE_URL=postgresql://railops_local:senha-falsa@localhost:5432/railops
+JWT_SECRET_KEY=exemplo-local-substitua-por-um-segredo-longo
 RAILOPS_ENV=development
 API_TITLE=RailOps API
-CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 ```
 
-Para Supabase ou outro PostgreSQL que exija TLS, a URL normalmente precisa do
-parâmetro `sslmode=require`. Use as informações fornecidas pelo seu provedor.
+Provedores que exigem TLS normalmente requerem `sslmode=require` na URL.
+Mantenha `.env`, credenciais e capturas com segredos fora do Git.
 
-Nunca envie o `.env` por Git, commit, print ou mensagem pública. Para permitir
-que outra pessoa avalie o sistema, forneça credenciais de um banco descartável
-por um canal privado.
-
-### 4. Aplicar as migrations
-
-Na raiz do repositório:
+### 3. Aplicar migrations e iniciar a API
 
 ```powershell
 py -3.13 -m uv --directory backend run alembic upgrade head
-```
-
-Esse comando cria e atualiza as tabelas e também registra as linhas
-operacionais usadas por Brisamar e TECON.
-
-### 5. Iniciar o backend
-
-```powershell
 py -3.13 -m uv run uvicorn app.main:app --reload --app-dir backend
 ```
 
-Verifique:
-
 - API: `http://127.0.0.1:8000`;
-- health check: `http://127.0.0.1:8000/health`;
+- health: `http://127.0.0.1:8000/health`;
 - Swagger: `http://127.0.0.1:8000/docs`;
-- OpenAPI JSON: `http://127.0.0.1:8000/openapi.json`.
+- OpenAPI: `http://127.0.0.1:8000/openapi.json`.
 
-O health check deve responder:
+### 4. Iniciar o frontend React
 
-```json
-{"status": "ok"}
-```
-
-### 6. Iniciar o frontend legado
-
-Abra outro PowerShell na raiz do projeto:
-
-```powershell
-py -3.13 -m uv run python -m http.server 3000 --directory frontend
-```
-
-Acesse `http://127.0.0.1:3000`. Não abra os arquivos HTML diretamente pelo
-Explorer; o servidor HTTP evita diferenças de origem e carregamento.
-
-### 7. Iniciar o shell React
-
-O shell moderno é independente dos fluxos legados. Em outro PowerShell:
+Em outro PowerShell:
 
 ```powershell
 Set-Location frontend\react
@@ -179,28 +137,18 @@ Copy-Item .env.example .env.local
 npm run dev
 ```
 
-Acesse `http://127.0.0.1:5173`. O React já oferece login, primeiro acesso e
-proteção da rota inicial usando os contratos atuais da API. As telas
-operacionais de Brisamar e TECON continuam no frontend legado até a migração
-incremental. Para validar a qualidade do frontend moderno:
+Acesse `http://127.0.0.1:5173`. O `.env.local` aponta por padrão para a API em
+`http://127.0.0.1:8000`.
 
-```powershell
-npm run lint
-npm run typecheck
-npm test
-npm run build
-```
+## Criar usuário de demonstração
 
-## Criar um usuário para avaliação
-
-As migrations não criam usuários. Se o avaliador estiver usando um banco local
-ou descartável, o comando abaixo cria ou reinicia um usuário de demonstração:
+As migrations não criam usuários. Em banco exclusivamente local ou de teste:
 
 ```powershell
 @'
 from app.core.database import SessionLocal
-from app.models.usuario import Usuario
-from app.services.auth_service import pwd_context
+from app.features.auth.models import Usuario
+from app.features.auth.service import pwd_context
 
 matricula = "12345678"
 codigo_ativacao = "123456"
@@ -210,7 +158,6 @@ with SessionLocal() as db:
     if usuario is None:
         usuario = Usuario(matricula=matricula, nome="Avaliador RailOps")
         db.add(usuario)
-
     usuario.senha_hash = None
     usuario.pin_definido = False
     usuario.codigo_ativacao_hash = pwd_context.hash(codigo_ativacao)
@@ -220,144 +167,132 @@ print("Usuário de demonstração preparado.")
 '@ | py -3.13 -m uv --directory backend run python -
 ```
 
-Use somente em banco local ou de teste. Depois:
+No React, escolha **Definir meu PIN**, informe matrícula `12345678`, código
+`123456`, defina um PIN de quatro dígitos e use-o no login. Não execute esse
+script em produção ou banco compartilhado.
 
-1. abra `http://127.0.0.1:3000`;
-2. clique em **Definir meu PIN**;
-3. informe matrícula `12345678`;
-4. informe código de ativação `123456`;
-5. escolha e confirme um PIN de quatro dígitos;
-6. volte ao login e entre com a matrícula e o novo PIN.
-
-Se for utilizado um banco compartilhado já preparado, peça ao responsável uma
-matrícula e um código de ativação ou PIN por canal privado e ignore esta etapa.
-
-## Roteiro de avaliação manual
+## Roteiro de teste manual
 
 1. Confirme `/health` e abra `/docs`.
-2. Realize o primeiro acesso e o login pelo frontend.
-3. Entre em Brisamar e registre uma passagem válida.
-4. Confira a tela de confirmação.
-5. Edite a passagem dentro da janela operacional permitida.
-6. Repita o fluxo para TECON e valide os campos específicos das Áreas 1 e 2.
-7. Tente enviar dados condicionais inválidos para observar as validações.
-
-As regras atuais estão congeladas e descritas em
-[`docs/architecture/baseline.md`](docs/architecture/baseline.md).
+2. Conclua primeiro acesso e login no React.
+3. Registre e confirme uma passagem válida de Brisamar.
+4. Edite-a dentro da janela permitida.
+5. Repita o fluxo para TECON e valide os campos das Áreas 1 e 2.
+6. Envie combinações condicionais inválidas e confira as mensagens da API.
 
 ## Testes e qualidade
 
-Execute a suíte completa:
+Na raiz:
 
 ```powershell
-py -3.13 -m uv run pytest
-```
-
-Execute todos os checks:
-
-```powershell
-py -3.13 -m uv run pytest --cov=backend/app --cov-report=term-missing
-py -3.13 -m uv run ruff check .
-py -3.13 -m uv run ruff format --check .
-py -3.13 -m uv run mypy
+py -3.13 -m uv run pytest --cov=backend/app --cov-report=term-missing --cov-fail-under=90
+py -3.13 -m uv run ruff check backend
+py -3.13 -m uv run ruff format --check backend
+py -3.13 -m uv run mypy backend
 py -3.13 -m uv run pre-commit run --all-files
 ```
 
-Para o shell React, execute os comandos dentro de `frontend/react`:
+Em `frontend/react`:
 
 ```powershell
-npm run lint
-npm run format:check
-npm run typecheck
 npm test
+npm run format:check
+npm run lint
+npm run typecheck
 npm run build
 ```
 
-Estado validado deste checkpoint:
+Estado validado neste checkpoint:
 
-- 120 testes aprovados;
-- cobertura total de 94%;
-- lint, formatter, type-check e pre-commit aprovados.
+- backend: 123 testes e cobertura real de 93,70% (94% arredondado);
+- frontend: 13 testes;
+- formatter, lint, type-check, build e pre-commit aprovados;
+- CI executa jobs independentes de backend e frontend em PRs e na `main`.
 
 ## Estrutura do repositório
 
 ```text
 railops-app/
+├── .github/workflows/       # pipeline de qualidade
 ├── backend/
-│   ├── alembic/              # migrations do PostgreSQL
+│   ├── alembic/             # migrations PostgreSQL
 │   ├── app/
-│   │   ├── core/             # configuração tipada e banco
-│   │   ├── models/           # modelos SQLAlchemy
-│   │   ├── repositories/     # persistência
-│   │   ├── routers/          # endpoints FastAPI
-│   │   ├── schemas/          # contratos Pydantic
-│   │   ├── services/         # regras de negócio
-│   │   └── main.py           # fábrica e bootstrap da aplicação
-│   ├── tests/                # testes automatizados
-│   ├── .env.example
-│   ├── Dockerfile
-│   ├── alembic.ini
-│   └── main.py               # entrypoint compatível temporário
+│   │   ├── api/             # respostas HTTP compartilhadas
+│   │   ├── core/            # configuração e banco
+│   │   ├── features/        # auth e passagens por domínio
+│   │   ├── shared/          # infraestrutura compartilhada
+│   │   ├── models/          # adaptadores de compatibilidade
+│   │   ├── repositories/    # adaptadores de compatibilidade
+│   │   ├── routers/         # adaptadores de compatibilidade
+│   │   ├── schemas/         # adaptadores de compatibilidade
+│   │   ├── services/        # adaptadores de compatibilidade
+│   │   └── main.py          # fábrica da aplicação
+│   ├── tests/               # unitários, integração e API
+│   └── Dockerfile
 ├── frontend/
-│   ├── react/                # shell React + TypeScript isolado
-│   ├── css/                  # estilos legados
-│   ├── js/                   # scripts legados
-│   └── *.html                # telas legadas ainda operacionais
-├── docs/                     # arquitetura, padrões, tasks e checkpoint
-├── compose.yaml              # API e PostgreSQL para desenvolvimento local
-├── pyproject.toml            # manifesto e ferramentas Python
-├── uv.lock                   # versões reproduzíveis
+│   ├── react/src/
+│   │   ├── app/             # bootstrap e rotas
+│   │   ├── features/        # auth, shell e passagens
+│   │   ├── services/        # cliente da API
+│   │   └── test/            # setup dos testes
+│   ├── css/ e js/           # fallback legado temporário
+│   └── *.html               # fallback legado temporário
+├── docs/                    # arquitetura, padrões, tasks e checkpoint
+├── compose.yaml
+├── pyproject.toml
+├── uv.lock
 └── README.md
 ```
 
+## Fluxo Git e CI
+
+O projeto usa uma branch curta por task, commits semânticos e pull request para
+`main`. Antes do merge, o CI valida testes, cobertura, formatação, lint,
+type-check e build. Veja [`docs/standards/git.md`](docs/standards/git.md).
+
 ## Compatibilidade com pip
 
-O fluxo recomendado usa `uv`. Para ferramentas que ainda exigem `pip`, os
-requirements são exports gerados do mesmo lockfile:
+O fluxo recomendado usa `uv`. Os requirements com hashes são exports do mesmo
+lockfile para ferramentas que exigem `pip`:
 
 ```powershell
 py -3.13 -m venv .venv
 .venv\Scripts\python.exe -m pip install --require-hashes -r backend\requirements-dev.txt
 ```
 
-Não edite `backend/requirements.txt` ou `backend/requirements-dev.txt`
-manualmente.
+Não edite `backend/requirements*.txt` manualmente.
 
 ## Solução de problemas
 
-- **Python bloqueado dentro do OneDrive:** mova o clone para uma pasta local não
-  sincronizada e execute `uv sync --frozen` novamente.
-- **Erro de `DATABASE_URL`:** confira `backend/.env`, host, porta, nome do banco e
-  exigência de TLS.
-- **Erro de `JWT_SECRET_KEY`:** defina uma chave não vazia no `.env`.
-- **Frontend não conecta:** confirme que a API está em `127.0.0.1:8000`, o
-  legado em `127.0.0.1:3000` ou o React em `127.0.0.1:5173` e confira
-  `frontend/react/.env.local`.
-- **CORS no navegador:** confira se a origem exata do frontend está em
-  `CORS_ORIGINS`.
-- **Banco vazio:** aplique `alembic upgrade head` e prepare um usuário de teste.
-- **Compose não inicia:** confirme Docker Desktop ativo, revise `.env.docker` e
-  execute `docker compose --env-file .env.docker logs backend db`.
+- **Executáveis bloqueados no OneDrive:** pause a sincronização ou mantenha o
+  clone em pasta não sincronizada; depois execute `uv sync --frozen`.
+- **Falha de banco:** confira `DATABASE_URL` e aplique `alembic upgrade head`.
+- **Falha de CORS:** inclua exatamente `localhost:5173` ou `127.0.0.1:5173` em
+  `CORS_ORIGINS` e reinicie a API.
+- **Frontend sem API:** confira `VITE_API_BASE_URL` e o health da porta 8000.
+- **Compose não sobe:** confirme Docker Desktop ativo e consulte
+  `docker compose --env-file .env.docker logs backend db`.
+- **Banco vazio:** aplique as migrations e prepare o usuário de demonstração.
 
-## Limitações atuais e próximos passos
+## Roadmap
 
-- login, primeiro acesso, seleção de terminal, passagens de Brisamar e TECON,
-  edição e confirmação já estão disponíveis no React;
-- o frontend legado permanece versionado como fallback temporário até a
-  validação operacional das telas React;
-- a configuração Docker e o CI remoto existem, mas ainda não há deploy
-  público;
-- consolidação do README e da documentação final é a próxima etapa técnica;
-- consultas com filtros, exportações e relatórios permanecem no roadmap.
+Concluído: caracterização das regras, arquitetura por features, contratos de
+erro, dependências reproduzíveis, testes, qualidade estática, Docker, fluxos
+React e CI.
 
-O estado seguro e a retomada do desenvolvimento estão em
-[`docs/CHECKPOINT.md`](docs/CHECKPOINT.md).
+Planejado, ainda não concluído:
 
-## Documentação e autoria
+- hardening final e limpeza segura dos adaptadores/fallbacks;
+- validação operacional e de UX com usuários;
+- consulta de histórico, filtros, exportações e relatórios;
+- estratégia de deploy e observabilidade.
 
-A documentação técnica deste repositório está em [`docs/`](docs/README.md). A
-documentação de requisitos e protótipos também está disponível no repositório
-[`railops-docs`](https://github.com/ChoqueanoIV/railops-docs).
+O estado de retomada fica em [`docs/CHECKPOINT.md`](docs/CHECKPOINT.md), o índice
+técnico em [`docs/README.md`](docs/README.md) e o backlog em
+[`docs/tasks/README.md`](docs/tasks/README.md).
+
+## Autoria
 
 Desenvolvido por [Leandro](https://github.com/ChoqueanoIV) como projeto de
-portfólio para transição de carreira em desenvolvimento de software.
+portfólio para transição de carreira. Requisitos e protótipos originais estão
+no [`railops-docs`](https://github.com/ChoqueanoIV/railops-docs).
