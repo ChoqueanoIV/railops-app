@@ -5,10 +5,11 @@ Atualizado em: 26/08/2026
 ## Estado seguro atual
 
 - branch de continuidade: `main`;
-- PR mais recente: [#36 — observabilidade e segurança](https://github.com/ChoqueanoIV/railops-app/pull/36), mesclada;
-- merge consolidado na `main`: `77d97e1`;
+- PR mais recente: [#37 — decisões arquiteturais e governança](https://github.com/ChoqueanoIV/railops-app/pull/37), mesclada;
+- merge consolidado na `main`: `060ef13`;
 - nenhuma implementação pendente fora da `main`;
 - worktree limpo antes da atualização deste checkpoint documental;
+- commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
 - commit principal da task 016: `e8047ab`;
 - commit funcional da task 015: `1bd6321`;
@@ -34,8 +35,12 @@ Atualizado em: 26/08/2026
 - 015 — CI de qualidade: integrada no PR #34.
 - 016 — README e documentação final: integrada no PR #35.
 - 017 — observabilidade, segurança e hardening: integrada no PR #36.
+- 018 — ADRs e governança arquitetural: integrada no PR #37.
 
-## Validação da task 017
+O backlog técnico descrito em `docs/tasks/README.md` foi integralmente executado;
+não existe uma task 019 definida.
+
+## Validação da task 018
 
 - jobs remotos `Backend` e `Frontend` aprovados no PR;
 - 133 testes do backend e 13 testes React aprovados;
@@ -44,35 +49,33 @@ Atualizado em: 26/08/2026
 - type-check TypeScript aprovado;
 - cobertura real de `94,06%`, reportada de forma arredondada como `94%`;
 - Ruff, formatter Ruff, mypy e pre-commit aprovados;
-- `pip-audit` e `npm audit --omit=dev` sem vulnerabilidades conhecidas;
 - nenhuma regra de negócio existente alterada;
-- mudanças HTTP e de segurança explicitadas e cobertas por testes.
+- oito ADRs com contexto, decisão, alternativas e consequências;
+- links internos da documentação validados.
 
-## O que foi entregue na task 017
+## O que foi entregue na task 018
 
-- logs JSON com request ID e campos operacionais permitidos;
-- headers defensivos e resposta segura para erros inesperados;
-- `/health` para liveness e novo `/ready` para prontidão do banco;
-- healthchecks Docker alinhados ao readiness;
-- JWT sem expiração rejeitado;
-- produção exige segredo JWT de 32 bytes e rejeita CORS `*`;
-- decisão fundamentada de adiar rate limiting até existir política operacional
-  e armazenamento compartilhado.
+- decisões arquiteturais vigentes registradas em oito ADRs;
+- índice e regras de governança para decisões futuras;
+- decisões explícitas sobre evolução incremental, compatibilidade da API, `uv`,
+  transações, ORM, React/Vite, token no navegador e Docker local;
+- navegação da documentação e evidências da task atualizadas;
+- nenhum código funcional alterado.
 
 ## Próximo passo obrigatório
 
 1. confirmar worktree limpo e `main` sincronizada;
-2. ler `AGENTS.md` e `docs/tasks/018-architecture-decisions.md`;
-3. executar o baseline completo;
-4. executar somente a task 018.
+2. ler `AGENTS.md`, este checkpoint e `docs/tasks/README.md`;
+3. revisar o produto executável e as necessidades funcionais ainda desejadas;
+4. definir e documentar um novo roadmap antes de alterar código.
 
-Não combinar a task 018 com trabalho posterior não planejado.
+Não iniciar uma suposta task 019: ela não existe no backlog atual.
 
 ## Restrições de continuidade
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar código funcional ao registrar as decisões da task 018;
+- não alterar regras de negócio sem requisito e aceite explícitos;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.
