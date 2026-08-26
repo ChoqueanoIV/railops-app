@@ -1,14 +1,15 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 25/08/2026
+Atualizado em: 26/08/2026
 
 ## Estado seguro atual
 
 - branch de continuidade: `main`;
-- PR mais recente: [#35 — README e documentação final](https://github.com/ChoqueanoIV/railops-app/pull/35), mesclada;
-- merge consolidado na `main`: `2d4d2c5`;
+- PR mais recente: [#36 — observabilidade e segurança](https://github.com/ChoqueanoIV/railops-app/pull/36), mesclada;
+- merge consolidado na `main`: `77d97e1`;
 - nenhuma implementação pendente fora da `main`;
 - worktree limpo antes da atualização deste checkpoint documental;
+- commit funcional da task 017: `1cd5756`;
 - commit principal da task 016: `e8047ab`;
 - commit funcional da task 015: `1bd6321`;
 - commit funcional da task 014: `1a5c0bf`;
@@ -32,43 +33,46 @@ Atualizado em: 25/08/2026
 - 014 — migração incremental das telas: integrada no PR #33.
 - 015 — CI de qualidade: integrada no PR #34.
 - 016 — README e documentação final: integrada no PR #35.
+- 017 — observabilidade, segurança e hardening: integrada no PR #36.
 
-## Validação da task 016
+## Validação da task 017
 
 - jobs remotos `Backend` e `Frontend` aprovados no PR;
-- 123 testes do backend e 13 testes React aprovados;
+- 133 testes do backend e 13 testes React aprovados;
 - build Vite aprovado;
 - ESLint e Prettier aprovados;
 - type-check TypeScript aprovado;
-- cobertura real de `93,70%`, reportada de forma arredondada como `94%`;
+- cobertura real de `94,06%`, reportada de forma arredondada como `94%`;
 - Ruff, formatter Ruff, mypy e pre-commit aprovados;
-- links Markdown internos versionados validados;
-- nenhum código de produção alterado;
-- nenhuma regra de negócio ou contrato HTTP alterado.
+- `pip-audit` e `npm audit --omit=dev` sem vulnerabilidades conhecidas;
+- nenhuma regra de negócio existente alterada;
+- mudanças HTTP e de segurança explicitadas e cobertas por testes.
 
-## O que foi entregue na task 016
+## O que foi entregue na task 017
 
-- README alinhado ao MVP React e ao CI existentes;
-- instruções validadas para instalação local, Docker, migrations e execução;
-- usuário de demonstração com imports canônicos e segredos fictícios;
-- árvore do repositório, stack, qualidade, fluxo Git e troubleshooting atuais;
-- índice técnico e estado arquitetural sincronizados;
-- exemplos de CORS alinhados ao frontend React em desenvolvimento.
+- logs JSON com request ID e campos operacionais permitidos;
+- headers defensivos e resposta segura para erros inesperados;
+- `/health` para liveness e novo `/ready` para prontidão do banco;
+- healthchecks Docker alinhados ao readiness;
+- JWT sem expiração rejeitado;
+- produção exige segredo JWT de 32 bytes e rejeita CORS `*`;
+- decisão fundamentada de adiar rate limiting até existir política operacional
+  e armazenamento compartilhado.
 
 ## Próximo passo obrigatório
 
 1. confirmar worktree limpo e `main` sincronizada;
-2. ler `AGENTS.md` e `docs/tasks/017-observability-security.md`;
+2. ler `AGENTS.md` e `docs/tasks/018-architecture-decisions.md`;
 3. executar o baseline completo;
-4. executar somente a task 017.
+4. executar somente a task 018.
 
-Não combinar a task 017 com tasks posteriores.
+Não combinar a task 018 com trabalho posterior não planejado.
 
 ## Restrições de continuidade
 
 - preservar integralmente as regras de negócio registradas em
   `docs/architecture/baseline.md`;
-- não alterar contratos HTTP fora dos critérios explícitos da task 017;
+- não alterar código funcional ao registrar as decisões da task 018;
 - manter commits em PT-BR e sem marcadores de coautoria por IA;
 - nunca versionar `.env`, tokens, URLs privadas ou credenciais;
 - executar testes antes e depois de qualquer refatoração.
