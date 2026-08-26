@@ -2,6 +2,7 @@ from main import app
 
 ENDPOINTS_PUBLICOS = {
     "/health": {"get"},
+    "/ready": {"get"},
     "/auth/primeiro-acesso": {"post"},
     "/auth/login": {"post"},
     "/passagens/brisamar": {"post"},
@@ -22,6 +23,8 @@ def test_openapi_mantem_status_de_sucesso_atual():
     caminhos = app.openapi()["paths"]
 
     assert "200" in caminhos["/health"]["get"]["responses"]
+    assert "200" in caminhos["/ready"]["get"]["responses"]
+    assert "503" in caminhos["/ready"]["get"]["responses"]
     assert "201" in caminhos["/auth/primeiro-acesso"]["post"]["responses"]
     assert "200" in caminhos["/auth/login"]["post"]["responses"]
     assert "201" in caminhos["/passagens/brisamar"]["post"]["responses"]
@@ -34,6 +37,7 @@ def test_openapi_mantem_autenticacao_apenas_nas_rotas_de_passagem():
     caminhos = app.openapi()["paths"]
 
     assert caminhos["/health"]["get"].get("security") is None
+    assert caminhos["/ready"]["get"].get("security") is None
     assert caminhos["/auth/login"]["post"].get("security") is None
     assert caminhos["/auth/primeiro-acesso"]["post"].get("security") is None
     for caminho in (

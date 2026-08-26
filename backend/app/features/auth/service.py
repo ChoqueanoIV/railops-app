@@ -53,7 +53,13 @@ class AuthService:
 
     def validar_token(self, token: str) -> Usuario:
         try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            payload = jwt.decode(
+                token,
+                SECRET_KEY,
+                algorithms=[ALGORITHM],
+            )
+            if "sub" not in payload or "exp" not in payload:
+                raise KeyError("claims obrigatórias ausentes")
             usuario_id = uuid.UUID(payload["sub"])
         except (JWTError, KeyError, TypeError, ValueError):
             raise AutenticacaoError("Token inválido ou expirado.")

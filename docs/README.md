@@ -28,7 +28,7 @@ de demonstração e troubleshooting, consulte o [`README principal`](../README.m
 
 - backend FastAPI organizado por features, com PostgreSQL e Alembic;
 - frontend React com autenticação e fluxos de Brisamar e TECON;
-- 123 testes backend, 13 testes frontend e cobertura backend de 93,70%;
+- 133 testes backend, 13 testes frontend e cobertura backend de 94,06%;
 - lint, formatter, type-check, build, pre-commit, Docker e CI validados;
 - legado e adaptadores preservados temporariamente para uma remoção segura;
 - sem deploy público, consulta de histórico, filtros, exportações ou relatórios.
@@ -109,10 +109,15 @@ Copie `backend/.env.example` para `backend/.env` e substitua os valores locais.
 O arquivo `.env` real permanece ignorado pelo Git.
 
 - `DATABASE_URL`: conexão PostgreSQL obrigatória;
-- `JWT_SECRET_KEY`: segredo JWT obrigatório;
+- `JWT_SECRET_KEY`: segredo JWT obrigatório; em `production`, mínimo de 32
+  bytes;
 - `RAILOPS_ENV`: `development`, `test` ou `production` (padrão: `development`);
 - `API_TITLE`: título exibido no OpenAPI (padrão: `RailOps API`);
 - `CORS_ORIGINS`: origens permitidas separadas por vírgula.
+
+Em `production`, `CORS_ORIGINS` não aceita `*`. `/health` verifica o processo e
+`/ready` verifica a conexão com o banco sem expor dados internos. Respostas
+incluem `X-Request-ID`; logs estruturados não registram payloads ou credenciais.
 
 O entrypoint recomendado é `app.main:app` a partir da pasta `backend`. O
 entrypoint anterior `main:app` permanece compatível durante a migração.

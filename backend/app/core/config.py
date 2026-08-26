@@ -74,9 +74,18 @@ class Configuracao:
         if not cors_origins:
             raise RuntimeError("CORS_ORIGINS deve conter ao menos uma origem válida.")
 
+        jwt_secret_key = obter_variavel_obrigatoria("JWT_SECRET_KEY", origem)
+        if ambiente_aplicacao is AmbienteAplicacao.PRODUCAO:
+            if len(jwt_secret_key.encode()) < 32:
+                raise RuntimeError(
+                    "JWT_SECRET_KEY deve possuir ao menos 32 bytes em production."
+                )
+            if "*" in cors_origins:
+                raise RuntimeError("CORS_ORIGINS não permite '*' em production.")
+
         return cls(
             database_url=obter_variavel_obrigatoria("DATABASE_URL", origem),
-            jwt_secret_key=obter_variavel_obrigatoria("JWT_SECRET_KEY", origem),
+            jwt_secret_key=jwt_secret_key,
             ambiente=ambiente_aplicacao,
             titulo_api=origem.get("API_TITLE", "RailOps API").strip() or "RailOps API",
             cors_origins=cors_origins,

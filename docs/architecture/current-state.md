@@ -87,7 +87,7 @@ contém testes de:
 - TECON schema;
 - TECON service.
 
-A suíte atual contém 123 testes, mantém cobertura real de 93,70% (94%
+A suíte atual contém 133 testes, mantém cobertura real de 94,06% (94%
 arredondado) e não depende
 das credenciais do `.env` real. A fixture de banco exige `RAILOPS_ENV=test` e o
 banco `railops_test`, reduzindo o risco de execução contra produção.
@@ -95,7 +95,7 @@ banco `railops_test`, reduzindo o risco de execução contra produção.
 ## Ambiente Docker
 
 O backend possui imagem multi-stage baseada em Python 3.13, executada por
-usuário não-root e com healthcheck em `/health`. O `compose.yaml` fornece um
+usuário não-root e com healthcheck de prontidão em `/ready`. O `compose.yaml` fornece um
 PostgreSQL local opcional, aguarda a saúde do banco e executa as migrations
 Alembic antes de iniciar o Uvicorn. Segredos são exigidos em tempo de execução
 por `.env.docker`, que permanece ignorado; somente o exemplo é versionado.
@@ -139,3 +139,8 @@ A base de qualidade inclui Ruff, formatter do Ruff, mypy com assinaturas
 obrigatórias e sem exceções por módulo, pytest-cov e pre-commit. O GitHub
 Actions executa jobs independentes de backend e frontend em pull requests e na
 `main`, com instalação lockada, PostgreSQL descartável, cobertura e build.
+
+O backend produz logs JSON com request ID e metadados HTTP restritos, devolve
+headers defensivos, mantém `/health` como liveness e usa `/ready` para testar o
+banco. Erros inesperados recebem resposta genérica correlacionável. Produção
+exige segredo JWT de ao menos 32 bytes, rejeita CORS `*` e tokens sem expiração.

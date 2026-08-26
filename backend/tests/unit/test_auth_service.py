@@ -142,6 +142,19 @@ def test_validar_token_rejeita_token_expirado():
         service.validar_token(token)
 
 
+def test_validar_token_rejeita_token_sem_expiracao():
+    usuario = criar_usuario_nao_ativado()
+    service = AuthService(UsuarioRepositoryFake(usuario))
+    token = jwt.encode(
+        {"sub": str(usuario.id), "matricula": usuario.matricula},
+        SECRET_KEY,
+        algorithm=ALGORITHM,
+    )
+
+    with pytest.raises(AutenticacaoError, match="Token inválido ou expirado"):
+        service.validar_token(token)
+
+
 def test_validar_token_rejeita_usuario_inexistente():
     usuario = criar_usuario_nao_ativado()
     token = AuthService(UsuarioRepositoryFake(usuario))._gerar_token(usuario)
