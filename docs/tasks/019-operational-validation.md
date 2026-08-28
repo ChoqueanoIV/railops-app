@@ -61,8 +61,9 @@ Preencher ao executar a task:
   ainda depende de decisão técnica.
 - Decisões de produto: consulta autorizada para todos os manobradores
   autenticados, Instrutores e Monitores de Qualidade; passagens confirmadas são
-  somente leitura. Filtros, paginação e visibilidade de autoria ainda precisam
-  ser definidos.
+  somente leitura. Filtros confirmados: período/data, terminal, turma, turno,
+  responsável por nome ou matrícula e protocolo. Paginação e visibilidade
+  detalhada de autoria ainda precisam ser definidas.
 - Testes automatizados: backend 134 aprovados e 94% de cobertura; frontend 13
   aprovados; lint, formato, tipos e builds aprovados.
 - Observações: TECON com e sem atendimento validados tecnicamente; nenhuma

@@ -93,6 +93,8 @@ uso manual da interface.
   independentemente da turma do usuário;
 - Permissão após confirmação final: somente leitura, sem edição para nenhum dos
   públicos acima;
+- Filtros mínimos confirmados: período/data, terminal, turma, turno, matrícula
+  ou nome do responsável e protocolo;
 - Segurança documental: matrículas reais dos perfis especiais não devem ser
   registradas nos documentos versionados.
 
