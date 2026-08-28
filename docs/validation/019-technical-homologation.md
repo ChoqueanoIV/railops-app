@@ -84,6 +84,18 @@ uso manual da interface.
 - decidir quem pode consultar autores e snapshots de alterações;
 - definir finalidade e formato de relatórios futuros.
 
+## Decisões para o contrato de consulta
+
+- Público autorizado: todos os manobradores autenticados;
+- Perfis adicionais autorizados: Instrutores e Monitores de Qualidade,
+  identificados por matrículas que serão cadastradas posteriormente;
+- Escopo: consulta de passagens confirmadas de Brisamar e TECON,
+  independentemente da turma do usuário;
+- Permissão após confirmação final: somente leitura, sem edição para nenhum dos
+  públicos acima;
+- Segurança documental: matrículas reais dos perfis especiais não devem ser
+  registradas nos documentos versionados.
+
 ## Achados da validação humana
 
 ### Brisamar não representa integralmente L22 e L24 — severidade alta

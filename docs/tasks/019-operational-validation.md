@@ -59,7 +59,10 @@ Preencher ao executar a task:
   dos dois terminais antes da confirmação definitiva. Após essa confirmação,
   ambos ficam imediatamente bloqueados para edição; persistência em rascunho
   ainda depende de decisão técnica.
-- Decisões de produto: gates da Task 020 ainda dependem dos usuários.
+- Decisões de produto: consulta autorizada para todos os manobradores
+  autenticados, Instrutores e Monitores de Qualidade; passagens confirmadas são
+  somente leitura. Filtros, paginação e visibilidade de autoria ainda precisam
+  ser definidos.
 - Testes automatizados: backend 134 aprovados e 94% de cobertura; frontend 13
   aprovados; lint, formato, tipos e builds aprovados.
 - Observações: TECON com e sem atendimento validados tecnicamente; nenhuma
