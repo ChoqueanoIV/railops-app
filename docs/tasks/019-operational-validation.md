@@ -1,6 +1,6 @@
 # Homologação operacional e de UX
 
-Status: `TODO`
+Status: `CONCLUÍDA COM ACHADOS ENCAMINHADOS`
 
 ## Objetivo
 
@@ -29,22 +29,53 @@ representativas do uso real, antes de criar novas funcionalidades.
 
 ## Critérios de aceite
 
-- [ ] instalação reproduzida a partir do README em ambiente limpo;
-- [ ] fluxos críticos executados e resultados registrados;
-- [ ] regras protegidas pelo baseline permanecem equivalentes;
-- [ ] problemas encontrados possuem passos de reprodução e severidade;
-- [ ] decisões necessárias para a Task 020 estão documentadas;
-- [ ] checkpoint indica claramente o próximo passo aprovado.
+- [x] instalação reproduzida a partir do README em ambiente limpo;
+- [x] fluxos críticos executados e resultados registrados;
+- [x] regras protegidas pelo baseline permanecem equivalentes;
+- [x] problemas encontrados possuem passos de reprodução e severidade;
+- [x] decisões necessárias para a Task 020 estão documentadas;
+- [x] checkpoint indica claramente o próximo passo aprovado.
 
 ## Evidências
 
 Preencher ao executar a task:
 
-- Branch:
-- Ambiente:
-- Participantes/perfis:
-- Fluxos aprovados:
-- Defeitos encontrados:
-- Decisões de produto:
-- Testes automatizados:
-- Observações:
+- Branch: `test/homologacao-operacional`.
+- Ambiente: Docker Desktop, PostgreSQL 17, backend containerizado e React/Vite
+  local; migration no `head`.
+- Participantes/perfis: homologação técnica pelo mantenedor e validação humana
+  por manobrador representativo do uso real.
+- Fluxos aprovados: primeiro acesso, login, logout, proteção de rota, Brisamar,
+  TECON com e sem atendimento, consulta, edição autorizada e modo somente
+  leitura.
+- Defeitos encontrados: handler de validação transformava `422` em `500`;
+  severidade alta, corrigido pela Task 019A/PR #39 e revalidado em
+  [`../validation/019-technical-homologation.md`](../validation/019-technical-homologation.md).
+- Achado humano: L22 e L24 precisam registrar `SUP` e `INF` simultaneamente, e
+  o Brisamar precisa incluir `Travessão L22` e `Travessão L24`; severidade alta
+  e correção pendente em task isolada.
+- Achado humano: a confirmação não reconhece quando Brisamar e TECON já foram
+  preenchidos; severidade média. A UX definida exige uma revisão consolidada
+  dos dois terminais antes da confirmação definitiva. Após essa confirmação,
+  ambos ficam imediatamente bloqueados para edição; persistência em rascunho
+  ainda depende de decisão técnica.
+- Decisões de produto: consulta autorizada para todos os manobradores
+  autenticados, Instrutores e Monitores de Qualidade; passagens confirmadas são
+  somente leitura. Filtros confirmados: período/data, terminal, turma, turno,
+  responsável por nome ou matrícula e protocolo. Consulta inicial dos últimos
+  30 dias, mais recentes primeiro e 20 itens por página, sem exclusão dos
+  registros antigos. Todos os usuários autorizados veem responsável, momento
+  da confirmação e conteúdo final; somente Instrutores e Monitores de Qualidade
+  veem o histórico detalhado das alterações do rascunho.
+- Testes automatizados: backend 134 aprovados e 94% de cobertura; frontend 13
+  aprovados; lint, formato, tipos e builds aprovados.
+- Observações: TECON com e sem atendimento validados tecnicamente; nenhuma
+  regra de negócio foi alterada nesta etapa.
+
+## Encerramento
+
+A homologação cumpriu seu objetivo de validar o produto existente, identificar
+lacunas operacionais e definir os gates da consulta. Os achados de Brisamar e
+do fluxo consolidado devem ser tratados em tasks corretivas isoladas antes da
+implementação do histórico. A conclusão desta task não declara esses defeitos
+corrigidos e não autoriza iniciar diretamente as tasks 020–026.

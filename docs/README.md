@@ -6,6 +6,8 @@ Este diretório organiza a evolução técnica do `railops-app`.
 
 - [`CHECKPOINT.md`](CHECKPOINT.md) — estado seguro e próximo passo.
 - [`ROADMAP.md`](ROADMAP.md) — sequência proposta para a segunda fase.
+- [`validation/019-technical-homologation.md`](validation/019-technical-homologation.md)
+  — resultado técnico e pendências da homologação atual.
 - [`architecture/current-state.md`](architecture/current-state.md) — estado
   implementado e validado.
 - [`architecture/baseline.md`](architecture/baseline.md) — regras de negócio
