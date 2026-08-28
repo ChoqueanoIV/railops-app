@@ -7,7 +7,8 @@ Atualizado em: 28/08/2026
 - branch de continuidade: `test/homologacao-operacional`;
 - PR mais recente: [#39 — correção da serialização de validações](https://github.com/ChoqueanoIV/railops-app/pull/39), mesclada;
 - checkpoint consolidado na `main`: `66f10a0`;
-- Task 019 em homologação na branch `test/homologacao-operacional`;
+- Task 019 concluída com achados encaminhados na branch
+  `test/homologacao-operacional`;
 - worktree limpo antes da atualização deste checkpoint documental;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
@@ -39,8 +40,8 @@ Atualizado em: 28/08/2026
 - 018 — ADRs e governança arquitetural: integrada no PR #37.
 - 019A — serialização dos erros de validação 422: integrada no PR #39.
 
-O pacote técnico das tasks 001–018 foi integralmente executado. A segunda fase
-está proposta em `docs/ROADMAP.md`, e a Task 019 está em homologação.
+O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
+concluída e originou as correções planejadas 019B e 019C.
 
 ## Validação da task 019A
 
@@ -75,11 +76,11 @@ está proposta em `docs/ROADMAP.md`, e a Task 019 está em homologação.
 
 ## Próximo passo obrigatório
 
-1. confirmar worktree limpo e `main` sincronizada;
-2. ler `AGENTS.md`, este checkpoint e `docs/tasks/README.md`;
-3. ler a evidência em `docs/validation/019-technical-homologation.md`;
-4. retomar somente a homologação da Task 019 com a correção 019A incorporada;
-5. obter validação humana e decisões de produto antes de concluir a task.
+1. revisar e integrar a documentação final da Task 019;
+2. executar somente `docs/tasks/019b-brisamar-line-positions.md` em branch
+   própria, com baseline antes da alteração;
+3. concluir e integrar a 019B antes de iniciar a 019C;
+4. não iniciar as tasks 020–026 antes das correções 019B e 019C.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.

@@ -20,7 +20,9 @@ edição, exportações, relatórios consolidados ou deploy público.
 | ID | Entrega | Dependência | Gate de negócio |
 |---|---|---|---|
 | 019 | Homologação operacional e de UX | 001–018 | execução por usuários representativos |
-| 020 | Descoberta e contrato de consulta | 019 | público, visibilidade, filtros e paginação |
+| 019B | Ocupação completa de L22/L24 | 019 | regra validada por manobrador |
+| 019C | Rascunho e confirmação consolidada | 019B | fluxo e bloqueio final aprovados |
+| 020 | Descoberta e contrato de consulta | 019C | público, visibilidade, filtros e paginação |
 | 021 | Listagem e filtros de passagens | 020 | contrato aprovado |
 | 022 | Histórico auditável de edições | 020, 021 | quem pode consultar e quais dados exibir |
 | 023 | Exportações e relatórios | 021, 022 | formato, período, campos e finalidade |
@@ -31,15 +33,21 @@ edição, exportações, relatórios consolidados ou deploy público.
 Os IDs 020–026 representam direção planejada, não autorização para implementar.
 Cada item deve ganhar uma task detalhada apenas depois que seu gate for decidido.
 
-## Decisões pendentes
+## Decisões confirmadas para a Task 020
 
-Antes da Task 020, registrar com os usuários do processo:
+- consulta por todos os manobradores autenticados, Instrutores e Monitores de
+  Qualidade;
+- conteúdo confirmado em modo somente leitura;
+- filtros por período/data, terminal, turma, turno, responsável e protocolo;
+- últimos 30 dias por padrão, mais recentes primeiro e 20 itens por página;
+- períodos maiores disponíveis sem exclusão dos registros antigos;
+- responsável, horário da confirmação e conteúdo final visíveis a todo o
+  público autorizado;
+- alterações do rascunho visíveis somente a Instrutores e Monitores de
+  Qualidade.
 
-- quem pode listar passagens: todos os autenticados, somente a própria turma ou
-  outro recorte;
-- filtros necessários e período máximo de consulta;
-- ordenação e paginação esperadas;
-- quem pode visualizar autores e snapshots de alterações;
+## Decisões ainda pendentes
+
 - quais relatórios são úteis e se a saída deve ser tela, CSV ou PDF;
 - política de retenção e tratamento dos dados operacionais;
 - ambiente e público do primeiro deploy.

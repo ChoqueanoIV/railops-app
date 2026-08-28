@@ -30,9 +30,12 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 |---|---|---|
 | 019 | Homologação operacional e de UX | 001–018 |
 | 019A | Serialização dos erros de validação | achado da 019 |
+| 019B | Ocupação completa das linhas 22 e 24 do Brisamar | achado da 019 |
+| 019C | Rascunho e confirmação consolidada da passagem | 019B |
 
-As entregas 020–026 ainda são propostas condicionadas às decisões de negócio
-registradas no roadmap. Criar a task detalhada somente após aprovar seu gate.
+As correções 019B e 019C devem ser concluídas antes da fase de consulta. As
+entregas 020–026 continuam condicionadas aos gates registrados no roadmap;
+criar cada task detalhada somente após aprovar seu gate.
 
 ## Como pedir uma task ao Codex
 
