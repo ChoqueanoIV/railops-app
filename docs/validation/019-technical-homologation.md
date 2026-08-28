@@ -98,6 +98,11 @@ uso manual da interface.
 - Consulta inicial: últimos 30 dias, com registros mais recentes primeiro;
 - Paginação: 20 passagens por página;
 - Retenção na consulta: permitir períodos maiores sem apagar registros antigos;
+- Visibilidade geral: nome e matrícula de quem preencheu, data e horário da
+  confirmação final e conteúdo final dos dois terminais;
+- Auditoria restrita: o histórico detalhado das alterações realizadas enquanto
+  o ciclo estava em rascunho será visível somente para Instrutores e Monitores
+  de Qualidade;
 - Segurança documental: matrículas reais dos perfis especiais não devem ser
   registradas nos documentos versionados.
 

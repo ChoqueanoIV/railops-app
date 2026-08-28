@@ -1,6 +1,6 @@
 # Homologação operacional e de UX
 
-Status: `EM ANDAMENTO`
+Status: `CONCLUÍDA COM ACHADOS ENCAMINHADOS`
 
 ## Objetivo
 
@@ -30,10 +30,10 @@ representativas do uso real, antes de criar novas funcionalidades.
 ## Critérios de aceite
 
 - [x] instalação reproduzida a partir do README em ambiente limpo;
-- [ ] fluxos críticos executados e resultados registrados;
+- [x] fluxos críticos executados e resultados registrados;
 - [x] regras protegidas pelo baseline permanecem equivalentes;
 - [x] problemas encontrados possuem passos de reprodução e severidade;
-- [ ] decisões necessárias para a Task 020 estão documentadas;
+- [x] decisões necessárias para a Task 020 estão documentadas;
 - [x] checkpoint indica claramente o próximo passo aprovado.
 
 ## Evidências
@@ -43,8 +43,8 @@ Preencher ao executar a task:
 - Branch: `test/homologacao-operacional`.
 - Ambiente: Docker Desktop, PostgreSQL 17, backend containerizado e React/Vite
   local; migration no `head`.
-- Participantes/perfis: homologação técnica automatizada pelo mantenedor;
-  avaliação com usuários representativos ainda pendente.
+- Participantes/perfis: homologação técnica pelo mantenedor e validação humana
+  por manobrador representativo do uso real.
 - Fluxos aprovados: primeiro acesso, login, logout, proteção de rota, Brisamar,
   TECON com e sem atendimento, consulta, edição autorizada e modo somente
   leitura.
@@ -64,9 +64,18 @@ Preencher ao executar a task:
   somente leitura. Filtros confirmados: período/data, terminal, turma, turno,
   responsável por nome ou matrícula e protocolo. Consulta inicial dos últimos
   30 dias, mais recentes primeiro e 20 itens por página, sem exclusão dos
-  registros antigos. Visibilidade detalhada de autoria ainda precisa ser
-  definida.
+  registros antigos. Todos os usuários autorizados veem responsável, momento
+  da confirmação e conteúdo final; somente Instrutores e Monitores de Qualidade
+  veem o histórico detalhado das alterações do rascunho.
 - Testes automatizados: backend 134 aprovados e 94% de cobertura; frontend 13
   aprovados; lint, formato, tipos e builds aprovados.
 - Observações: TECON com e sem atendimento validados tecnicamente; nenhuma
   regra de negócio foi alterada nesta etapa.
+
+## Encerramento
+
+A homologação cumpriu seu objetivo de validar o produto existente, identificar
+lacunas operacionais e definir os gates da consulta. Os achados de Brisamar e
+do fluxo consolidado devem ser tratados em tasks corretivas isoladas antes da
+implementação do histórico. A conclusão desta task não declara esses defeitos
+corrigidos e não autoriza iniciar diretamente as tasks 020–026.
