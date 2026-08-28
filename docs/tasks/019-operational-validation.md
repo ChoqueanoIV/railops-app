@@ -46,11 +46,13 @@ Preencher ao executar a task:
 - Participantes/perfis: homologação técnica automatizada pelo mantenedor;
   avaliação com usuários representativos ainda pendente.
 - Fluxos aprovados: primeiro acesso, login, logout, proteção de rota, Brisamar,
-  TECON sem atendimento, consulta, edição autorizada e modo somente leitura.
-- Defeitos encontrados: handler de validação pode transformar `422` em `500`;
-  severidade alta e reprodução em
+  TECON com e sem atendimento, consulta, edição autorizada e modo somente
+  leitura.
+- Defeitos encontrados: handler de validação transformava `422` em `500`;
+  severidade alta, corrigido pela Task 019A/PR #39 e revalidado em
   [`../validation/019-technical-homologation.md`](../validation/019-technical-homologation.md).
 - Decisões de produto: gates da Task 020 ainda dependem dos usuários.
-- Testes automatizados: backend 133 aprovados e 94% de cobertura; frontend 13
+- Testes automatizados: backend 134 aprovados e 94% de cobertura; frontend 13
   aprovados; lint, formato, tipos e builds aprovados.
-- Observações: nenhuma correção ou regra de negócio foi alterada nesta etapa.
+- Observações: TECON com e sem atendimento validados tecnicamente; nenhuma
+  regra de negócio foi alterada nesta etapa.

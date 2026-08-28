@@ -1,6 +1,6 @@
 # Homologação técnica da Task 019
 
-Data: 26/08/2026
+Data: 28/08/2026
 
 Branch: `test/homologacao-operacional`
 
@@ -23,13 +23,16 @@ Branch: `test/homologacao-operacional`
 - edição autorizada do Brisamar durante o turno noturno;
 - confirmação da edição com terminal, data, turma, turno e protocolo;
 - criação de TECON sem atendimento pelo React;
+- criação de TECON com atendimento da Área 1 pela API;
+- consulta do TECON com atendimento no React, preservando horários e campos;
+- identidade da passagem TECON bloqueada durante a edição;
 - confirmação sem link de edição para passagem fora da janela permitida;
-- 133 testes backend, cobertura de 94%, Ruff, formatter e mypy;
+- 134 testes backend, cobertura de 94%, Ruff, formatter e mypy;
 - 13 testes frontend, ESLint, Prettier, TypeScript e build Vite.
 
-## Defeito encontrado — severidade alta
+## Defeito corrigido — severidade alta
 
-### Handler de validação pode transformar 422 em 500
+### Handler de validação transformava 422 em 500
 
 Ao receber uma combinação que falha em um `model_validator` do Pydantic, o
 `RequestValidationError.errors()` inclui um objeto `ValueError` em `ctx`. O
@@ -51,9 +54,18 @@ Impacto:
 - o usuário não recebe orientação sobre o campo que precisa corrigir;
 - o contrato documentado de validação HTTP 422 não é preservado.
 
-A correção não foi aplicada durante a homologação. Ela deve sanitizar os
-detalhes da validação para tipos serializáveis e ganhar teste de regressão de
-API antes da continuação da Task 019.
+A correção foi implementada isoladamente na Task 019A e integrada pelo PR #39.
+O cenário inválido foi repetido após a integração: a API devolveu HTTP `422`
+com detalhes serializáveis e o React exibiu "Dados da requisição inválidos",
+sem erro `500` nem falsa falha de conexão.
+
+## Limitação da automação de interface
+
+Durante a retomada, o controlador do navegador não manteve no estado React os
+valores digitados nos campos nativos `date` e `time`. O mesmo payload completo
+foi aceito pela API e depois carregado corretamente no formulário React. Essa
+limitação pertence à automação usada na homologação e não foi reproduzida no
+uso manual da interface.
 
 ## Observações de UX
 
