@@ -95,6 +95,9 @@ uso manual da interface.
   públicos acima;
 - Filtros mínimos confirmados: período/data, terminal, turma, turno, matrícula
   ou nome do responsável e protocolo;
+- Consulta inicial: últimos 30 dias, com registros mais recentes primeiro;
+- Paginação: 20 passagens por página;
+- Retenção na consulta: permitir períodos maiores sem apagar registros antigos;
 - Segurança documental: matrículas reais dos perfis especiais não devem ser
   registradas nos documentos versionados.
 
