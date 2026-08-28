@@ -56,7 +56,8 @@ Preencher ao executar a task:
   e correção pendente em task isolada.
 - Achado humano: a confirmação não reconhece quando Brisamar e TECON já foram
   preenchidos; severidade média. A UX definida exige uma revisão consolidada
-  dos dois terminais antes da confirmação definitiva; persistência em rascunho
+  dos dois terminais antes da confirmação definitiva. Após essa confirmação,
+  ambos ficam imediatamente bloqueados para edição; persistência em rascunho
   ainda depende de decisão técnica.
 - Decisões de produto: gates da Task 020 ainda dependem dos usuários.
 - Testes automatizados: backend 134 aprovados e 94% de cobertura; frontend 13

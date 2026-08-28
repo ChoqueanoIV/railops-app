@@ -122,6 +122,9 @@ uso manual da interface.
   registro já salvo;
 - Decisão de UX: a revisão deve permitir conferir todos os dados dos dois
   terminais antes de confirmar;
+- Decisão de negócio: a confirmação final encerra o ciclo e bloqueia
+  imediatamente qualquer edição posterior em Brisamar e TECON, mesmo que a
+  janela de edição original ainda esteja aberta;
 - Decisão técnica pendente: definir se o primeiro preenchimento será salvo como
   rascunho no servidor ou persistido definitivamente antes da revisão, além de
   identificar que as duas passagens pertencem ao mesmo ciclo de turno.
