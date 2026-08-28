@@ -61,6 +61,27 @@ def test_erro_de_validacao_preserva_lista_em_detail():
     assert conteudo["error"]["details"] == conteudo["detail"]
 
 
+def test_erro_de_validacao_serializa_value_error_do_contexto():
+    erro = RequestValidationError(
+        [
+            {
+                "type": "value_error",
+                "loc": ("body", "detalhe"),
+                "msg": "Value error, combinação inválida",
+                "input": {"houve_atendimento": False},
+                "ctx": {"error": ValueError("combinação inválida")},
+            }
+        ]
+    )
+
+    resposta = asyncio.run(tratar_validacao(MagicMock(), erro))
+    conteudo = conteudo_json(resposta)
+
+    assert resposta.status_code == 422
+    assert conteudo["detail"][0]["ctx"]["error"] == "combinação inválida"
+    assert conteudo["error"]["details"] == conteudo["detail"]
+
+
 def test_http_exception_legada_recebe_envelope_sem_perder_detail():
     erro = HTTPException(status_code=403, detail="Acesso negado.")
 
