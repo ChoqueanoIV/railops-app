@@ -103,3 +103,22 @@ uso manual da interface.
 - Encaminhamento: corrigir em task isolada, com migration, testes e leitura
   compatível das passagens existentes. Não alterar o modelo durante a sessão
   de homologação.
+
+### Confirmação não reconhece os dois terminais concluídos — severidade média
+
+- Perfil: manobrador, validação do fluxo completo dos dois terminais;
+- Fluxo: confirmação após registrar Brisamar e TECON;
+- Resultado: lacuna funcional e de navegação;
+- Comportamento atual: toda confirmação oferece `Preencher o outro terminal`,
+  independentemente de o outro terminal já ter sido registrado;
+- Causa confirmada: a tela usa apenas o terminal da última passagem e não
+  mantém nem consulta o estado de conclusão do conjunto Brisamar + TECON;
+- Comportamento necessário: após o primeiro terminal, oferecer o preenchimento
+  do terminal pendente; após o segundo, direcionar para uma tela final ainda a
+  ser definida;
+- Impacto: o usuário pode entender que ainda existe uma etapa obrigatória ou
+  iniciar um preenchimento duplicado;
+- Classificação: média, pois confunde a conclusão do fluxo, mas não altera um
+  registro já salvo;
+- Decisão pendente: definir conteúdo e ações da tela final e como identificar
+  que as duas passagens pertencem ao mesmo ciclo de turno.

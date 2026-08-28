@@ -54,6 +54,8 @@ Preencher ao executar a task:
 - Achado humano: L22 e L24 precisam registrar `SUP` e `INF` simultaneamente, e
   o Brisamar precisa incluir `Travessão L22` e `Travessão L24`; severidade alta
   e correção pendente em task isolada.
+- Achado humano: a confirmação não reconhece quando Brisamar e TECON já foram
+  preenchidos; severidade média e destino final ainda pendente de decisão.
 - Decisões de produto: gates da Task 020 ainda dependem dos usuários.
 - Testes automatizados: backend 134 aprovados e 94% de cobertura; frontend 13
   aprovados; lint, formato, tipos e builds aprovados.
