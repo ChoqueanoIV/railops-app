@@ -1,6 +1,6 @@
 # Ocupação completa das linhas 22 e 24 do Brisamar
 
-Status: `PLANEJADA`
+Status: `CONCLUÍDA LOCALMENTE`
 
 ## Objetivo
 
@@ -48,16 +48,16 @@ das duas deve excluir ou substituir a outra.
 
 ## Critérios de aceite
 
-- [ ] L22 Superior e L22 Inferior aceitam conteúdos simultâneos;
-- [ ] L24 Superior e L24 Inferior aceitam conteúdos simultâneos;
-- [ ] Travessão L22 e Travessão L24 possuem campos próprios;
-- [ ] criação, consulta e edição carregam os seis valores corretamente;
-- [ ] passagens antigas continuam consultáveis sem perda de significado;
-- [ ] upgrade e downgrade da migration são testados quando tecnicamente seguros;
-- [ ] contratos inválidos continuam retornando erros compatíveis;
-- [ ] suítes backend e frontend, lint, tipos e build são aprovados;
-- [ ] evidências e checkpoint são atualizados;
-- [ ] nenhuma regra fora deste requisito é alterada.
+- [x] L22 Superior e L22 Inferior aceitam conteúdos simultâneos;
+- [x] L24 Superior e L24 Inferior aceitam conteúdos simultâneos;
+- [x] Travessão L22 e Travessão L24 possuem campos próprios;
+- [x] criação, consulta e edição carregam os seis valores corretamente;
+- [x] passagens antigas continuam consultáveis sem perda de significado;
+- [x] upgrade e downgrade da migration são testados quando tecnicamente seguros;
+- [x] contratos inválidos continuam retornando erros compatíveis;
+- [x] suítes backend e frontend, lint, tipos e build são aprovados;
+- [x] evidências e checkpoint são atualizados;
+- [x] nenhuma regra fora deste requisito é alterada.
 
 ## Risco principal
 
@@ -68,4 +68,21 @@ migration deve ser validada contra dados antigos antes da mudança funcional.
 
 ## Evidências
 
-Preencher durante a execução.
+- baseline anterior à alteração: 134 testes de backend e 13 testes React
+  aprovados, além de lint, tipos e build;
+- migration `e8f1a2b3c4d5` validada no banco Docker preservado com ciclo completo
+  de upgrade, downgrade e novo upgrade;
+- no upgrade, as ocupações históricas `22 SUP` e `24 INF` conservaram seus
+  conteúdos; no downgrade, voltaram ao catálogo anterior com o lado restaurado;
+- criação real pela API Docker retornou 12 ocupações e preservou simultaneamente
+  `22 SUP`, `22 INF`, `Travessão L22`, `24 SUP`, `24 INF` e `Travessão L24`;
+- a passagem histórica `ad1f8db7-a2bb-419b-af7e-8e84319d56ec`, anterior à
+  migration, permaneceu consultável com suas oito ocupações originais;
+- o registro temporário da validação integrada e todos os seus filhos foram
+  removidos em transação; nenhum dado de homologação permaneceu alterado;
+- resultado final local: 135 testes de backend e 13 testes React aprovados;
+- Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check TypeScript e build
+  Vite aprovados;
+- frontend React e fallback legado usam os 12 campos independentes, sem o
+  seletor exclusivo de posição;
+- nenhuma regra do TECON ou das demais linhas do Brisamar foi alterada.

@@ -4,12 +4,11 @@ Atualizado em: 28/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
+- branch de trabalho atual: `feat/brisamar-l22-l24-completas`;
 - PR mais recente: [#40 — homologação operacional da Task 019](https://github.com/ChoqueanoIV/railops-app/pull/40), mesclada;
 - merge consolidado na `main`: `34e8cc6`;
-- Task 019 concluída e integrada, com achados encaminhados às Tasks 019B e
-  019C;
-- worktree limpo antes da atualização deste checkpoint documental;
+- Task 019B concluída e validada localmente, aguardando commit e integração;
+- Task 019C permanece como próximo requisito, sem implementação iniciada;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -41,7 +40,21 @@ Atualizado em: 28/08/2026
 - 019A — serialização dos erros de validação 422: integrada no PR #39.
 
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
-concluída e originou as correções planejadas 019B e 019C.
+concluída e originou as correções 019B e 019C. A 019B está concluída e validada
+localmente; a 019C ainda não foi iniciada.
+
+## Validação local da task 019B
+
+- 135 testes do backend e 13 testes React aprovados;
+- Ruff, formatter Ruff, mypy, ESLint, Prettier e type-check aprovados;
+- build Vite de produção aprovado;
+- migration `e8f1a2b3c4d5` validada com upgrade, downgrade e novo upgrade no
+  banco Docker preservado;
+- dados históricos de L22/L24 preservados e consultáveis;
+- criação real pela API confirmou os 12 campos independentes, inclusive lados
+  superior e inferior simultâneos e os travessões L22/L24;
+- registro temporário usado no teste integrado removido em transação;
+- nenhuma regra do TECON ou das demais linhas foi alterada.
 
 ## Validação da task 019A
 
@@ -76,11 +89,12 @@ concluída e originou as correções planejadas 019B e 019C.
 
 ## Próximo passo obrigatório
 
-1. revisar e integrar a documentação final da Task 019;
-2. executar somente `docs/tasks/019b-brisamar-line-positions.md` em branch
-   própria, com baseline antes da alteração;
-3. concluir e integrar a 019B antes de iniciar a 019C;
-4. não iniciar as tasks 020–026 antes das correções 019B e 019C.
+1. revisar o diff final da Task 019B, criar o commit e publicar a branch;
+2. abrir e validar o PR da 019B, aguardando os checks remotos;
+3. integrar a 019B antes de iniciar a 019C;
+4. executar somente `docs/tasks/019c-consolidated-draft-confirmation.md` após
+   a integração da 019B;
+5. não iniciar as tasks 020–026 antes da conclusão da 019C.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.
