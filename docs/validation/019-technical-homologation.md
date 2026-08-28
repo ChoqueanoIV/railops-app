@@ -83,3 +83,23 @@ uso manual da interface.
 - decidir público, visibilidade, filtros e paginação para a Task 020;
 - decidir quem pode consultar autores e snapshots de alterações;
 - definir finalidade e formato de relatórios futuros.
+
+## Achados da validação humana
+
+### Brisamar não representa integralmente L22 e L24 — severidade alta
+
+- Perfil: manobrador, validação em cenário operacional realista;
+- Fluxo: preenchimento da ocupação das linhas do Pátio Brisamar;
+- Resultado: defeito funcional;
+- Comportamento atual: cada uma das linhas 22 e 24 aceita uma única descrição
+  de vagões e obriga escolher `SUP` ou `INF`;
+- Comportamento necessário: permitir registrar vagões simultaneamente nas
+  posições superior e inferior de L22 e L24;
+- Lacuna adicional: incluir campos independentes para `Travessão L22` e
+  `Travessão L24`;
+- Impacto: uma passagem pode omitir parte da ocupação real do pátio e entregar
+  informação operacional incompleta ao turno seguinte;
+- Classificação: alta, pois existe perda potencial de informação operacional;
+- Encaminhamento: corrigir em task isolada, com migration, testes e leitura
+  compatível das passagens existentes. Não alterar o modelo durante a sessão
+  de homologação.
