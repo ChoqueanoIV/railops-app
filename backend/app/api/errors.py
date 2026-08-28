@@ -2,6 +2,7 @@ import logging
 from collections.abc import Mapping
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -51,6 +52,18 @@ def _conteudo_erro(
     }
 
 
+def _detalhes_validacao_serializaveis(erro: RequestValidationError) -> object:
+    detalhes = erro.errors()
+    for detalhe in detalhes:
+        contexto = detalhe.get("ctx")
+        if contexto is not None:
+            detalhe["ctx"] = {
+                chave: str(valor) if isinstance(valor, Exception) else valor
+                for chave, valor in contexto.items()
+            }
+    return jsonable_encoder(detalhes)
+
+
 async def tratar_api_error(_request: Request, erro: Exception) -> JSONResponse:
     assert isinstance(erro, ApiError)
     return JSONResponse(
@@ -67,7 +80,7 @@ async def tratar_api_error(_request: Request, erro: Exception) -> JSONResponse:
 
 async def tratar_validacao(_request: Request, erro: Exception) -> JSONResponse:
     assert isinstance(erro, RequestValidationError)
-    detalhes = erro.errors()
+    detalhes = _detalhes_validacao_serializaveis(erro)
     return JSONResponse(
         status_code=422,
         content=_conteudo_erro(
