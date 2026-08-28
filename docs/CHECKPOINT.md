@@ -4,11 +4,11 @@ Atualizado em: 28/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `test/homologacao-operacional`;
-- PR mais recente: [#39 — correção da serialização de validações](https://github.com/ChoqueanoIV/railops-app/pull/39), mesclada;
-- checkpoint consolidado na `main`: `66f10a0`;
-- Task 019 concluída com achados encaminhados na branch
-  `test/homologacao-operacional`;
+- branch de continuidade: `main`;
+- PR mais recente: [#40 — homologação operacional da Task 019](https://github.com/ChoqueanoIV/railops-app/pull/40), mesclada;
+- merge consolidado na `main`: `34e8cc6`;
+- Task 019 concluída e integrada, com achados encaminhados às Tasks 019B e
+  019C;
 - worktree limpo antes da atualização deste checkpoint documental;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
