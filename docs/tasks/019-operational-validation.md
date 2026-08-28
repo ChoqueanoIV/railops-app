@@ -55,7 +55,9 @@ Preencher ao executar a task:
   o Brisamar precisa incluir `Travessão L22` e `Travessão L24`; severidade alta
   e correção pendente em task isolada.
 - Achado humano: a confirmação não reconhece quando Brisamar e TECON já foram
-  preenchidos; severidade média e destino final ainda pendente de decisão.
+  preenchidos; severidade média. A UX definida exige uma revisão consolidada
+  dos dois terminais antes da confirmação definitiva; persistência em rascunho
+  ainda depende de decisão técnica.
 - Decisões de produto: gates da Task 020 ainda dependem dos usuários.
 - Testes automatizados: backend 134 aprovados e 94% de cobertura; frontend 13
   aprovados; lint, formato, tipos e builds aprovados.

@@ -114,11 +114,14 @@ uso manual da interface.
 - Causa confirmada: a tela usa apenas o terminal da última passagem e não
   mantém nem consulta o estado de conclusão do conjunto Brisamar + TECON;
 - Comportamento necessário: após o primeiro terminal, oferecer o preenchimento
-  do terminal pendente; após o segundo, direcionar para uma tela final ainda a
-  ser definida;
+  do terminal pendente; após o segundo, exibir uma revisão consolidada de toda
+  a passagem de Brisamar e TECON antes da confirmação definitiva;
 - Impacto: o usuário pode entender que ainda existe uma etapa obrigatória ou
   iniciar um preenchimento duplicado;
 - Classificação: média, pois confunde a conclusão do fluxo, mas não altera um
   registro já salvo;
-- Decisão pendente: definir conteúdo e ações da tela final e como identificar
-  que as duas passagens pertencem ao mesmo ciclo de turno.
+- Decisão de UX: a revisão deve permitir conferir todos os dados dos dois
+  terminais antes de confirmar;
+- Decisão técnica pendente: definir se o primeiro preenchimento será salvo como
+  rascunho no servidor ou persistido definitivamente antes da revisão, além de
+  identificar que as duas passagens pertencem ao mesmo ciclo de turno.
