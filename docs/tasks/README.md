@@ -29,6 +29,7 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | ID | Task | Dependência |
 |---|---|---|
 | 019 | Homologação operacional e de UX | 001–018 |
+| 019A | Serialização dos erros de validação | achado da 019 |
 
 As entregas 020–026 ainda são propostas condicionadas às decisões de negócio
 registradas no roadmap. Criar a task detalhada somente após aprovar seu gate.
