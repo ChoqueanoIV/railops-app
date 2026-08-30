@@ -38,13 +38,16 @@ Cada item deve ganhar uma task detalhada apenas depois que seu gate for decidido
 - consulta por todos os manobradores autenticados, Instrutores e Monitores de
   Qualidade;
 - conteúdo confirmado em modo somente leitura;
-- filtros por período/data, terminal, turma, turno, responsável e protocolo;
+- filtros por período/data, turma, turno, responsável e protocolo;
 - últimos 30 dias por padrão, mais recentes primeiro e 20 itens por página;
 - períodos maiores disponíveis sem exclusão dos registros antigos;
 - responsável, horário da confirmação e conteúdo final visíveis a todo o
   público autorizado;
 - alterações do rascunho visíveis somente a Instrutores e Monitores de
   Qualidade.
+- cada item da consulta representa uma passagem completa, reunindo Brisamar e
+  TECON; não haverá filtro por terminal, pois todo ciclo confirmado contém os
+  dois terminais.
 
 ## Decisões ainda pendentes
 

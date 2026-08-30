@@ -9,6 +9,7 @@ Atualizado em: 30/08/2026
 - merge consolidado na `main`: `02e9683`;
 - Task 019B concluída, validada e integrada;
 - Task 019C concluída, validada e integrada;
+- Task 020 concluída e validada localmente, aguardando integração;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -107,10 +108,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar e executar somente `docs/tasks/020-discovery-query-contract.md`;
-2. validar o contrato contra controller, schemas, models e testes atuais;
-3. preencher as evidências e concluir a task sem alterar código funcional;
-4. detalhar a Task 021 somente depois da aprovação desse contrato.
+1. revisar o diff documental final da Task 020;
+2. publicar a branch e integrar a Task 020 após os checks aplicáveis;
+3. detalhar a Task 021 a partir do contrato aprovado;
+4. não implementar a listagem antes de validar o plano da Task 021.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.

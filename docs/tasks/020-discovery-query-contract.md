@@ -1,6 +1,6 @@
 # Descoberta e contrato de consulta
 
-Status: `PLANEJADA`
+Status: `CONCLUÍDA LOCALMENTE`
 
 ## Objetivo
 
@@ -38,11 +38,11 @@ partes da mesma passagem operacional.
 - período padrão: últimos 30 dias, considerando a data de início do turno;
 - paginação padrão: página 1 com 20 ciclos;
 - períodos maiores são permitidos e não provocam exclusão de registros;
-- filtros opcionais combináveis: data inicial, data final, terminal, turma,
-  turno, responsável e protocolo;
+- filtros opcionais combináveis: data inicial, data final, turma, turno,
+  responsável e protocolo;
 - protocolo corresponde ao UUID do ciclo consolidado;
-- filtro de terminal seleciona ciclos que possuam a passagem daquele terminal,
-  sem remover o outro terminal da resposta consolidada;
+- não existe filtro por terminal: todo ciclo confirmado contém Brisamar e TECON
+  e esse filtro não reduziria os resultados;
 - responsável pode ser localizado por matrícula ou nome, com identificação
   inequívoca na resposta;
 - somente ciclos em estado `CONFIRMADO` entram na coleção;
@@ -59,7 +59,6 @@ Parâmetros de query:
 |---|---|---|---|
 | `data_inicio` | data ISO | hoje menos 29 dias | data de início do turno |
 | `data_fim` | data ISO | hoje | inclusiva e não anterior ao início |
-| `terminal` | enum | ausente | `BRISAMAR` ou `TECON` |
 | `turma` | enum | ausente | `A`, `B`, `C` ou `D` |
 | `turno` | enum | ausente | `DIURNO` ou `NOTURNO` |
 | `responsavel` | texto | ausente | matrícula exata ou trecho do nome |
@@ -116,16 +115,28 @@ Resposta de sucesso proposta:
 
 ## Critérios de aceite
 
-- [ ] inventário atual confrontado com controller, schemas, models e testes;
-- [ ] unidade de consulta definida como ciclo consolidado confirmado;
-- [ ] filtros, ordenação, período e paginação definidos sem ambiguidade;
-- [ ] resposta inclui protocolo, responsável e horário de confirmação;
-- [ ] compatibilidade com os endpoints atuais explicitamente protegida;
-- [ ] acesso a rascunhos e snapshots excluído deste contrato;
-- [ ] ausência atual de perfil/cargo registrada como dependência futura;
-- [ ] nenhum código funcional ou schema de banco alterado;
-- [ ] plano da Task 021 pode ser derivado sem inventar regra de negócio.
+- [x] inventário atual confrontado com controller, schemas, models e testes;
+- [x] unidade de consulta definida como ciclo consolidado confirmado;
+- [x] filtros, ordenação, período e paginação definidos sem ambiguidade;
+- [x] resposta inclui protocolo, responsável e horário de confirmação;
+- [x] compatibilidade com os endpoints atuais explicitamente protegida;
+- [x] acesso a rascunhos e snapshots excluído deste contrato;
+- [x] ausência atual de perfil/cargo registrada como dependência futura;
+- [x] nenhum código funcional ou schema de banco alterado;
+- [x] plano da Task 021 pode ser derivado sem inventar regra de negócio.
 
 ## Evidências
 
-A preencher durante a execução da task.
+- `Usuario` possui nome e matrícula, mas ainda não possui perfil ou cargo;
+- `CicloPassagem` registra identidade operacional, autor, estado e horário da
+  confirmação;
+- a confirmação atual exige Brisamar e TECON, tornando o filtro por terminal
+  sem efeito sobre ciclos confirmados;
+- controller e repository não possuem endpoint nem consulta paginada de
+  coleção;
+- endpoint individual autenticado e contrato consolidado existente foram
+  preservados;
+- decisão do responsável pelo produto confirmou uma linha por passagem
+  completa e a remoção do filtro por terminal;
+- validação realizada somente por inspeção documental e estática, sem mudança
+  de código funcional, banco ou contrato HTTP existente.
