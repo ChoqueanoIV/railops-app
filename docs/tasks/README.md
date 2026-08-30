@@ -32,9 +32,11 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 019A | Serialização dos erros de validação | achado da 019 |
 | 019B | Ocupação completa das linhas 22 e 24 do Brisamar | achado da 019 |
 | 019C | Rascunho e confirmação consolidada da passagem | 019B |
+| 020 | Descoberta e contrato de consulta | 019C |
 
-As correções 019B e 019C devem ser concluídas antes da fase de consulta. As
-entregas 020–026 continuam condicionadas aos gates registrados no roadmap;
+As correções 019B e 019C estão concluídas. A Task 020 teve seu gate aprovado e
+seu plano detalhado em [`020-discovery-query-contract.md`](020-discovery-query-contract.md).
+As entregas 021–026 continuam condicionadas aos gates registrados no roadmap;
 criar cada task detalhada somente após aprovar seu gate.
 
 ## Como pedir uma task ao Codex
