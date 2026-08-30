@@ -12,6 +12,7 @@ ENDPOINTS_PUBLICOS = {
     "/passagens/ciclos/{ciclo_id}": {"get"},
     "/passagens/ciclos/{ciclo_id}/confirmar": {"post"},
     "/passagens/{passagem_id}": {"get", "put"},
+    "/passagens/{passagem_id}/historico": {"get"},
 }
 
 
@@ -35,6 +36,7 @@ def test_openapi_mantem_status_de_sucesso_atual():
     assert "201" in caminhos["/passagens/tecon"]["post"]["responses"]
     assert "200" in caminhos["/passagens/{passagem_id}"]["get"]["responses"]
     assert "200" in caminhos["/passagens/{passagem_id}"]["put"]["responses"]
+    assert "200" in caminhos["/passagens/{passagem_id}/historico"]["get"]["responses"]
 
 
 def test_openapi_mantem_autenticacao_apenas_nas_rotas_de_passagem():
@@ -52,6 +54,7 @@ def test_openapi_mantem_autenticacao_apenas_nas_rotas_de_passagem():
         "/passagens/ciclos/{ciclo_id}",
         "/passagens/ciclos/{ciclo_id}/confirmar",
         "/passagens/{passagem_id}",
+        "/passagens/{passagem_id}/historico",
     ):
         for operacao in caminhos[caminho].values():
             assert operacao["security"] == [{"HTTPBearer": []}]
@@ -67,6 +70,7 @@ def test_openapi_documenta_erros_conhecidos_com_schema_unico():
         ("/passagens/tecon", "post"): {"400", "401"},
         ("/passagens/{passagem_id}", "get"): {"401", "404"},
         ("/passagens/{passagem_id}", "put"): {"400", "401"},
+        ("/passagens/{passagem_id}/historico", "get"): {"401", "403", "404"},
     }
 
     for (caminho, metodo), status_esperados in respostas_esperadas.items():

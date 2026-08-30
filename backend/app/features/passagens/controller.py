@@ -6,7 +6,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query
 
 from app.api.errors import ApiError, resposta_erro
-from app.features.auth.dependencies import obter_usuario_atual
+from app.features.auth.dependencies import (
+    exigir_consulta_historico,
+    obter_usuario_atual,
+)
 from app.features.auth.models import Usuario
 from app.features.passagens.dependencies import (
     obter_ciclo_service,
@@ -27,6 +30,7 @@ from app.features.passagens.schemas import (
     CicloConsultaListaResponse,
     CicloPassagemResponse,
     EquipeMembroRequest,
+    HistoricoAlteradorResponse,
     LinhaOcupacaoRequest,
     PaginacaoResponse,
     PassagemAtualizadaResponse,
@@ -34,6 +38,8 @@ from app.features.passagens.schemas import (
     PassagemBrisamarRequest,
     PassagemConsultaResponse,
     PassagemCriadaResponse,
+    PassagemHistoricoItemResponse,
+    PassagemHistoricoListaResponse,
     PassagemTeconEdicaoRequest,
     PassagemTeconRequest,
     RadioUsoRequest,
@@ -291,6 +297,57 @@ def confirmar_ciclo(
             status_code=400, code="CICLO_CONFIRMATION_INVALID", message=str(erro)
         ) from erro
     return montar_resposta_ciclo(ciclo, passagem_service, usuario_atual)
+
+
+@router.get(
+    "/{passagem_id}/historico",
+    response_model=PassagemHistoricoListaResponse,
+    summary="Consultar histórico auditável da passagem",
+    responses={
+        401: resposta_erro("Não autenticado"),
+        403: resposta_erro("Perfil sem permissão"),
+        404: resposta_erro("Passagem não encontrada"),
+    },
+)
+def consultar_historico_passagem(
+    passagem_id: uuid.UUID,
+    pagina: Annotated[int, Query(ge=1)] = 1,
+    por_pagina: Annotated[int, Query(ge=1, le=100)] = 20,
+    service: PassagemService = Depends(obter_passagem_service),
+    usuario_atual: Usuario = Depends(exigir_consulta_historico),
+) -> PassagemHistoricoListaResponse:
+    try:
+        passagem, itens, total = service.consultar_historico(
+            passagem_id, pagina, por_pagina
+        )
+    except PassagemError as erro:
+        raise ApiError(
+            status_code=404, code="PASSAGEM_NOT_FOUND", message=str(erro)
+        ) from erro
+
+    return PassagemHistoricoListaResponse(
+        passagem_atual=montar_resposta_consulta(
+            passagem, service.passagem_editavel(passagem, usuario_atual)
+        ),
+        itens=[
+            PassagemHistoricoItemResponse(
+                versao=item.versao,
+                alterado_em=item.alterado_em,
+                alterador=HistoricoAlteradorResponse(
+                    nome=item.alterador.nome,
+                    matricula=item.alterador.matricula,
+                ),
+                snapshot=item.snapshot,
+            )
+            for item in itens
+        ],
+        paginacao=PaginacaoResponse(
+            pagina=pagina,
+            por_pagina=por_pagina,
+            total_itens=total,
+            total_paginas=ceil(total / por_pagina),
+        ),
+    )
 
 
 @router.put(

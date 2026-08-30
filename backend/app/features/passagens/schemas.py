@@ -291,3 +291,21 @@ class PaginacaoResponse(SchemaBase):
 class CicloConsultaListaResponse(SchemaBase):
     itens: list[CicloConsultaItemResponse]
     paginacao: PaginacaoResponse
+
+
+class HistoricoAlteradorResponse(SchemaBase):
+    nome: str
+    matricula: str
+
+
+class PassagemHistoricoItemResponse(SchemaBase):
+    versao: int
+    alterado_em: datetime
+    alterador: HistoricoAlteradorResponse
+    snapshot: dict[str, object]
+
+
+class PassagemHistoricoListaResponse(SchemaBase):
+    passagem_atual: PassagemConsultaResponse
+    itens: list[PassagemHistoricoItemResponse]
+    paginacao: PaginacaoResponse

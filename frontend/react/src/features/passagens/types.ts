@@ -100,6 +100,25 @@ export interface CicloConsultaLista {
     total_paginas: number;
   };
 }
+export interface PassagemHistoricoItem {
+  versao: number;
+  alterado_em: string;
+  alterador: {
+    nome: string;
+    matricula: string;
+  };
+  snapshot: Record<string, unknown>;
+}
+export interface PassagemHistoricoLista {
+  passagem_atual: PassagemConsulta;
+  itens: PassagemHistoricoItem[];
+  paginacao: {
+    pagina: number;
+    por_pagina: number;
+    total_itens: number;
+    total_paginas: number;
+  };
+}
 export interface UltimaPassagem extends PassagemResultado {
   operacao: 'criacao' | 'edicao';
   terminal: 'Pátio Brisamar' | 'Terminal TECON';

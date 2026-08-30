@@ -1,6 +1,6 @@
 # Histórico auditável de edições
 
-Status: `PLANEJADA`
+Status: `EM EXECUÇÃO`
 
 ## Objetivo
 
@@ -114,20 +114,58 @@ consulta do conteúdo confirmado para todos os usuários autenticados.
 - edição posterior à confirmação;
 - alteração das regras internas dos terminais.
 
+## Procedimento administrativo de atribuição de perfil
+
+A atribuição inicial deve ser feita por uma pessoa autorizada, informando uma
+matrícula exata e um dos perfis especiais aprovados. Antes de confirmar, conferir
+o usuário retornado pela primeira consulta. O comando é idempotente: repetir a
+atribuição do mesmo perfil não produz mudança adicional.
+
+```sql
+BEGIN;
+
+SELECT nome, matricula, perfil
+FROM usuario
+WHERE matricula = 'MATRICULA_EXATA';
+
+UPDATE usuario
+SET perfil = 'INSTRUTOR'
+WHERE matricula = 'MATRICULA_EXATA'
+RETURNING nome, matricula, perfil;
+
+COMMIT;
+```
+
+Para Monitor de Qualidade, substituir somente `INSTRUTOR` por
+`MONITOR_QUALIDADE`. Se a consulta não retornar exatamente o usuário esperado,
+executar `ROLLBACK` e não prosseguir. Nunca alterar matrícula, PIN, hashes ou
+códigos de ativação durante esse procedimento.
+
 ## Critérios de aceite
 
-- [ ] perfis explícitos persistidos com padrão seguro para usuários existentes;
-- [ ] login e tokens atuais permanecem compatíveis;
-- [ ] somente Instrutor e Monitor acessam snapshots;
-- [ ] Manobrador recebe 403 e mantém acesso ao conteúdo final;
-- [ ] histórico mostra versão, horário, responsável, anterior e final;
-- [ ] dados de autenticação nunca aparecem no contrato;
-- [ ] snapshots existentes permanecem intactos;
-- [ ] migration validada nos dois sentidos sem perda de usuários;
-- [ ] procedimento administrativo de atribuição documentado;
+- [x] perfis explícitos persistidos com padrão seguro para usuários existentes;
+- [x] login e tokens atuais permanecem compatíveis;
+- [x] somente Instrutor e Monitor acessam snapshots;
+- [x] Manobrador recebe 403 e mantém acesso ao conteúdo final;
+- [x] histórico mostra versão, horário, responsável, anterior e final;
+- [x] dados de autenticação nunca aparecem no contrato;
+- [x] snapshots existentes permanecem intactos;
+- [x] migration validada nos dois sentidos sem perda de usuários;
+- [x] procedimento administrativo de atribuição documentado;
 - [ ] backend, frontend, Docker e CI aprovados;
 - [ ] nenhuma regra operacional não autorizada é alterada.
 
 ## Evidências
 
-A preencher durante a execução da task.
+- baseline anterior à implementação: 148 testes backend e 18 testes React;
+- após a implementação: 153 testes backend aprovados;
+- 21 testes React aprovados, incluindo acesso permitido, bloqueio 403 e
+  preservação da sessão válida;
+- Ruff, mypy, ESLint, Prettier e type-check aprovados;
+- build Vite de produção aprovado;
+- migration `a2b3c4d5e6f7` validada em PostgreSQL real isolado com upgrade,
+  downgrade e novo upgrade;
+- usuário de teste preservado nos dois sentidos e perfil padrão
+  `MANOBRADOR` confirmado;
+- banco temporário `railops_migration_task022` removido ao final;
+- banco persistente e regras operacionais não foram alterados.

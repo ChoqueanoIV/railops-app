@@ -180,6 +180,7 @@ class PassagemServicoHistorico(Base):
     )
 
     passagem: Mapped["PassagemServico"] = relationship(back_populates="historico")
+    alterador: Mapped["Usuario"] = relationship(foreign_keys=[alterado_por])
 
 
 class PassagemBrisamarDetalhe(Base):

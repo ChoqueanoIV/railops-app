@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.api.errors import ApiError
 from app.core.database import get_db
 from app.features.auth.exceptions import AutenticacaoError
-from app.features.auth.models import Usuario
+from app.features.auth.models import PerfilUsuario, Usuario
 from app.features.auth.repository import UsuarioRepository
 from app.features.auth.service import AuthService
 
@@ -39,3 +39,18 @@ def obter_usuario_atual(
             message="Não autenticado.",
             headers={"WWW-Authenticate": "Bearer"},
         ) from None
+
+
+def exigir_consulta_historico(
+    usuario_atual: Usuario = Depends(obter_usuario_atual),
+) -> Usuario:
+    if usuario_atual.perfil not in {
+        PerfilUsuario.INSTRUTOR,
+        PerfilUsuario.MONITOR_QUALIDADE,
+    }:
+        raise ApiError(
+            status_code=403,
+            code="HISTORY_ACCESS_DENIED",
+            message="Usuário sem permissão para consultar o histórico.",
+        )
+    return usuario_atual

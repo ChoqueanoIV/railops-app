@@ -59,13 +59,13 @@ describe('ApiClient', () => {
     } satisfies Partial<ApiClientError>);
   });
 
-  it('remove a sessão e sinaliza respostas 401 ou 403', async () => {
+  it('remove a sessão e sinaliza respostas 401', async () => {
     tokenStorage.set('jwt-expirado');
     const listener = vi.fn();
     window.addEventListener(UNAUTHORIZED_EVENT, listener, { once: true });
     const fetcher = vi
       .fn<typeof fetch>()
-      .mockResolvedValue(jsonResponse({ detail: 'Não autenticado.' }, 403));
+      .mockResolvedValue(jsonResponse({ detail: 'Não autenticado.' }, 401));
 
     await expect(
       new ApiClient({ fetcher }).request('/protegido'),
@@ -73,5 +73,21 @@ describe('ApiClient', () => {
 
     expect(tokenStorage.get()).toBeNull();
     expect(listener).toHaveBeenCalledOnce();
+  });
+
+  it('preserva a sessão válida quando o perfil recebe 403', async () => {
+    tokenStorage.set('jwt-valido');
+    const listener = vi.fn();
+    window.addEventListener(UNAUTHORIZED_EVENT, listener, { once: true });
+    const fetcher = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(jsonResponse({ detail: 'Sem permissão.' }, 403));
+
+    await expect(
+      new ApiClient({ fetcher }).request('/restrito'),
+    ).rejects.toBeInstanceOf(ApiClientError);
+
+    expect(tokenStorage.get()).toBe('jwt-valido');
+    expect(listener).not.toHaveBeenCalled();
   });
 });

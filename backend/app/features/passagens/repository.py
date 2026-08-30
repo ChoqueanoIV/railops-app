@@ -255,6 +255,25 @@ class PassagemRepository:
             .first()
         )
 
+    def listar_historico(
+        self, passagem_id: uuid.UUID, pagina: int, por_pagina: int
+    ) -> tuple[list[PassagemServicoHistorico], int]:
+        consulta = self.db.query(PassagemServicoHistorico).filter(
+            PassagemServicoHistorico.passagem_id == passagem_id
+        )
+        total = consulta.count()
+        itens = (
+            consulta.options(selectinload(PassagemServicoHistorico.alterador))
+            .order_by(
+                PassagemServicoHistorico.versao.desc(),
+                PassagemServicoHistorico.alterado_em.desc(),
+            )
+            .offset((pagina - 1) * por_pagina)
+            .limit(por_pagina)
+            .all()
+        )
+        return itens, total
+
     def registrar_snapshot(
         self, passagem: PassagemServico, alterado_por: uuid.UUID
     ) -> PassagemServicoHistorico:
