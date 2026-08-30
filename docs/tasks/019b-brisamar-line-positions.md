@@ -1,6 +1,6 @@
 # Ocupação completa das linhas 22 e 24 do Brisamar
 
-Status: `CONCLUÍDA LOCALMENTE`
+Status: `CONCLUÍDA E INTEGRADA NO PR #41`
 
 ## Objetivo
 

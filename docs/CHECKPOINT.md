@@ -1,13 +1,13 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 28/08/2026
+Atualizado em: 30/08/2026
 
 ## Estado seguro atual
 
-- branch de trabalho atual: `feat/brisamar-l22-l24-completas`;
-- PR mais recente: [#40 — homologação operacional da Task 019](https://github.com/ChoqueanoIV/railops-app/pull/40), mesclada;
-- merge consolidado na `main`: `34e8cc6`;
-- Task 019B concluída e validada localmente, aguardando commit e integração;
+- branch de continuidade: `main`;
+- PR mais recente: [#41 — ocupação completa de L22/L24](https://github.com/ChoqueanoIV/railops-app/pull/41), mesclada;
+- merge consolidado na `main`: `cfaa59d`;
+- Task 019B concluída, validada e integrada;
 - Task 019C permanece como próximo requisito, sem implementação iniciada;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
@@ -38,12 +38,13 @@ Atualizado em: 28/08/2026
 - 017 — observabilidade, segurança e hardening: integrada no PR #36.
 - 018 — ADRs e governança arquitetural: integrada no PR #37.
 - 019A — serialização dos erros de validação 422: integrada no PR #39.
+- 019B — ocupação completa de L22/L24: integrada no PR #41.
 
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
-concluída e originou as correções 019B e 019C. A 019B está concluída e validada
-localmente; a 019C ainda não foi iniciada.
+concluída e originou as correções 019B e 019C. A 019B está concluída e integrada;
+a 019C ainda não foi iniciada.
 
-## Validação local da task 019B
+## Validação da task 019B
 
 - 135 testes do backend e 13 testes React aprovados;
 - Ruff, formatter Ruff, mypy, ESLint, Prettier e type-check aprovados;
@@ -55,6 +56,8 @@ localmente; a 019C ainda não foi iniciada.
   superior e inferior simultâneos e os travessões L22/L24;
 - registro temporário usado no teste integrado removido em transação;
 - nenhuma regra do TECON ou das demais linhas foi alterada.
+- jobs remotos `Backend` e `Frontend` aprovados no PR #41;
+- merge `cfaa59d` integrado na `main` sem conflitos.
 
 ## Validação da task 019A
 
@@ -89,12 +92,11 @@ localmente; a 019C ainda não foi iniciada.
 
 ## Próximo passo obrigatório
 
-1. revisar o diff final da Task 019B, criar o commit e publicar a branch;
-2. abrir e validar o PR da 019B, aguardando os checks remotos;
-3. integrar a 019B antes de iniciar a 019C;
-4. executar somente `docs/tasks/019c-consolidated-draft-confirmation.md` após
-   a integração da 019B;
-5. não iniciar as tasks 020–026 antes da conclusão da 019C.
+1. executar somente `docs/tasks/019c-consolidated-draft-confirmation.md` em
+   branch própria;
+2. caracterizar o comportamento atual antes de alterar código;
+3. preservar as passagens existentes e todas as regras fora do requisito;
+4. não iniciar as tasks 020–026 antes da conclusão e integração da 019C.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.
