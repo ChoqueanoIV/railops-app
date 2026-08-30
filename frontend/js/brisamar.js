@@ -2,7 +2,20 @@ const API_URL = "http://127.0.0.1:8000";
 const listaEquipe = document.getElementById("lista-equipe");
 const adicionarMembroButton = document.getElementById("adicionar-membro");
 const listaLinhas = document.getElementById("lista-linhas");
-const linhasBrisamar = ["16", "18", "20", "22", "24", "26", "28", "30"];
+const linhasBrisamar = [
+    "16",
+    "18",
+    "20",
+    "22 SUP",
+    "22 INF",
+    "Travessão L22",
+    "24 SUP",
+    "24 INF",
+    "Travessão L24",
+    "26",
+    "28",
+    "30",
+];
 const mobileOpcoes = document.querySelectorAll('input[name="mobile_utilizado"]');
 const campoJustificativaMobile = document.getElementById(
     "campo-justificativa-mobile"
@@ -75,36 +88,25 @@ criarCampoMembro(null, false);
 
 function criarCamposLinhas() {
     linhasBrisamar.forEach(function (codigoLinha) {
-        const exigePosicao = codigoLinha === "22" || codigoLinha === "24";
+        const linhaId = codigoLinha
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-zA-Z0-9]+/g, "-")
+            .toLowerCase();
         const linha = document.createElement("div");
         linha.className = "item-linha";
         linha.dataset.codigoLinha = codigoLinha;
 
-        const campoPosicao = exigePosicao
-            ? `
-                <div class="campo-formulario campo-posicao">
-                    <label class="somente-leitor" for="linha-${codigoLinha}-posicao">
-                        Posição da linha ${codigoLinha}
-                    </label>
-                    <select id="linha-${codigoLinha}-posicao" name="linha_sup_inf" required>
-                        <option value="">SUP ou INF</option>
-                        <option value="SUP">SUP</option>
-                        <option value="INF">INF</option>
-                    </select>
-                </div>
-            `
-            : '<span class="nao-aplicavel">Não se aplica</span>';
-
         linha.innerHTML = `
             <strong class="codigo-linha">${codigoLinha}</strong>
             <div class="campo-formulario">
-                <label class="somente-leitor" for="linha-${codigoLinha}-veiculos">
+                <label class="somente-leitor" for="linha-${linhaId}-veiculos">
                     Veículos ou situação da linha ${codigoLinha}
                 </label>
-                <input type="text" id="linha-${codigoLinha}-veiculos"
+                <input type="text" id="linha-${linhaId}-veiculos"
                     name="linha_veiculos" placeholder="Ex.: Livre ou P02, P15">
             </div>
-            ${campoPosicao}
+            <span class="nao-aplicavel">Não se aplica</span>
         `;
 
         listaLinhas.appendChild(linha);
@@ -261,8 +263,6 @@ function preencherFormulario(passagem) {
         if (!linha) return;
         linha.querySelector('[name="linha_veiculos"]').value =
             ocupacao.veiculos || "";
-        const posicao = linha.querySelector('[name="linha_sup_inf"]');
-        if (posicao) posicao.value = ocupacao.sup_inf || "";
     });
 
     document.getElementById("radios-operantes").value =
@@ -337,13 +337,12 @@ function montarEquipe() {
 function montarOcupacoesLinhas() {
     return Array.from(listaLinhas.querySelectorAll(".item-linha")).map(
         function (linha) {
-            const posicao = linha.querySelector('[name="linha_sup_inf"]');
             return {
                 codigo_linha: linha.dataset.codigoLinha,
                 veiculos: valorOuNulo(
                     linha.querySelector('[name="linha_veiculos"]').value
                 ),
-                sup_inf: posicao ? valorOuNulo(posicao.value) : null,
+                sup_inf: null,
             };
         }
     );

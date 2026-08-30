@@ -25,7 +25,20 @@ from app.features.passagens.schemas import (
 )
 from app.features.passagens.service import PassagemService
 
-CODIGOS_BRISAMAR = ["16", "18", "20", "22", "24", "26", "28", "30"]
+CODIGOS_BRISAMAR = [
+    "16",
+    "18",
+    "20",
+    "22 SUP",
+    "22 INF",
+    "Travessão L22",
+    "24 SUP",
+    "24 INF",
+    "Travessão L24",
+    "26",
+    "28",
+    "30",
+]
 
 
 def criar_linhas_brisamar() -> list[Linha]:
@@ -34,7 +47,7 @@ def criar_linhas_brisamar() -> list[Linha]:
             id=uuid.uuid4(),
             terminal=Terminal.BRISAMAR,
             codigo=codigo,
-            permite_sup_inf=codigo in {"22", "24"},
+            permite_sup_inf=False,
         )
         for codigo in CODIGOS_BRISAMAR
     ]
@@ -53,7 +66,7 @@ def criar_dados_validos() -> PassagemBrisamarRequest:
             {
                 "codigo_linha": codigo,
                 "veiculos": "Livre",
-                "sup_inf": "SUP" if codigo in {"22", "24"} else None,
+                "sup_inf": None,
             }
             for codigo in CODIGOS_BRISAMAR
         ],
@@ -94,12 +107,41 @@ def test_criar_brisamar_monta_passagem_completa():
 
     assert passagem.terminal == Terminal.BRISAMAR
     assert passagem.responsavel_id == responsavel.id
-    assert len(passagem.ocupacoes_linhas) == 8
+    assert len(passagem.ocupacoes_linhas) == 12
     assert len(passagem.equipe) == 1
     assert len(passagem.radios_utilizados) == 1
     assert passagem.detalhe_brisamar.radios_operantes == 4
     linha_repository.listar_por_terminal.assert_called_once_with(Terminal.BRISAMAR)
     radio_repository.buscar_ou_criar.assert_called_once_with("R-01")
+    passagem_repository.salvar.assert_called_once_with(passagem)
+
+
+def test_criar_brisamar_aceita_lados_e_travessoes_como_ocupacoes_independentes():
+    service, passagem_repository, linha_repository, _ = criar_service()
+    linhas = [
+        Linha(
+            id=uuid.uuid4(),
+            terminal=Terminal.BRISAMAR,
+            codigo=codigo,
+            permite_sup_inf=False,
+        )
+        for codigo in CODIGOS_BRISAMAR
+    ]
+    linha_repository.listar_por_terminal.return_value = linhas
+    dados = criar_dados_validos().model_dump()
+    dados["ocupacoes_linhas"] = [
+        {"codigo_linha": codigo, "veiculos": f"Ocupação {codigo}"}
+        for codigo in CODIGOS_BRISAMAR
+    ]
+
+    passagem = service.criar_brisamar(
+        PassagemBrisamarRequest(**dados), Usuario(id=uuid.uuid4())
+    )
+
+    assert [item.linha.codigo for item in passagem.ocupacoes_linhas] == (
+        CODIGOS_BRISAMAR
+    )
+    assert all(item.sup_inf is None for item in passagem.ocupacoes_linhas)
     passagem_repository.salvar.assert_called_once_with(passagem)
 
 
@@ -126,15 +168,16 @@ def test_criar_brisamar_rejeita_linha_duplicada():
     passagem_repository.salvar.assert_not_called()
 
 
-def test_criar_brisamar_exige_sup_inf_na_linha_22():
+def test_criar_brisamar_rejeita_formato_antigo_exclusivo_da_linha_22():
     service, passagem_repository, _, _ = criar_service()
     dados = criar_dados_validos()
-    ocupacao_22 = next(
-        item for item in dados.ocupacoes_linhas if item.codigo_linha == "22"
+    ocupacao_22_sup = next(
+        item for item in dados.ocupacoes_linhas if item.codigo_linha == "22 SUP"
     )
-    ocupacao_22.sup_inf = None
+    ocupacao_22_sup.codigo_linha = "22"
+    ocupacao_22_sup.sup_inf = LadoLinha.SUP
 
-    with pytest.raises(PassagemError, match="linha 22 exige"):
+    with pytest.raises(PassagemError, match="todas as linhas"):
         service.criar_brisamar(dados, Usuario(id=uuid.uuid4()))
 
     passagem_repository.salvar.assert_not_called()

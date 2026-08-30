@@ -7,7 +7,7 @@ import { App } from '@/app/App';
 describe('migração das passagens para React', () => {
   beforeEach(() => sessionStorage.setItem('access_token', 'jwt-de-teste'));
 
-  it('mantém as linhas e a posição obrigatória do Brisamar', () => {
+  it('permite registrar separadamente os lados e travessões de L22 e L24', () => {
     render(
       <MemoryRouter initialEntries={['/brisamar']}>
         <App />
@@ -17,10 +17,17 @@ describe('migração das passagens para React', () => {
       screen.getByRole('heading', { name: 'Nova passagem de serviço' }),
     ).toBeVisible();
     expect(screen.getByLabelText('Veículos da linha 16')).toBeVisible();
-    expect(screen.getByLabelText('Posição da linha 22')).toBeRequired();
+    expect(screen.getByLabelText('Veículos da linha 22 SUP')).toBeVisible();
+    expect(screen.getByLabelText('Veículos da linha 22 INF')).toBeVisible();
     expect(
-      screen.queryByLabelText('Posição da linha 16'),
-    ).not.toBeInTheDocument();
+      screen.getByLabelText('Veículos da linha Travessão L22'),
+    ).toBeVisible();
+    expect(screen.getByLabelText('Veículos da linha 24 SUP')).toBeVisible();
+    expect(screen.getByLabelText('Veículos da linha 24 INF')).toBeVisible();
+    expect(
+      screen.getByLabelText('Veículos da linha Travessão L24'),
+    ).toBeVisible();
+    expect(screen.queryByText('Posição')).not.toBeInTheDocument();
   });
 
   it('mostra apenas os detalhes aplicáveis ao atendimento TECON', async () => {

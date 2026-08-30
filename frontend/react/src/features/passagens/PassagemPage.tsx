@@ -14,7 +14,20 @@ import type {
 } from './types';
 
 const LINHAS: Record<Terminal, string[]> = {
-  BRISAMAR: ['16', '18', '20', '22', '24', '26', '28', '30'],
+  BRISAMAR: [
+    '16',
+    '18',
+    '20',
+    '22 SUP',
+    '22 INF',
+    'Travessão L22',
+    '24 SUP',
+    '24 INF',
+    'Travessão L24',
+    '26',
+    '28',
+    '30',
+  ],
   TECON: [
     'Viaduto/DM1A',
     'L1',
@@ -327,21 +340,6 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
                   value={l.veiculos ?? ''}
                   onChange={(e) => alterarLinha(i, 'veiculos', e.target.value)}
                 />
-                {terminal === 'BRISAMAR' &&
-                  ['22', '24'].includes(l.codigo_linha) && (
-                    <select
-                      aria-label={`Posição da linha ${l.codigo_linha}`}
-                      required
-                      value={l.sup_inf ?? ''}
-                      onChange={(e) =>
-                        alterarLinha(i, 'sup_inf', e.target.value)
-                      }
-                    >
-                      <option value="">Posição</option>
-                      <option>SUP</option>
-                      <option>INF</option>
-                    </select>
-                  )}
               </div>
             ))}
           </div>
