@@ -1,6 +1,8 @@
 import { apiClient } from '@/services/api/client';
 import type {
   CicloPassagem,
+  CicloConsultaFiltros,
+  CicloConsultaLista,
   PassagemConsulta,
   PassagemPayload,
   PassagemResultado,
@@ -8,6 +10,17 @@ import type {
 } from './types';
 
 export const passagemService = {
+  listar: (filtros: CicloConsultaFiltros) => {
+    const parametros = new URLSearchParams();
+    Object.entries(filtros).forEach(([chave, valor]) => {
+      if (valor !== undefined && valor !== '') {
+        parametros.set(chave, String(valor));
+      }
+    });
+    return apiClient.request<CicloConsultaLista>(
+      `/passagens/ciclos?${parametros}`,
+    );
+  },
   consultar: (id: string) =>
     apiClient.request<PassagemConsulta>(`/passagens/${id}`),
   consultarCiclo: (id: string) =>

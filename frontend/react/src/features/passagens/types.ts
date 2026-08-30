@@ -75,6 +75,31 @@ export interface CicloPassagem {
   terminal_pendente: Terminal | null;
   passagens: PassagemConsulta[];
 }
+export interface CicloConsultaItem extends CicloPassagem {
+  responsavel: {
+    nome: string;
+    matricula: string;
+  };
+}
+export interface CicloConsultaFiltros {
+  data_inicio?: string;
+  data_fim?: string;
+  turma?: Turma;
+  turno?: Turno;
+  responsavel?: string;
+  protocolo?: string;
+  pagina?: number;
+  por_pagina?: number;
+}
+export interface CicloConsultaLista {
+  itens: CicloConsultaItem[];
+  paginacao: {
+    pagina: number;
+    por_pagina: number;
+    total_itens: number;
+    total_paginas: number;
+  };
+}
 export interface UltimaPassagem extends PassagemResultado {
   operacao: 'criacao' | 'edicao';
   terminal: 'Pátio Brisamar' | 'Terminal TECON';

@@ -9,13 +9,19 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 
 if TYPE_CHECKING:
-    from app.features.passagens.models import PassagemServico
+    from app.features.passagens.models import CicloPassagem, PassagemServico
 
 
 def _modelo_passagem_servico() -> type["PassagemServico"]:
     from app.features.passagens.models import PassagemServico
 
     return PassagemServico
+
+
+def _modelo_ciclo_passagem() -> type["CicloPassagem"]:
+    from app.features.passagens.models import CicloPassagem
+
+    return CicloPassagem
 
 
 class Usuario(Base):
@@ -36,4 +42,8 @@ class Usuario(Base):
     passagens: Mapped[list["PassagemServico"]] = relationship(
         _modelo_passagem_servico,
         back_populates="responsavel",
+    )
+    ciclos: Mapped[list["CicloPassagem"]] = relationship(
+        _modelo_ciclo_passagem,
+        back_populates="criador",
     )

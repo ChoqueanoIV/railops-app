@@ -1,4 +1,5 @@
 import uuid
+from datetime import UTC, date, datetime
 from unittest.mock import MagicMock
 
 import pytest
@@ -9,11 +10,18 @@ from app.features.passagens import controller as passagem_controller
 from app.features.passagens.exceptions import PassagemError
 from app.features.passagens.models import (
     CicloPassagem,
+    EstadoCicloPassagem,
     PassagemServico,
     PassagemTeconDetalhe,
     Terminal,
+    Turma,
+    Turno,
 )
-from app.features.passagens.schemas import PassagemTeconEdicaoRequest
+from app.features.passagens.schemas import (
+    CicloConsultaFiltros,
+    CicloPassagemResponse,
+    PassagemTeconEdicaoRequest,
+)
 from tests.integration.test_passagem_repository import (
     criar_passagem_completa_para_snapshot,
 )
@@ -221,6 +229,53 @@ def test_consultar_passagem_inexistente_retorna_404(monkeypatch):
 
     assert erro.value.status_code == 404
     assert erro.value.code == "PASSAGEM_NOT_FOUND"
+
+
+def test_listar_ciclos_retorna_responsavel_e_paginacao(monkeypatch):
+    usuario = Usuario(id=uuid.uuid4(), nome="Responsável", matricula="30032552")
+    ciclo = CicloPassagem(
+        id=uuid.uuid4(),
+        data=date(2026, 8, 30),
+        turma=Turma.C,
+        turno=Turno.DIURNO,
+        estado=EstadoCicloPassagem.CONFIRMADO,
+        criado_por=usuario.id,
+        confirmado_em=datetime(2026, 8, 30, 18, 50, tzinfo=UTC),
+        criador=usuario,
+        passagens=[],
+    )
+    ciclo_service = passagem_controller.PassagemCicloService(MagicMock())
+    monkeypatch.setattr(
+        ciclo_service,
+        "listar",
+        MagicMock(return_value=([ciclo], 21, date(2026, 8, 1), date(2026, 8, 30))),
+    )
+    monkeypatch.setattr(
+        passagem_controller,
+        "montar_resposta_ciclo",
+        MagicMock(
+            return_value=CicloPassagemResponse(
+                id=ciclo.id,
+                data=ciclo.data,
+                turma=ciclo.turma,
+                turno=ciclo.turno,
+                estado=ciclo.estado,
+                confirmado_em=ciclo.confirmado_em,
+                terminal_pendente=None,
+                passagens=[],
+            )
+        ),
+    )
+    filtros = CicloConsultaFiltros(pagina=2, por_pagina=20)
+
+    resposta = passagem_controller.listar_ciclos_confirmados(
+        filtros, ciclo_service, criar_service(), usuario
+    )
+
+    assert resposta.itens[0].id == ciclo.id
+    assert resposta.itens[0].responsavel.matricula == "30032552"
+    assert resposta.paginacao.total_itens == 21
+    assert resposta.paginacao.total_paginas == 2
 
 
 def criar_service() -> passagem_controller.PassagemService:

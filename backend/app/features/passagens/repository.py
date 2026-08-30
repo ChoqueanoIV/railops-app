@@ -5,6 +5,7 @@ from datetime import date, datetime, time
 from sqlalchemy import func, text
 from sqlalchemy.orm import Session, selectinload
 
+from app.features.auth.models import Usuario
 from app.features.passagens.models import (
     CicloPassagem,
     EquipeMembro,
@@ -130,6 +131,76 @@ class PassagemRepository:
             .filter(CicloPassagem.id == ciclo_id)
             .first()
         )
+
+    def listar_ciclos_confirmados(
+        self,
+        *,
+        data_inicio: date,
+        data_fim: date,
+        turma: Turma | None,
+        turno: Turno | None,
+        responsavel: str | None,
+        protocolo: uuid.UUID | None,
+        pagina: int,
+        por_pagina: int,
+    ) -> tuple[list[CicloPassagem], int]:
+        consulta = (
+            self.db.query(CicloPassagem)
+            .options(
+                selectinload(CicloPassagem.criador),
+                selectinload(CicloPassagem.passagens).selectinload(
+                    PassagemServico.detalhe_brisamar
+                ),
+                selectinload(CicloPassagem.passagens).selectinload(
+                    PassagemServico.detalhe_tecon
+                ),
+                selectinload(CicloPassagem.passagens).selectinload(
+                    PassagemServico.equipe
+                ),
+                selectinload(CicloPassagem.passagens)
+                .selectinload(PassagemServico.ocupacoes_linhas)
+                .selectinload(PassagemLinhaOcupacao.linha),
+                selectinload(CicloPassagem.passagens)
+                .selectinload(PassagemServico.radios_utilizados)
+                .selectinload(PassagemRadioUso.radio),
+            )
+            .filter(
+                CicloPassagem.estado == EstadoCicloPassagem.CONFIRMADO,
+                CicloPassagem.data >= data_inicio,
+                CicloPassagem.data <= data_fim,
+            )
+        )
+        if turma is not None:
+            consulta = consulta.filter(CicloPassagem.turma == turma)
+        if turno is not None:
+            consulta = consulta.filter(CicloPassagem.turno == turno)
+        if protocolo is not None:
+            consulta = consulta.filter(CicloPassagem.id == protocolo)
+        if responsavel is not None:
+            consulta = consulta.join(CicloPassagem.criador)
+            if len(responsavel) == 8 and responsavel.isdigit():
+                consulta = consulta.filter(Usuario.matricula == responsavel)
+            else:
+                trecho = (
+                    responsavel.replace("\\", "\\\\")
+                    .replace("%", "\\%")
+                    .replace("_", "\\_")
+                )
+                consulta = consulta.filter(
+                    Usuario.nome.ilike(f"%{trecho}%", escape="\\")
+                )
+
+        total = consulta.order_by(None).count()
+        itens = (
+            consulta.order_by(
+                CicloPassagem.confirmado_em.desc(),
+                CicloPassagem.id.desc(),
+            )
+            .offset((pagina - 1) * por_pagina)
+            .limit(por_pagina)
+            .all()
+        )
+        return itens, total
 
     def buscar_ciclo_para_confirmacao(
         self, ciclo_id: uuid.UUID

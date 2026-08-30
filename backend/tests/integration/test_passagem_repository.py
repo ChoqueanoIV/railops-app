@@ -9,6 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.features.passagens.models import (
     CicloPassagem,
     EquipeMembro,
+    EstadoCicloPassagem,
     Linha,
     PassagemBrisamarDetalhe,
     PassagemLinhaOcupacao,
@@ -126,6 +127,43 @@ def test_passagem_repository_confirma_ciclo_em_uma_transacao():
     db.commit.assert_called_once_with()
     db.refresh.assert_called_once_with(ciclo)
     db.rollback.assert_not_called()
+
+
+def test_passagem_repository_pagina_somente_ciclos_confirmados():
+    db = MagicMock()
+    consulta = MagicMock()
+    for metodo in ("options", "filter", "join", "order_by", "offset", "limit"):
+        getattr(consulta, metodo).return_value = consulta
+    ciclos = [CicloPassagem(id=uuid.uuid4()), CicloPassagem(id=uuid.uuid4())]
+    consulta.count.return_value = 7
+    consulta.all.return_value = ciclos
+    db.query.return_value = consulta
+    repository = PassagemRepository(db)
+
+    itens, total = repository.listar_ciclos_confirmados(
+        data_inicio=date(2026, 8, 1),
+        data_fim=date(2026, 8, 30),
+        turma=Turma.C,
+        turno=Turno.DIURNO,
+        responsavel="30032552",
+        protocolo=None,
+        pagina=2,
+        por_pagina=2,
+    )
+
+    assert itens == ciclos
+    assert total == 7
+    db.query.assert_called_once_with(CicloPassagem)
+    consulta.join.assert_called_once_with(CicloPassagem.criador)
+    consulta.offset.assert_called_once_with(2)
+    consulta.limit.assert_called_once_with(2)
+    assert any(
+        str(expressao.left) == "ciclo_passagem.estado"
+        and expressao.right.value == EstadoCicloPassagem.CONFIRMADO
+        for chamada in consulta.filter.call_args_list
+        for expressao in chamada.args
+        if hasattr(expressao, "left") and hasattr(expressao, "right")
+    )
 
 
 def test_passagem_repository_desfaz_transacao_quando_commit_falha():

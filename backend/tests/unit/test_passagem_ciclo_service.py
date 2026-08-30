@@ -14,6 +14,7 @@ from app.features.passagens.models import (
     Turma,
     Turno,
 )
+from app.features.passagens.schemas import CicloConsultaFiltros
 from app.features.passagens.service import PassagemCicloService
 
 
@@ -98,3 +99,41 @@ def test_passagem_confirmada_nao_e_editavel_mesmo_durante_turno():
     passagem.turno = ciclo.turno
 
     assert PassagemCicloService.passagem_confirmada(passagem) is True
+
+
+def test_listagem_aplica_periodo_padrao_de_trinta_dias():
+    repository = MagicMock()
+    repository.listar_ciclos_confirmados.return_value = ([], 0)
+    service = PassagemCicloService(repository)
+
+    itens, total, data_inicio, data_fim = service.listar(
+        CicloConsultaFiltros(), hoje=date(2026, 8, 30)
+    )
+
+    assert itens == []
+    assert total == 0
+    assert data_inicio == date(2026, 8, 1)
+    assert data_fim == date(2026, 8, 30)
+    repository.listar_ciclos_confirmados.assert_called_once_with(
+        data_inicio=date(2026, 8, 1),
+        data_fim=date(2026, 8, 30),
+        turma=None,
+        turno=None,
+        responsavel=None,
+        protocolo=None,
+        pagina=1,
+        por_pagina=20,
+    )
+
+
+def test_listagem_rejeita_inicio_posterior_ao_fim_padrao():
+    repository = MagicMock()
+    service = PassagemCicloService(repository)
+
+    with pytest.raises(PassagemError, match="data final"):
+        service.listar(
+            CicloConsultaFiltros(data_inicio=date(2026, 8, 31)),
+            hoje=date(2026, 8, 30),
+        )
+
+    repository.listar_ciclos_confirmados.assert_not_called()

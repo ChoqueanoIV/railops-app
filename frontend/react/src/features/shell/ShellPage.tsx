@@ -22,6 +22,9 @@ export function ShellPage() {
             <span>Linhas e atendimento das Áreas 1 e 2</span>
           </Link>
         </nav>
+        <Link className="button button--secondary link-button" to="/passagens">
+          Consultar passagens
+        </Link>
         <button
           className="button button--secondary"
           type="button"
