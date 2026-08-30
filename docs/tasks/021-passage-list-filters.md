@@ -1,6 +1,6 @@
 # Listagem e filtros de passagens
 
-Status: `CONCLUÍDA LOCALMENTE`
+Status: `INTEGRADA` — PR #44, merge `1ac14e7`
 
 ## Objetivo
 

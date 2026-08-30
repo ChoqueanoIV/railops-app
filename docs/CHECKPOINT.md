@@ -5,12 +5,12 @@ Atualizado em: 30/08/2026
 ## Estado seguro atual
 
 - branch de continuidade: `main`;
-- PR mais recente: [#43 — contrato de consulta da Task 020](https://github.com/ChoqueanoIV/railops-app/pull/43), mesclada;
-- merge consolidado na `main`: `0cbc869`;
+- PR mais recente: [#44 — consulta de passagens confirmadas](https://github.com/ChoqueanoIV/railops-app/pull/44), mesclada;
+- merge consolidado na `main`: `1ac14e7`;
 - Task 019B concluída, validada e integrada;
 - Task 019C concluída, validada e integrada;
 - Task 020 concluída, validada e integrada;
-- Task 021 concluída e validada localmente, aguardando publicação e integração;
+- Task 021 concluída, validada e integrada;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -43,6 +43,7 @@ Atualizado em: 30/08/2026
 - 019B — ocupação completa de L22/L24: integrada no PR #41.
 - 019C — rascunho e confirmação consolidada: integrada no PR #42.
 - 020 — descoberta e contrato de consulta: integrada no PR #43.
+- 021 — listagem e filtros de passagens: integrada no PR #44.
 
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
@@ -110,10 +111,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar o diff final e os commits da Task 021;
-2. publicar a branch e abrir o PR após confirmar o estado limpo;
-3. conferir os jobs remotos de backend e frontend;
-4. integrar somente com todos os checks aprovados.
+1. decidir a fonte oficial dos perfis de Instrutor e Monitor de Qualidade;
+2. aprovar quem pode consultar snapshots e quais campos serão exibidos;
+3. detalhar a Task 022 somente depois dessas decisões de negócio;
+4. não alterar autenticação, banco ou histórico antes do gate aprovado.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.
