@@ -109,10 +109,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. detalhar a Task 021 a partir do contrato aprovado na Task 020;
-2. confrontar o plano com o código e os testes atuais;
-3. validar o escopo e os critérios antes de alterar código funcional;
-4. implementar somente a listagem e os filtros aprovados.
+1. revisar `docs/tasks/021-passage-list-filters.md`;
+2. executar a suíte de baseline antes de alterar código funcional;
+3. implementar somente a listagem e os filtros aprovados;
+4. validar backend, frontend, Docker e fluxo HTTP real antes da integração.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.
