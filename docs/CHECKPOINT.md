@@ -111,10 +111,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. decidir a fonte oficial dos perfis de Instrutor e Monitor de Qualidade;
-2. aprovar quem pode consultar snapshots e quais campos serão exibidos;
-3. detalhar a Task 022 somente depois dessas decisões de negócio;
-4. não alterar autenticação, banco ou histórico antes do gate aprovado.
+1. revisar `docs/tasks/022-auditable-edit-history.md`;
+2. executar o baseline completo antes de alterar código funcional;
+3. implementar perfis e autorização preservando login e tokens atuais;
+4. implementar o histórico sem modificar snapshots existentes.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.
