@@ -53,8 +53,48 @@ class Turno(str, enum.Enum):
     NOTURNO = "NOTURNO"
 
 
+class EstadoCicloPassagem(str, enum.Enum):
+    RASCUNHO = "RASCUNHO"
+    CONFIRMADO = "CONFIRMADO"
+
+
+class CicloPassagem(Base):
+    __tablename__ = "ciclo_passagem"
+    __table_args__ = (
+        UniqueConstraint("data", "turma", "turno", name="uq_ciclo_passagem_identidade"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    data: Mapped[date] = mapped_column(Date, nullable=False)
+    turma: Mapped[Turma] = mapped_column(Enum(Turma, name="turma"), nullable=False)
+    turno: Mapped[Turno] = mapped_column(Enum(Turno, name="turno"), nullable=False)
+    estado: Mapped[EstadoCicloPassagem] = mapped_column(
+        Enum(EstadoCicloPassagem, name="estadociclopassagem"),
+        nullable=False,
+        default=EstadoCicloPassagem.RASCUNHO,
+    )
+    criado_por: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("usuario.id"), nullable=False
+    )
+    criado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+    confirmado_em: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+
+    passagens: Mapped[list["PassagemServico"]] = relationship(back_populates="ciclo")
+
+
 class PassagemServico(Base):
     __tablename__ = "passagem_servico"
+    __table_args__ = (
+        UniqueConstraint(
+            "ciclo_id", "terminal", name="uq_passagem_servico_ciclo_terminal"
+        ),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
@@ -71,6 +111,9 @@ class PassagemServico(Base):
     )
     responsavel_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("usuario.id"), nullable=False
+    )
+    ciclo_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("ciclo_passagem.id"), nullable=True
     )
     observacoes: Mapped[str | None] = mapped_column(Text, nullable=True)
     relatorio_ocorrencias: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -90,6 +133,7 @@ class PassagemServico(Base):
         _modelo_usuario,
         back_populates="passagens",
     )
+    ciclo: Mapped[CicloPassagem | None] = relationship(back_populates="passagens")
     detalhe_brisamar: Mapped["PassagemBrisamarDetalhe | None"] = relationship(
         back_populates="passagem", cascade="all, delete-orphan", uselist=False
     )

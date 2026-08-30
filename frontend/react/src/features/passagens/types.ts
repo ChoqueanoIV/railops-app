@@ -62,6 +62,18 @@ export type PassagemPayload = PassagemBase & {
 export interface PassagemResultado {
   id: string;
   mensagem: string;
+  ciclo_id?: string | null;
+  terminal_pendente?: Terminal | null;
+}
+export interface CicloPassagem {
+  id: string;
+  data: string;
+  turma: Turma;
+  turno: Turno;
+  estado: 'RASCUNHO' | 'CONFIRMADO';
+  confirmado_em: string | null;
+  terminal_pendente: Terminal | null;
+  passagens: PassagemConsulta[];
 }
 export interface UltimaPassagem extends PassagemResultado {
   operacao: 'criacao' | 'edicao';

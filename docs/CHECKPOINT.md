@@ -8,7 +8,7 @@ Atualizado em: 30/08/2026
 - PR mais recente: [#41 — ocupação completa de L22/L24](https://github.com/ChoqueanoIV/railops-app/pull/41), mesclada;
 - merge consolidado na `main`: `cfaa59d`;
 - Task 019B concluída, validada e integrada;
-- Task 019C permanece como próximo requisito, sem implementação iniciada;
+- Task 019C concluída e validada localmente, aguardando commit e integração;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -41,8 +41,20 @@ Atualizado em: 30/08/2026
 - 019B — ocupação completa de L22/L24: integrada no PR #41.
 
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
-concluída e originou as correções 019B e 019C. A 019B está concluída e integrada;
-a 019C ainda não foi iniciada.
+concluída e originou as correções 019B e 019C. A 019B está integrada e a 019C
+está concluída e validada localmente.
+
+## Validação local da task 019C
+
+- 144 testes backend e 14 testes React aprovados;
+- Ruff, formatter Ruff, mypy, ESLint, Prettier e type-check aprovados;
+- build Vite de produção aprovado;
+- migration `f9a2b3c4d5e6` validada com upgrade, downgrade e novo upgrade;
+- seis passagens históricas preservadas sem associação retroativa inventada;
+- fluxo Docker completo aprovado, incluindo retomada, revisão, correção,
+  confirmação idempotente e bloqueio posterior;
+- dados temporários da homologação removidos em transação;
+- nenhuma regra interna de Brisamar, TECON ou janela de turno foi alterada.
 
 ## Validação da task 019B
 
@@ -92,11 +104,10 @@ a 019C ainda não foi iniciada.
 
 ## Próximo passo obrigatório
 
-1. executar somente `docs/tasks/019c-consolidated-draft-confirmation.md` em
-   branch própria;
-2. caracterizar o comportamento atual antes de alterar código;
-3. preservar as passagens existentes e todas as regras fora do requisito;
-4. não iniciar as tasks 020–026 antes da conclusão e integração da 019C.
+1. revisar o diff final da Task 019C e criar o commit local;
+2. publicar a branch e abrir o PR somente após os gates finais;
+3. integrar a 019C antes de iniciar qualquer task 020–026;
+4. após a integração, detalhar a Task 020 conforme seu gate já aprovado.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.

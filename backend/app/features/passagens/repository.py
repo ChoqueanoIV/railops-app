@@ -2,11 +2,13 @@ import enum
 import uuid
 from datetime import date, datetime, time
 
-from sqlalchemy import func
+from sqlalchemy import func, text
 from sqlalchemy.orm import Session, selectinload
 
 from app.features.passagens.models import (
+    CicloPassagem,
     EquipeMembro,
+    EstadoCicloPassagem,
     Linha,
     PassagemBrisamarDetalhe,
     PassagemLinhaOcupacao,
@@ -16,6 +18,8 @@ from app.features.passagens.models import (
     PassagemTeconDetalhe,
     Radio,
     Terminal,
+    Turma,
+    Turno,
 )
 from app.shared.persistence.transactions import Transacao, TransacaoSQLAlchemy
 
@@ -67,6 +71,81 @@ class PassagemRepository:
         self.transacao.confirmar()
         self.transacao.atualizar(passagem)
         return passagem
+
+    def obter_ou_criar_ciclo(
+        self,
+        data: date,
+        turma: Turma,
+        turno: Turno,
+        criado_por: uuid.UUID,
+    ) -> CicloPassagem:
+        identidade = f"{data.isoformat()}|{turma.value}|{turno.value}"
+        self.db.execute(
+            text("SELECT pg_advisory_xact_lock(hashtextextended(:identidade, 0))"),
+            {"identidade": identidade},
+        )
+        ciclo = (
+            self.db.query(CicloPassagem)
+            .options(selectinload(CicloPassagem.passagens))
+            .filter(
+                CicloPassagem.data == data,
+                CicloPassagem.turma == turma,
+                CicloPassagem.turno == turno,
+            )
+            .with_for_update()
+            .first()
+        )
+        if ciclo is not None:
+            return ciclo
+
+        ciclo = CicloPassagem(
+            data=data,
+            turma=turma,
+            turno=turno,
+            estado=EstadoCicloPassagem.RASCUNHO,
+            criado_por=criado_por,
+        )
+        self.db.add(ciclo)
+        self.db.flush()
+        return ciclo
+
+    def buscar_ciclo_por_identidade(
+        self, data: date, turma: Turma, turno: Turno
+    ) -> CicloPassagem | None:
+        return (
+            self.db.query(CicloPassagem)
+            .options(selectinload(CicloPassagem.passagens))
+            .filter(
+                CicloPassagem.data == data,
+                CicloPassagem.turma == turma,
+                CicloPassagem.turno == turno,
+            )
+            .first()
+        )
+
+    def buscar_ciclo_por_id(self, ciclo_id: uuid.UUID) -> CicloPassagem | None:
+        return (
+            self.db.query(CicloPassagem)
+            .options(selectinload(CicloPassagem.passagens))
+            .filter(CicloPassagem.id == ciclo_id)
+            .first()
+        )
+
+    def buscar_ciclo_para_confirmacao(
+        self, ciclo_id: uuid.UUID
+    ) -> CicloPassagem | None:
+        return (
+            self.db.query(CicloPassagem)
+            .options(selectinload(CicloPassagem.passagens))
+            .filter(CicloPassagem.id == ciclo_id)
+            .with_for_update()
+            .first()
+        )
+
+    def confirmar_ciclo(self, ciclo: CicloPassagem) -> CicloPassagem:
+        self.transacao.confirmar()
+        self.transacao.atualizar(ciclo)
+        return ciclo
 
     def buscar_para_edicao(self, passagem_id: uuid.UUID) -> PassagemServico | None:
         return (

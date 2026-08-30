@@ -1,5 +1,6 @@
 import { apiClient } from '@/services/api/client';
 import type {
+  CicloPassagem,
   PassagemConsulta,
   PassagemPayload,
   PassagemResultado,
@@ -9,6 +10,16 @@ import type {
 export const passagemService = {
   consultar: (id: string) =>
     apiClient.request<PassagemConsulta>(`/passagens/${id}`),
+  consultarCiclo: (id: string) =>
+    apiClient.request<CicloPassagem>(`/passagens/ciclos/${id}`),
+  recuperarRascunho: (data: string, turma: string, turno: string) =>
+    apiClient.request<CicloPassagem>(
+      `/passagens/ciclos/rascunho?${new URLSearchParams({ data, turma, turno })}`,
+    ),
+  confirmarCiclo: (id: string) =>
+    apiClient.request<CicloPassagem>(`/passagens/ciclos/${id}/confirmar`, {
+      method: 'POST',
+    }),
   salvar: (terminal: Terminal, payload: PassagemPayload, id?: string) => {
     const body: Partial<PassagemPayload> = { ...payload };
     if (id) {

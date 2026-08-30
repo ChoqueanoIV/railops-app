@@ -1,12 +1,18 @@
 from __future__ import annotations
 
-from datetime import date, time
+from datetime import date, datetime, time
 from typing import Self
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.features.passagens.models import LadoLinha, Terminal, Turma, Turno
+from app.features.passagens.models import (
+    EstadoCicloPassagem,
+    LadoLinha,
+    Terminal,
+    Turma,
+    Turno,
+)
 
 
 class SchemaBase(BaseModel):
@@ -99,6 +105,8 @@ class PassagemBrisamarEdicaoRequest(SchemaBase):
 class PassagemCriadaResponse(SchemaBase):
     id: UUID
     mensagem: str
+    ciclo_id: UUID | None = None
+    terminal_pendente: Terminal | None = None
 
 
 class PassagemAtualizadaResponse(SchemaBase):
@@ -230,3 +238,14 @@ class PassagemTeconEdicaoRequest(SchemaBase):
                 "A justificativa é obrigatória quando o Mobile não foi utilizado."
             )
         return self
+
+
+class CicloPassagemResponse(SchemaBase):
+    id: UUID
+    data: date
+    turma: Turma
+    turno: Turno
+    estado: EstadoCicloPassagem
+    confirmado_em: datetime | None
+    terminal_pendente: Terminal | None
+    passagens: list[PassagemConsultaResponse]
