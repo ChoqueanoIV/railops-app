@@ -87,9 +87,8 @@ contém testes de:
 - TECON schema;
 - TECON service.
 
-A suíte atual contém 133 testes, mantém cobertura real de 94,06% (94%
-arredondado) e não depende
-das credenciais do `.env` real. A fixture de banco exige `RAILOPS_ENV=test` e o
+A suíte atual contém 148 testes, mantém cobertura de 91% e não depende das
+credenciais do `.env` real. A fixture de banco exige `RAILOPS_ENV=test` e o
 banco `railops_test`, reduzindo o risco de execução contra produção.
 
 ## Ambiente Docker
@@ -124,9 +123,10 @@ domínio e autorização de edição permanecem no backend.
 
 Os arquivos HTML, CSS e JavaScript anteriores permanecem intactos como fallback
 temporário, permitindo validação operacional antes de sua remoção em uma etapa
-posterior. Histórico, filtros e relatórios ainda não possuem telas dedicadas.
+posterior. A consulta de passagens confirmadas possui filtros e paginação;
+histórico visual de edições e relatórios ainda não possuem telas dedicadas.
 
-A suíte React contém 13 testes. Prettier, ESLint, TypeScript e o build Vite são
+A suíte React contém 18 testes. Prettier, ESLint, TypeScript e o build Vite são
 executados localmente e pelo GitHub Actions.
 
 ## Dependências

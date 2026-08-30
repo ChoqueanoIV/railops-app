@@ -1,6 +1,6 @@
 # Listagem e filtros de passagens
 
-Status: `PLANEJADA`
+Status: `CONCLUÍDA LOCALMENTE`
 
 ## Objetivo
 
@@ -109,19 +109,33 @@ terminal.
 
 ## Critérios de aceite
 
-- [ ] endpoint autenticado retorna somente ciclos confirmados;
-- [ ] período padrão, ordenação e paginação seguem a Task 020;
-- [ ] todos os filtros aprovados funcionam isolados e combinados;
-- [ ] responsável e horário da confirmação aparecem na resposta e na tela;
-- [ ] uma linha representa um ciclo completo, sem duplicação por terminal;
-- [ ] detalhe reutiliza a revisão consolidada somente leitura;
-- [ ] rascunhos e snapshots não são expostos;
-- [ ] nenhum schema de banco ou regra operacional é alterado;
-- [ ] testes backend e frontend cobrem sucesso, vazio, erro e limites;
-- [ ] lint, formatter, type-check, testes e build aprovados;
-- [ ] Docker valida migration head existente e fluxo HTTP real;
-- [ ] documentação e checkpoint atualizados com evidências.
+- [x] endpoint autenticado retorna somente ciclos confirmados;
+- [x] período padrão, ordenação e paginação seguem a Task 020;
+- [x] todos os filtros aprovados funcionam isolados e combinados;
+- [x] responsável e horário da confirmação aparecem na resposta e na tela;
+- [x] uma linha representa um ciclo completo, sem duplicação por terminal;
+- [x] detalhe reutiliza a revisão consolidada somente leitura;
+- [x] rascunhos e snapshots não são expostos;
+- [x] nenhum schema de banco ou regra operacional é alterado;
+- [x] testes backend e frontend cobrem sucesso, vazio, erro e limites;
+- [x] lint, formatter, type-check, testes e build aprovados;
+- [x] Docker valida migration head existente e fluxo HTTP real;
+- [x] documentação e checkpoint atualizados com evidências.
 
 ## Evidências
 
-A preencher durante a execução da task.
+- 148 testes backend aprovados;
+- cobertura backend de 91%, acima do gate mínimo de 90%;
+- 18 testes React aprovados;
+- Ruff, formatter Ruff, mypy, ESLint, Prettier e type-check aprovados;
+- build Vite de produção aprovado;
+- Docker backend e PostgreSQL saudáveis na migration head `f9a2b3c4d5e6`;
+- HTTP real somente leitura aprovou autenticação 401, coleção vazia 200,
+  período amplo e validação 422;
+- PostgreSQL real aprovou estado, período, turma, turno, matrícula, trecho do
+  nome, protocolo, ordenação e paginação em transação isolada;
+- rollback verificado sem persistência das fixtures temporárias;
+- tentativa de limpeza por critérios amplos foi descartada antes de executar,
+  preservando integralmente os dados locais existentes;
+- nenhuma migration, snapshot, regra operacional ou endpoint anterior foi
+  alterado.

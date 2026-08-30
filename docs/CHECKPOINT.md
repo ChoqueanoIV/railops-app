@@ -10,6 +10,7 @@ Atualizado em: 30/08/2026
 - Task 019B concluída, validada e integrada;
 - Task 019C concluída, validada e integrada;
 - Task 020 concluída, validada e integrada;
+- Task 021 concluída e validada localmente, aguardando publicação e integração;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -109,10 +110,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar `docs/tasks/021-passage-list-filters.md`;
-2. executar a suíte de baseline antes de alterar código funcional;
-3. implementar somente a listagem e os filtros aprovados;
-4. validar backend, frontend, Docker e fluxo HTTP real antes da integração.
+1. revisar o diff final e os commits da Task 021;
+2. publicar a branch e abrir o PR após confirmar o estado limpo;
+3. conferir os jobs remotos de backend e frontend;
+4. integrar somente com todos os checks aprovados.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.

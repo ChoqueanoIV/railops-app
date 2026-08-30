@@ -206,8 +206,8 @@ npm run build
 
 Estado validado neste checkpoint:
 
-- backend: 133 testes e cobertura real de 94,06% (94% arredondado);
-- frontend: 13 testes;
+- backend: 148 testes e cobertura atual de 91%;
+- frontend: 18 testes;
 - formatter, lint, type-check, build e pre-commit aprovados;
 - CI executa jobs independentes de backend e frontend em PRs e na `main`.
 
@@ -291,7 +291,7 @@ Planejado, ainda não concluído:
 
 - hardening final e limpeza segura dos adaptadores/fallbacks;
 - validação operacional e de UX com usuários;
-- consulta de histórico, filtros, exportações e relatórios;
+- histórico visual de edições, exportações e relatórios;
 - estratégia de deploy e observabilidade.
 
 O estado de retomada fica em [`docs/CHECKPOINT.md`](docs/CHECKPOINT.md), o índice
