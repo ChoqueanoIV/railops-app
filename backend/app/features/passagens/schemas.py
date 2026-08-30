@@ -249,3 +249,45 @@ class CicloPassagemResponse(SchemaBase):
     confirmado_em: datetime | None
     terminal_pendente: Terminal | None
     passagens: list[PassagemConsultaResponse]
+
+
+class CicloConsultaFiltros(SchemaBase):
+    data_inicio: date | None = None
+    data_fim: date | None = None
+    turma: Turma | None = None
+    turno: Turno | None = None
+    responsavel: str | None = Field(default=None, min_length=1)
+    protocolo: UUID | None = None
+    pagina: int = Field(default=1, ge=1)
+    por_pagina: int = Field(default=20, ge=1, le=100)
+
+    @model_validator(mode="after")
+    def validar_periodo(self) -> Self:
+        if (
+            self.data_inicio is not None
+            and self.data_fim is not None
+            and self.data_fim < self.data_inicio
+        ):
+            raise ValueError("A data final não pode ser anterior à data inicial.")
+        return self
+
+
+class ResponsavelResumoResponse(SchemaBase):
+    nome: str
+    matricula: str
+
+
+class CicloConsultaItemResponse(CicloPassagemResponse):
+    responsavel: ResponsavelResumoResponse
+
+
+class PaginacaoResponse(SchemaBase):
+    pagina: int
+    por_pagina: int
+    total_itens: int
+    total_paginas: int
+
+
+class CicloConsultaListaResponse(SchemaBase):
+    itens: list[CicloConsultaItemResponse]
+    paginacao: PaginacaoResponse

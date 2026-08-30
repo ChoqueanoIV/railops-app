@@ -32,6 +32,9 @@ describe('shell React', () => {
     ).toBeVisible();
     expect(screen.getByRole('link', { name: /Pátio Brisamar/i })).toBeVisible();
     expect(screen.getByRole('link', { name: /Terminal TECON/i })).toBeVisible();
+    expect(
+      screen.getByRole('link', { name: 'Consultar passagens' }),
+    ).toHaveAttribute('href', '/passagens');
   });
 
   it('encerra a sessão sem expor o token', async () => {

@@ -85,6 +85,10 @@ class CicloPassagem(Base):
         DateTime(timezone=True), nullable=True
     )
 
+    criador: Mapped["Usuario"] = relationship(
+        _modelo_usuario,
+        back_populates="ciclos",
+    )
     passagens: Mapped[list["PassagemServico"]] = relationship(back_populates="ciclo")
 
 

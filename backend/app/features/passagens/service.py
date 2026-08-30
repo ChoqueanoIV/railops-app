@@ -25,6 +25,7 @@ from app.features.passagens.repository import (
     RadioRepository,
 )
 from app.features.passagens.schemas import (
+    CicloConsultaFiltros,
     PassagemBrisamarEdicaoRequest,
     PassagemBrisamarRequest,
     PassagemTeconEdicaoRequest,
@@ -47,6 +48,19 @@ class CicloPassagemRepository(Protocol):
     ) -> CicloPassagem | None: ...
 
     def buscar_ciclo_por_id(self, ciclo_id: uuid.UUID) -> CicloPassagem | None: ...
+
+    def listar_ciclos_confirmados(
+        self,
+        *,
+        data_inicio: date,
+        data_fim: date,
+        turma: Turma | None,
+        turno: Turno | None,
+        responsavel: str | None,
+        protocolo: uuid.UUID | None,
+        pagina: int,
+        por_pagina: int,
+    ) -> tuple[list[CicloPassagem], int]: ...
 
     def desfazer(self) -> None: ...
 
@@ -78,6 +92,27 @@ class PassagemCicloService:
         except Exception:
             self.repository.desfazer()
             raise
+
+    def listar(
+        self,
+        filtros: CicloConsultaFiltros,
+        hoje: date | None = None,
+    ) -> tuple[list[CicloPassagem], int, date, date]:
+        data_fim = filtros.data_fim or hoje or datetime.now(FUSO_OPERACAO).date()
+        data_inicio = filtros.data_inicio or (data_fim - timedelta(days=29))
+        if data_fim < data_inicio:
+            raise PassagemError("A data final não pode ser anterior à data inicial.")
+        itens, total = self.repository.listar_ciclos_confirmados(
+            data_inicio=data_inicio,
+            data_fim=data_fim,
+            turma=filtros.turma,
+            turno=filtros.turno,
+            responsavel=filtros.responsavel,
+            protocolo=filtros.protocolo,
+            pagina=filtros.pagina,
+            por_pagina=filtros.por_pagina,
+        )
+        return itens, total, data_inicio, data_fim
 
     def obter_por_id(self, ciclo_id: uuid.UUID, responsavel: Usuario) -> CicloPassagem:
         ciclo = self.repository.buscar_ciclo_por_id(ciclo_id)

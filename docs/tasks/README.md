@@ -33,11 +33,13 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 019B | Ocupação completa das linhas 22 e 24 do Brisamar | achado da 019 |
 | 019C | Rascunho e confirmação consolidada da passagem | 019B |
 | 020 | Descoberta e contrato de consulta | 019C |
+| 021 | Listagem e filtros de passagens | 020 |
 
-As correções 019B e 019C estão concluídas. A Task 020 teve seu gate aprovado e
-seu plano detalhado em [`020-discovery-query-contract.md`](020-discovery-query-contract.md).
-As entregas 021–026 continuam condicionadas aos gates registrados no roadmap;
-criar cada task detalhada somente após aprovar seu gate.
+As correções 019B e 019C e o contrato da Task 020 estão concluídos. A Task 021
+possui plano detalhado em
+[`021-passage-list-filters.md`](021-passage-list-filters.md). As entregas
+022–026 continuam condicionadas aos gates registrados no roadmap; criar cada
+task detalhada somente após aprovar seu gate.
 
 ## Como pedir uma task ao Codex
 

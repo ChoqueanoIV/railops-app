@@ -1,7 +1,9 @@
 import uuid
 from datetime import date
+from math import ceil
+from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from app.api.errors import ApiError, resposta_erro
 from app.features.auth.dependencies import obter_usuario_atual
@@ -20,9 +22,13 @@ from app.features.passagens.models import (
 )
 from app.features.passagens.schemas import (
     BrisamarDetalheRequest,
+    CicloConsultaFiltros,
+    CicloConsultaItemResponse,
+    CicloConsultaListaResponse,
     CicloPassagemResponse,
     EquipeMembroRequest,
     LinhaOcupacaoRequest,
+    PaginacaoResponse,
     PassagemAtualizadaResponse,
     PassagemBrisamarEdicaoRequest,
     PassagemBrisamarRequest,
@@ -31,6 +37,7 @@ from app.features.passagens.schemas import (
     PassagemTeconEdicaoRequest,
     PassagemTeconRequest,
     RadioUsoRequest,
+    ResponsavelResumoResponse,
     TeconDetalheRequest,
 )
 from app.features.passagens.service import PassagemCicloService, PassagemService
@@ -181,6 +188,46 @@ def criar_passagem_tecon(
         mensagem="Passagem de serviço registrada com sucesso.",
         ciclo_id=passagem.ciclo_id or passagem.ciclo.id,
         terminal_pendente=terminal_pendente(passagem.ciclo),
+    )
+
+
+@router.get(
+    "/ciclos",
+    response_model=CicloConsultaListaResponse,
+    summary="Listar ciclos confirmados",
+    responses={401: resposta_erro("Não autenticado")},
+)
+def listar_ciclos_confirmados(
+    filtros: Annotated[CicloConsultaFiltros, Query()],
+    ciclo_service: PassagemCicloService = Depends(obter_ciclo_service),
+    passagem_service: PassagemService = Depends(obter_passagem_service),
+    _usuario_atual: Usuario = Depends(obter_usuario_atual),
+) -> CicloConsultaListaResponse:
+    try:
+        ciclos, total, _, _ = ciclo_service.listar(filtros)
+    except PassagemError as erro:
+        raise ApiError(
+            status_code=422, code="PASSAGEM_FILTER_INVALID", message=str(erro)
+        ) from erro
+    return CicloConsultaListaResponse(
+        itens=[
+            CicloConsultaItemResponse(
+                **montar_resposta_ciclo(
+                    ciclo, passagem_service, _usuario_atual
+                ).model_dump(),
+                responsavel=ResponsavelResumoResponse(
+                    nome=ciclo.criador.nome,
+                    matricula=ciclo.criador.matricula,
+                ),
+            )
+            for ciclo in ciclos
+        ],
+        paginacao=PaginacaoResponse(
+            pagina=filtros.pagina,
+            por_pagina=filtros.por_pagina,
+            total_itens=total,
+            total_paginas=ceil(total / filtros.por_pagina),
+        ),
     )
 
 

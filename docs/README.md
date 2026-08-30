@@ -33,10 +33,11 @@ de demonstração e troubleshooting, consulte o [`README principal`](../README.m
 
 - backend FastAPI organizado por features, com PostgreSQL e Alembic;
 - frontend React com autenticação e fluxos de Brisamar e TECON;
-- 133 testes backend, 13 testes frontend e cobertura backend de 94,06%;
+- 148 testes backend, 18 testes frontend e cobertura backend de 91%;
 - lint, formatter, type-check, build, pre-commit, Docker e CI validados;
 - legado e adaptadores preservados temporariamente para uma remoção segura;
-- sem deploy público, consulta de histórico, filtros, exportações ou relatórios.
+- consulta navegável de passagens confirmadas com filtros e paginação;
+- sem deploy público, histórico visual de edições, exportações ou relatórios.
 
 ## Como executar o plano
 
