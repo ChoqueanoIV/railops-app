@@ -5,11 +5,11 @@ Atualizado em: 30/08/2026
 ## Estado seguro atual
 
 - branch de continuidade: `main`;
-- PR mais recente: [#42 — rascunho e confirmação consolidada da passagem](https://github.com/ChoqueanoIV/railops-app/pull/42), mesclada;
-- merge consolidado na `main`: `02e9683`;
+- PR mais recente: [#43 — contrato de consulta da Task 020](https://github.com/ChoqueanoIV/railops-app/pull/43), mesclada;
+- merge consolidado na `main`: `0cbc869`;
 - Task 019B concluída, validada e integrada;
 - Task 019C concluída, validada e integrada;
-- Task 020 concluída e validada localmente, aguardando integração;
+- Task 020 concluída, validada e integrada;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -41,6 +41,7 @@ Atualizado em: 30/08/2026
 - 019A — serialização dos erros de validação 422: integrada no PR #39.
 - 019B — ocupação completa de L22/L24: integrada no PR #41.
 - 019C — rascunho e confirmação consolidada: integrada no PR #42.
+- 020 — descoberta e contrato de consulta: integrada no PR #43.
 
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
@@ -108,10 +109,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar o diff documental final da Task 020;
-2. publicar a branch e integrar a Task 020 após os checks aplicáveis;
-3. detalhar a Task 021 a partir do contrato aprovado;
-4. não implementar a listagem antes de validar o plano da Task 021.
+1. detalhar a Task 021 a partir do contrato aprovado na Task 020;
+2. confrontar o plano com o código e os testes atuais;
+3. validar o escopo e os critérios antes de alterar código funcional;
+4. implementar somente a listagem e os filtros aprovados.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.

@@ -1,6 +1,6 @@
 # Descoberta e contrato de consulta
 
-Status: `CONCLUÍDA LOCALMENTE`
+Status: `INTEGRADA` — PR #43, merge `0cbc869`
 
 ## Objetivo
 
