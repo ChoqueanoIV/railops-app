@@ -107,10 +107,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar o gate de negócio da Task 020 no roadmap do produto;
-2. detalhar a Task 020 em arquivo próprio antes de alterar código;
-3. validar o plano detalhado contra o comportamento existente;
-4. implementar somente após aprovação explícita do escopo e dos critérios.
+1. revisar e executar somente `docs/tasks/020-discovery-query-contract.md`;
+2. validar o contrato contra controller, schemas, models e testes atuais;
+3. preencher as evidências e concluir a task sem alterar código funcional;
+4. detalhar a Task 021 somente depois da aprovação desse contrato.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.
