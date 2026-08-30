@@ -7,7 +7,12 @@ from app.api.errors import ApiError
 from app.features.auth.models import Usuario
 from app.features.passagens import controller as passagem_controller
 from app.features.passagens.exceptions import PassagemError
-from app.features.passagens.models import PassagemTeconDetalhe, Terminal
+from app.features.passagens.models import (
+    CicloPassagem,
+    PassagemServico,
+    PassagemTeconDetalhe,
+    Terminal,
+)
 from app.features.passagens.schemas import PassagemTeconEdicaoRequest
 from tests.integration.test_passagem_repository import (
     criar_passagem_completa_para_snapshot,
@@ -21,7 +26,10 @@ from tests.unit.test_passagem_tecon_service import criar_dados_tecon_request
 
 def test_criar_passagem_brisamar_retorna_id_e_mensagem(monkeypatch):
     passagem_id = uuid.uuid4()
-    passagem = MagicMock(id=passagem_id)
+    ciclo = CicloPassagem(
+        id=uuid.uuid4(), passagens=[PassagemServico(terminal=Terminal.BRISAMAR)]
+    )
+    passagem = MagicMock(id=passagem_id, ciclo_id=ciclo.id, ciclo=ciclo)
     criar = MagicMock(return_value=passagem)
     monkeypatch.setattr(
         passagem_controller.PassagemService,
@@ -63,7 +71,10 @@ def test_criar_passagem_brisamar_converte_erro_de_negocio(monkeypatch):
 
 def test_criar_passagem_tecon_retorna_id_e_mensagem(monkeypatch):
     passagem_id = uuid.uuid4()
-    passagem = MagicMock(id=passagem_id)
+    ciclo = CicloPassagem(
+        id=uuid.uuid4(), passagens=[PassagemServico(terminal=Terminal.TECON)]
+    )
+    passagem = MagicMock(id=passagem_id, ciclo_id=ciclo.id, ciclo=ciclo)
     criar = MagicMock(return_value=passagem)
     monkeypatch.setattr(
         passagem_controller.PassagemService,

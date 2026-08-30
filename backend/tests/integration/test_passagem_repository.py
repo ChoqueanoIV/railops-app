@@ -7,6 +7,7 @@ import pytest
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.features.passagens.models import (
+    CicloPassagem,
     EquipeMembro,
     Linha,
     PassagemBrisamarDetalhe,
@@ -78,6 +79,52 @@ def test_passagem_repository_confirma_transacao_completa():
     db.add.assert_called_once_with(passagem)
     db.commit.assert_called_once_with()
     db.refresh.assert_called_once_with(passagem)
+    db.rollback.assert_not_called()
+
+
+def test_passagem_repository_bloqueia_ciclo_antes_da_confirmacao():
+    db = MagicMock()
+    consulta = db.query.return_value.options.return_value.filter.return_value
+    ciclo = CicloPassagem(id=uuid.uuid4())
+    consulta.with_for_update.return_value.first.return_value = ciclo
+    repository = PassagemRepository(db)
+
+    resultado = repository.buscar_ciclo_para_confirmacao(ciclo.id)
+
+    assert resultado is ciclo
+    db.query.assert_called_once_with(CicloPassagem)
+    consulta.with_for_update.assert_called_once_with()
+
+
+def test_passagem_repository_serializa_criacao_da_mesma_identidade():
+    db = MagicMock()
+    consulta = db.query.return_value.options.return_value.filter.return_value
+    consulta.with_for_update.return_value.first.return_value = None
+    repository = PassagemRepository(db)
+    criado_por = uuid.uuid4()
+
+    ciclo = repository.obter_ou_criar_ciclo(
+        date(2026, 8, 30), Turma.C, Turno.NOTURNO, criado_por
+    )
+
+    comando = str(db.execute.call_args.args[0])
+    assert "pg_advisory_xact_lock" in comando
+    assert db.execute.call_args.args[1] == {"identidade": "2026-08-30|C|NOTURNO"}
+    assert ciclo.criado_por == criado_por
+    db.add.assert_called_once_with(ciclo)
+    db.flush.assert_called_once_with()
+
+
+def test_passagem_repository_confirma_ciclo_em_uma_transacao():
+    db = MagicMock()
+    repository = PassagemRepository(db)
+    ciclo = CicloPassagem(id=uuid.uuid4())
+
+    resultado = repository.confirmar_ciclo(ciclo)
+
+    assert resultado is ciclo
+    db.commit.assert_called_once_with()
+    db.refresh.assert_called_once_with(ciclo)
     db.rollback.assert_not_called()
 
 

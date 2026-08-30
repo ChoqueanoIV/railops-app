@@ -8,7 +8,9 @@ import pytest
 from app.features.auth.models import Usuario
 from app.features.passagens.exceptions import PassagemError
 from app.features.passagens.models import (
+    CicloPassagem,
     EquipeMembro,
+    EstadoCicloPassagem,
     LadoLinha,
     Linha,
     PassagemBrisamarDetalhe,
@@ -95,6 +97,16 @@ def criar_service():
         id=uuid.uuid4(), numero="R-01"
     )
     passagem_repository.salvar.side_effect = lambda passagem: passagem
+    passagem_repository.obter_ou_criar_ciclo.side_effect = (
+        lambda data, turma, turno, criado_por: CicloPassagem(
+            data=data,
+            turma=turma,
+            turno=turno,
+            estado=EstadoCicloPassagem.RASCUNHO,
+            criado_por=criado_por,
+            passagens=[],
+        )
+    )
     service = PassagemService(passagem_repository, linha_repository, radio_repository)
     return service, passagem_repository, linha_repository, radio_repository
 
@@ -106,6 +118,8 @@ def test_criar_brisamar_monta_passagem_completa():
     passagem = service.criar_brisamar(criar_dados_validos(), responsavel)
 
     assert passagem.terminal == Terminal.BRISAMAR
+    assert passagem.ciclo is not None
+    assert passagem.ciclo.estado == EstadoCicloPassagem.RASCUNHO
     assert passagem.responsavel_id == responsavel.id
     assert len(passagem.ocupacoes_linhas) == 12
     assert len(passagem.equipe) == 1
@@ -114,6 +128,25 @@ def test_criar_brisamar_monta_passagem_completa():
     linha_repository.listar_por_terminal.assert_called_once_with(Terminal.BRISAMAR)
     radio_repository.buscar_ou_criar.assert_called_once_with("R-01")
     passagem_repository.salvar.assert_called_once_with(passagem)
+
+
+def test_criar_brisamar_rejeita_terminal_duplicado_no_mesmo_ciclo():
+    service, passagem_repository, _, _ = criar_service()
+    responsavel = Usuario(id=uuid.uuid4())
+    ciclo = CicloPassagem(
+        data=date(2026, 8, 13),
+        turma=Turma.A,
+        turno=Turno.DIURNO,
+        criado_por=responsavel.id,
+        passagens=[PassagemServico(terminal=Terminal.BRISAMAR)],
+    )
+    passagem_repository.obter_ou_criar_ciclo.return_value = ciclo
+    passagem_repository.obter_ou_criar_ciclo.side_effect = None
+
+    with pytest.raises(PassagemError, match="BRISAMAR já foi preenchido"):
+        service.criar_brisamar(criar_dados_validos(), responsavel)
+
+    passagem_repository.salvar.assert_not_called()
 
 
 def test_criar_brisamar_aceita_lados_e_travessoes_como_ocupacoes_independentes():

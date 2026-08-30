@@ -1,15 +1,26 @@
 import uuid
+from datetime import date
 
 from fastapi import APIRouter, Depends
 
 from app.api.errors import ApiError, resposta_erro
 from app.features.auth.dependencies import obter_usuario_atual
 from app.features.auth.models import Usuario
-from app.features.passagens.dependencies import obter_passagem_service
+from app.features.passagens.dependencies import (
+    obter_ciclo_service,
+    obter_passagem_service,
+)
 from app.features.passagens.exceptions import PassagemError
-from app.features.passagens.models import PassagemServico
+from app.features.passagens.models import (
+    CicloPassagem,
+    PassagemServico,
+    Terminal,
+    Turma,
+    Turno,
+)
 from app.features.passagens.schemas import (
     BrisamarDetalheRequest,
+    CicloPassagemResponse,
     EquipeMembroRequest,
     LinhaOcupacaoRequest,
     PassagemAtualizadaResponse,
@@ -22,7 +33,7 @@ from app.features.passagens.schemas import (
     RadioUsoRequest,
     TeconDetalheRequest,
 )
-from app.features.passagens.service import PassagemService
+from app.features.passagens.service import PassagemCicloService, PassagemService
 
 router = APIRouter(prefix="/passagens", tags=["Passagens de serviço"])
 
@@ -82,6 +93,35 @@ def montar_resposta_consulta(
     )
 
 
+def terminal_pendente(ciclo: CicloPassagem) -> Terminal | None:
+    preenchidos = {passagem.terminal for passagem in ciclo.passagens}
+    pendentes = {Terminal.BRISAMAR, Terminal.TECON} - preenchidos
+    return next(iter(pendentes)) if len(pendentes) == 1 else None
+
+
+def montar_resposta_ciclo(
+    ciclo: CicloPassagem,
+    passagem_service: PassagemService,
+    usuario_atual: Usuario,
+) -> CicloPassagemResponse:
+    return CicloPassagemResponse(
+        id=ciclo.id,
+        data=ciclo.data,
+        turma=ciclo.turma,
+        turno=ciclo.turno,
+        estado=ciclo.estado,
+        confirmado_em=ciclo.confirmado_em,
+        terminal_pendente=terminal_pendente(ciclo),
+        passagens=[
+            montar_resposta_consulta(
+                passagem,
+                passagem_service.passagem_editavel(passagem, usuario_atual),
+            )
+            for passagem in ciclo.passagens
+        ],
+    )
+
+
 @router.post(
     "/brisamar",
     response_model=PassagemCriadaResponse,
@@ -104,9 +144,12 @@ def criar_passagem_brisamar(
             status_code=400, code="PASSAGEM_INVALID", message=str(erro)
         ) from erro
 
+    assert passagem.ciclo is not None
     return PassagemCriadaResponse(
         id=passagem.id,
         mensagem="Passagem de serviço registrada com sucesso.",
+        ciclo_id=passagem.ciclo_id or passagem.ciclo.id,
+        terminal_pendente=terminal_pendente(passagem.ciclo),
     )
 
 
@@ -132,10 +175,75 @@ def criar_passagem_tecon(
             status_code=400, code="PASSAGEM_INVALID", message=str(erro)
         ) from erro
 
+    assert passagem.ciclo is not None
     return PassagemCriadaResponse(
         id=passagem.id,
         mensagem="Passagem de serviço registrada com sucesso.",
+        ciclo_id=passagem.ciclo_id or passagem.ciclo.id,
+        terminal_pendente=terminal_pendente(passagem.ciclo),
     )
+
+
+@router.get(
+    "/ciclos/rascunho",
+    response_model=CicloPassagemResponse,
+    summary="Recuperar ciclo pela identidade operacional",
+)
+def consultar_ciclo_por_identidade(
+    data: date,
+    turma: Turma,
+    turno: Turno,
+    ciclo_service: PassagemCicloService = Depends(obter_ciclo_service),
+    passagem_service: PassagemService = Depends(obter_passagem_service),
+    usuario_atual: Usuario = Depends(obter_usuario_atual),
+) -> CicloPassagemResponse:
+    try:
+        ciclo = ciclo_service.obter_por_identidade(data, turma, turno, usuario_atual)
+    except PassagemError as erro:
+        raise ApiError(
+            status_code=404, code="CICLO_NOT_FOUND", message=str(erro)
+        ) from erro
+    return montar_resposta_ciclo(ciclo, passagem_service, usuario_atual)
+
+
+@router.get(
+    "/ciclos/{ciclo_id}",
+    response_model=CicloPassagemResponse,
+    summary="Consultar revisão consolidada do ciclo",
+)
+def consultar_ciclo(
+    ciclo_id: uuid.UUID,
+    ciclo_service: PassagemCicloService = Depends(obter_ciclo_service),
+    passagem_service: PassagemService = Depends(obter_passagem_service),
+    usuario_atual: Usuario = Depends(obter_usuario_atual),
+) -> CicloPassagemResponse:
+    try:
+        ciclo = ciclo_service.obter_por_id(ciclo_id, usuario_atual)
+    except PassagemError as erro:
+        raise ApiError(
+            status_code=404, code="CICLO_NOT_FOUND", message=str(erro)
+        ) from erro
+    return montar_resposta_ciclo(ciclo, passagem_service, usuario_atual)
+
+
+@router.post(
+    "/ciclos/{ciclo_id}/confirmar",
+    response_model=CicloPassagemResponse,
+    summary="Confirmar definitivamente o ciclo",
+)
+def confirmar_ciclo(
+    ciclo_id: uuid.UUID,
+    ciclo_service: PassagemCicloService = Depends(obter_ciclo_service),
+    passagem_service: PassagemService = Depends(obter_passagem_service),
+    usuario_atual: Usuario = Depends(obter_usuario_atual),
+) -> CicloPassagemResponse:
+    try:
+        ciclo = ciclo_service.confirmar(ciclo_id, usuario_atual)
+    except PassagemError as erro:
+        raise ApiError(
+            status_code=400, code="CICLO_CONFIRMATION_INVALID", message=str(erro)
+        ) from erro
+    return montar_resposta_ciclo(ciclo, passagem_service, usuario_atual)
 
 
 @router.put(

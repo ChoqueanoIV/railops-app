@@ -8,6 +8,8 @@ import pytest
 from app.features.auth.models import Usuario
 from app.features.passagens.exceptions import PassagemError
 from app.features.passagens.models import (
+    CicloPassagem,
+    EstadoCicloPassagem,
     LadoLinha,
     Linha,
     PassagemLinhaOcupacao,
@@ -47,6 +49,16 @@ def criar_service_tecon():
         id=uuid.uuid4(), numero="R-TECON-01"
     )
     passagem_repository.salvar.side_effect = lambda passagem: passagem
+    passagem_repository.obter_ou_criar_ciclo.side_effect = (
+        lambda data, turma, turno, criado_por: CicloPassagem(
+            data=data,
+            turma=turma,
+            turno=turno,
+            estado=EstadoCicloPassagem.RASCUNHO,
+            criado_por=criado_por,
+            passagens=[],
+        )
+    )
     service = PassagemService(passagem_repository, linha_repository, radio_repository)
     return service, passagem_repository, linha_repository, radio_repository
 
@@ -73,6 +85,8 @@ def test_criar_tecon_sem_atendimento_monta_passagem_completa():
     passagem = service.criar_tecon(criar_dados_tecon_request(), responsavel)
 
     assert passagem.terminal == Terminal.TECON
+    assert passagem.ciclo is not None
+    assert passagem.ciclo.estado == EstadoCicloPassagem.RASCUNHO
     assert passagem.responsavel_id == responsavel.id
     assert passagem.detalhe_tecon.houve_atendimento is False
     assert len(passagem.ocupacoes_linhas) == 9

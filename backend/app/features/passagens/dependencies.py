@@ -7,7 +7,7 @@ from app.features.passagens.repository import (
     PassagemRepository,
     RadioRepository,
 )
-from app.features.passagens.service import PassagemService
+from app.features.passagens.service import PassagemCicloService, PassagemService
 
 
 def obter_passagem_service(db: Session = Depends(get_db)) -> PassagemService:
@@ -16,3 +16,7 @@ def obter_passagem_service(db: Session = Depends(get_db)) -> PassagemService:
         LinhaRepository(db),
         RadioRepository(db),
     )
+
+
+def obter_ciclo_service(db: Session = Depends(get_db)) -> PassagemCicloService:
+    return PassagemCicloService(PassagemRepository(db))

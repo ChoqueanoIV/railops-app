@@ -1,11 +1,14 @@
 import uuid
-from datetime import datetime, time, timedelta
+from datetime import UTC, date, datetime, time, timedelta
+from typing import Protocol
 from zoneinfo import ZoneInfo
 
 from app.features.auth.models import Usuario
 from app.features.passagens.exceptions import PassagemError
 from app.features.passagens.models import (
+    CicloPassagem,
     EquipeMembro,
+    EstadoCicloPassagem,
     Linha,
     PassagemBrisamarDetalhe,
     PassagemLinhaOcupacao,
@@ -13,6 +16,7 @@ from app.features.passagens.models import (
     PassagemServico,
     PassagemTeconDetalhe,
     Terminal,
+    Turma,
     Turno,
 )
 from app.features.passagens.repository import (
@@ -29,6 +33,85 @@ from app.features.passagens.schemas import (
 
 FUSO_OPERACAO = ZoneInfo("America/Sao_Paulo")
 PassagemEdicaoRequest = PassagemBrisamarEdicaoRequest | PassagemTeconEdicaoRequest
+
+
+class CicloPassagemRepository(Protocol):
+    def buscar_ciclo_para_confirmacao(
+        self, ciclo_id: uuid.UUID
+    ) -> CicloPassagem | None: ...
+
+    def confirmar_ciclo(self, ciclo: CicloPassagem) -> CicloPassagem: ...
+
+    def buscar_ciclo_por_identidade(
+        self, data: date, turma: Turma, turno: Turno
+    ) -> CicloPassagem | None: ...
+
+    def buscar_ciclo_por_id(self, ciclo_id: uuid.UUID) -> CicloPassagem | None: ...
+
+    def desfazer(self) -> None: ...
+
+
+class PassagemCicloService:
+    def __init__(self, repository: CicloPassagemRepository):
+        self.repository = repository
+
+    def confirmar(self, ciclo_id: uuid.UUID, responsavel: Usuario) -> CicloPassagem:
+        try:
+            ciclo = self.repository.buscar_ciclo_para_confirmacao(ciclo_id)
+            if ciclo is None:
+                raise PassagemError("Ciclo de passagem não encontrado.")
+            if ciclo.estado == EstadoCicloPassagem.CONFIRMADO:
+                self.repository.desfazer()
+                return ciclo
+            if ciclo.criado_por != responsavel.id:
+                raise PassagemError("Somente o autor do rascunho pode confirmá-lo.")
+
+            terminais = {passagem.terminal for passagem in ciclo.passagens}
+            if terminais != {Terminal.BRISAMAR, Terminal.TECON}:
+                raise PassagemError(
+                    "Brisamar e TECON devem estar preenchidos antes da confirmação."
+                )
+
+            ciclo.estado = EstadoCicloPassagem.CONFIRMADO
+            ciclo.confirmado_em = datetime.now(UTC)
+            return self.repository.confirmar_ciclo(ciclo)
+        except Exception:
+            self.repository.desfazer()
+            raise
+
+    def obter_por_id(self, ciclo_id: uuid.UUID, responsavel: Usuario) -> CicloPassagem:
+        ciclo = self.repository.buscar_ciclo_por_id(ciclo_id)
+        return self._validar_consulta(ciclo, responsavel)
+
+    def obter_por_identidade(
+        self,
+        data: date,
+        turma: Turma,
+        turno: Turno,
+        responsavel: Usuario,
+    ) -> CicloPassagem:
+        ciclo = self.repository.buscar_ciclo_por_identidade(data, turma, turno)
+        return self._validar_consulta(ciclo, responsavel)
+
+    @staticmethod
+    def _validar_consulta(
+        ciclo: CicloPassagem | None, responsavel: Usuario
+    ) -> CicloPassagem:
+        if ciclo is None:
+            raise PassagemError("Ciclo de passagem não encontrado.")
+        if (
+            ciclo.estado == EstadoCicloPassagem.RASCUNHO
+            and ciclo.criado_por != responsavel.id
+        ):
+            raise PassagemError("Somente o autor pode consultar este rascunho.")
+        return ciclo
+
+    @staticmethod
+    def passagem_confirmada(passagem: PassagemServico) -> bool:
+        return (
+            passagem.ciclo is not None
+            and passagem.ciclo.estado == EstadoCicloPassagem.CONFIRMADO
+        )
 
 
 class PassagemService:
@@ -70,7 +153,9 @@ class PassagemService:
                     f"A linha {linha.codigo} não permite indicação SUP ou INF."
                 )
 
+        ciclo = self._obter_ciclo_para_terminal(dados, responsavel, Terminal.BRISAMAR)
         passagem = PassagemServico(
+            ciclo=ciclo,
             terminal=Terminal.BRISAMAR,
             data=dados.data,
             turma=dados.turma,
@@ -124,7 +209,9 @@ class PassagemService:
         if any(ocupacao.sup_inf is not None for ocupacao in dados.ocupacoes_linhas):
             raise PassagemError("As linhas do TECON não permitem indicação SUP ou INF.")
 
+        ciclo = self._obter_ciclo_para_terminal(dados, responsavel, Terminal.TECON)
         passagem = PassagemServico(
+            ciclo=ciclo,
             terminal=Terminal.TECON,
             data=dados.data,
             turma=dados.turma,
@@ -158,6 +245,23 @@ class PassagemService:
         ]
 
         return self.passagem_repository.salvar(passagem)
+
+    def _obter_ciclo_para_terminal(
+        self,
+        dados: PassagemBrisamarRequest | PassagemTeconRequest,
+        responsavel: Usuario,
+        terminal: Terminal,
+    ) -> CicloPassagem:
+        ciclo = self.passagem_repository.obter_ou_criar_ciclo(
+            dados.data, dados.turma, dados.turno, responsavel.id
+        )
+        if ciclo.estado == EstadoCicloPassagem.CONFIRMADO:
+            raise PassagemError("Este ciclo de passagem já foi confirmado.")
+        if ciclo.criado_por != responsavel.id:
+            raise PassagemError("Este ciclo pertence a outro responsável.")
+        if any(passagem.terminal == terminal for passagem in ciclo.passagens):
+            raise PassagemError(f"O terminal {terminal.value} já foi preenchido.")
+        return ciclo
 
     def obter_para_edicao(
         self,
@@ -308,6 +412,10 @@ class PassagemService:
     ) -> None:
         if passagem is None:
             raise PassagemError("Passagem de serviço não encontrada.")
+        if PassagemCicloService.passagem_confirmada(passagem):
+            raise PassagemError(
+                "Esta passagem já foi confirmada e não pode ser editada."
+            )
         if passagem.responsavel_id != responsavel.id:
             raise PassagemError("Somente o autor pode editar esta passagem.")
         if passagem.turma is None or passagem.turno is None:

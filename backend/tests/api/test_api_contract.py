@@ -7,6 +7,9 @@ ENDPOINTS_PUBLICOS = {
     "/auth/login": {"post"},
     "/passagens/brisamar": {"post"},
     "/passagens/tecon": {"post"},
+    "/passagens/ciclos/rascunho": {"get"},
+    "/passagens/ciclos/{ciclo_id}": {"get"},
+    "/passagens/ciclos/{ciclo_id}/confirmar": {"post"},
     "/passagens/{passagem_id}": {"get", "put"},
 }
 
@@ -43,6 +46,9 @@ def test_openapi_mantem_autenticacao_apenas_nas_rotas_de_passagem():
     for caminho in (
         "/passagens/brisamar",
         "/passagens/tecon",
+        "/passagens/ciclos/rascunho",
+        "/passagens/ciclos/{ciclo_id}",
+        "/passagens/ciclos/{ciclo_id}/confirmar",
         "/passagens/{passagem_id}",
     ):
         for operacao in caminhos[caminho].values():

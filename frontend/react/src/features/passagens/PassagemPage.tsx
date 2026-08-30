@@ -61,7 +61,8 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const id = params.get('editar') ?? undefined;
-  const [carregando, setCarregando] = useState(Boolean(id));
+  const cicloId = params.get('ciclo') ?? undefined;
+  const [carregando, setCarregando] = useState(Boolean(id || cicloId));
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState('');
   const [data, setData] = useState('');
@@ -142,6 +143,27 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
       )
       .finally(() => setCarregando(false));
   }, [id, terminal]);
+
+  useEffect(() => {
+    if (!cicloId || id) return;
+    passagemService
+      .consultarCiclo(cicloId)
+      .then((ciclo) => {
+        if (ciclo.estado === 'CONFIRMADO')
+          throw new Error('Este ciclo já foi confirmado.');
+        if (ciclo.terminal_pendente !== terminal)
+          throw new Error('Este terminal já foi preenchido no ciclo.');
+        setData(ciclo.data);
+        setTurma(ciclo.turma);
+        setTurno(ciclo.turno);
+      })
+      .catch((e: unknown) =>
+        setErro(
+          e instanceof Error ? e.message : 'Não foi possível retomar o ciclo.',
+        ),
+      )
+      .finally(() => setCarregando(false));
+  }, [cicloId, id, terminal]);
 
   const alterarEquipe = (i: number, campo: keyof EquipeMembro, valor: string) =>
     setEquipe((atual) =>
@@ -224,6 +246,20 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
         montarPayload(),
         id,
       );
+      if (resultado.ciclo_id) {
+        if (resultado.terminal_pendente) {
+          const destino =
+            resultado.terminal_pendente === 'BRISAMAR' ? '/brisamar' : '/tecon';
+          navigate(`${destino}?ciclo=${resultado.ciclo_id}`);
+        } else {
+          navigate(`/confirmacao?ciclo=${resultado.ciclo_id}`);
+        }
+        return;
+      }
+      if (id && cicloId) {
+        navigate(`/confirmacao?ciclo=${cicloId}`);
+        return;
+      }
       const ultima: UltimaPassagem = {
         ...resultado,
         operacao: id ? 'edicao' : 'criacao',
@@ -269,21 +305,21 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
               <input
                 type="date"
                 required
-                disabled={Boolean(id)}
+                disabled={Boolean(id || cicloId)}
                 value={data}
                 onChange={(e) => setData(e.target.value)}
               />
             </Field>
             <Select
               label="Turma"
-              disabled={Boolean(id)}
+              disabled={Boolean(id || cicloId)}
               value={turma}
               onChange={(v) => setTurma(v as Turma)}
               options={['A', 'B', 'C', 'D']}
             />
             <Select
               label="Turno"
-              disabled={Boolean(id)}
+              disabled={Boolean(id || cicloId)}
               value={turno}
               onChange={(v) => setTurno(v as Turno)}
               options={['DIURNO', 'NOTURNO']}
