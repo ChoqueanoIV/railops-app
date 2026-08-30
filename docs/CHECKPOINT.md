@@ -5,10 +5,10 @@ Atualizado em: 30/08/2026
 ## Estado seguro atual
 
 - branch de continuidade: `main`;
-- PR mais recente: [#41 — ocupação completa de L22/L24](https://github.com/ChoqueanoIV/railops-app/pull/41), mesclada;
-- merge consolidado na `main`: `cfaa59d`;
+- PR mais recente: [#42 — rascunho e confirmação consolidada da passagem](https://github.com/ChoqueanoIV/railops-app/pull/42), mesclada;
+- merge consolidado na `main`: `02e9683`;
 - Task 019B concluída, validada e integrada;
-- Task 019C concluída e validada localmente, aguardando commit e integração;
+- Task 019C concluída, validada e integrada;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -39,12 +39,13 @@ Atualizado em: 30/08/2026
 - 018 — ADRs e governança arquitetural: integrada no PR #37.
 - 019A — serialização dos erros de validação 422: integrada no PR #39.
 - 019B — ocupação completa de L22/L24: integrada no PR #41.
+- 019C — rascunho e confirmação consolidada: integrada no PR #42.
 
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
-concluída e originou as correções 019B e 019C. A 019B está integrada e a 019C
-está concluída e validada localmente.
+concluída e originou as correções 019B e 019C. Ambas estão integradas na
+`main`.
 
-## Validação local da task 019C
+## Validação da task 019C
 
 - 144 testes backend e 14 testes React aprovados;
 - Ruff, formatter Ruff, mypy, ESLint, Prettier e type-check aprovados;
@@ -55,6 +56,8 @@ está concluída e validada localmente.
   confirmação idempotente e bloqueio posterior;
 - dados temporários da homologação removidos em transação;
 - nenhuma regra interna de Brisamar, TECON ou janela de turno foi alterada.
+- jobs remotos `Backend` e `Frontend` aprovados no PR #42;
+- merge `02e9683` integrado na `main` sem conflitos.
 
 ## Validação da task 019B
 
@@ -104,10 +107,10 @@ está concluída e validada localmente.
 
 ## Próximo passo obrigatório
 
-1. revisar o diff final da Task 019C e criar o commit local;
-2. publicar a branch e abrir o PR somente após os gates finais;
-3. integrar a 019C antes de iniciar qualquer task 020–026;
-4. após a integração, detalhar a Task 020 conforme seu gate já aprovado.
+1. revisar o gate de negócio da Task 020 no roadmap do produto;
+2. detalhar a Task 020 em arquivo próprio antes de alterar código;
+3. validar o plano detalhado contra o comportamento existente;
+4. implementar somente após aprovação explícita do escopo e dos critérios.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.

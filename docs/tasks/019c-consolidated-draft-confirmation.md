@@ -1,6 +1,6 @@
 # Rascunho e confirmação consolidada da passagem
 
-Status: `CONCLUÍDA LOCALMENTE`
+Status: `INTEGRADA` — PR #42, merge `02e9683`
 
 ## Objetivo
 
