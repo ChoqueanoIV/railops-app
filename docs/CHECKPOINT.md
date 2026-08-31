@@ -4,14 +4,14 @@ Atualizado em: 30/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `feat/historico-auditavel-edicoes`;
-- PR mais recente: [#44 — consulta de passagens confirmadas](https://github.com/ChoqueanoIV/railops-app/pull/44), mesclada;
-- merge consolidado na `main`: `1ac14e7`;
+- branch de continuidade: `main`;
+- PR mais recente: [#45 — histórico auditável de edições](https://github.com/ChoqueanoIV/railops-app/pull/45), mesclada;
+- merge consolidado na `main`: `0d30b51`;
 - Task 019B concluída, validada e integrada;
 - Task 019C concluída, validada e integrada;
 - Task 020 concluída, validada e integrada;
 - Task 021 concluída, validada e integrada;
-- Task 022 em execução, com backend, frontend e migration validados localmente;
+- Task 022 concluída, validada e integrada;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -45,12 +45,13 @@ Atualizado em: 30/08/2026
 - 019C — rascunho e confirmação consolidada: integrada no PR #42.
 - 020 — descoberta e contrato de consulta: integrada no PR #43.
 - 021 — listagem e filtros de passagens: integrada no PR #44.
+- 022 — histórico auditável de edições: integrada no PR #45.
 
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
 `main`.
 
-## Validação parcial da task 022
+## Validação da task 022
 
 - perfis explícitos persistidos com `MANOBRADOR` como padrão seguro;
 - endpoint paginado de histórico restrito a Instrutor e Monitor de Qualidade;
@@ -70,6 +71,8 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 - procedimento administrativo idempotente de atribuição de perfil documentado;
 - nenhuma regra operacional de Brisamar, TECON, turno, edição ou confirmação
   foi modificada.
+- jobs remotos `Backend` e `Frontend` aprovados no PR #45;
+- merge `0d30b51` integrado na `main` sem conflitos.
 
 ## Validação da task 019C
 
@@ -133,12 +136,12 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. executar todos os gates locais e revisar o diff final;
-2. concluir a Task 022, criar commit complementar e publicar a branch;
-3. abrir o PR da Task 022 e aguardar os jobs remotos antes do merge.
+1. revisar o gate da Task 023 no `docs/ROADMAP.md`;
+2. decidir formato, período, campos e finalidade das exportações e relatórios;
+3. criar a task detalhada somente após aprovação explícita dessas decisões;
+4. não implementar a Task 023 antes do gate de negócio.
 
-Não implementar os itens 020–026 antes da homologação e da aprovação de seus
-gates de negócio.
+Não implementar os itens 023–026 antes da aprovação de seus gates de negócio.
 
 ## Restrições de continuidade
 

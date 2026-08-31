@@ -1,6 +1,6 @@
 # Histórico auditável de edições
 
-Status: `EM EXECUÇÃO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 
@@ -152,8 +152,8 @@ códigos de ativação durante esse procedimento.
 - [x] snapshots existentes permanecem intactos;
 - [x] migration validada nos dois sentidos sem perda de usuários;
 - [x] procedimento administrativo de atribuição documentado;
-- [ ] backend, frontend, Docker e CI aprovados;
-- [ ] nenhuma regra operacional não autorizada é alterada.
+- [x] backend, frontend, Docker e CI aprovados;
+- [x] nenhuma regra operacional não autorizada é alterada.
 
 ## Evidências
 
@@ -176,3 +176,5 @@ códigos de ativação durante esse procedimento.
 - contêiner `railops-task022-http` e banco `railops_http_task022` removidos ao
   final da homologação;
 - banco persistente e regras operacionais não foram alterados.
+- jobs remotos `Backend` e `Frontend` aprovados no PR #45;
+- merge `0d30b51` integrado na `main` sem conflitos.
