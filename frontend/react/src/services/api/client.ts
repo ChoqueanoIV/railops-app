@@ -91,7 +91,7 @@ export class ApiClient {
       const body = await readBody(response);
 
       if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
+        if (response.status === 401) {
           tokenStorage.clear();
           window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
         }

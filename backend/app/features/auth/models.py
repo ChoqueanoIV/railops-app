@@ -1,8 +1,9 @@
+import enum
 import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, DateTime, String, func
+from sqlalchemy import Boolean, DateTime, Enum, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -24,6 +25,12 @@ def _modelo_ciclo_passagem() -> type["CicloPassagem"]:
     return CicloPassagem
 
 
+class PerfilUsuario(str, enum.Enum):
+    MANOBRADOR = "MANOBRADOR"
+    INSTRUTOR = "INSTRUTOR"
+    MONITOR_QUALIDADE = "MONITOR_QUALIDADE"
+
+
 class Usuario(Base):
     __tablename__ = "usuario"
 
@@ -37,6 +44,12 @@ class Usuario(Base):
     pin_definido: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     criado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+    perfil: Mapped["PerfilUsuario"] = mapped_column(
+        Enum(PerfilUsuario, name="perfilusuario"),
+        nullable=False,
+        default=lambda: PerfilUsuario.MANOBRADOR,
+        server_default=PerfilUsuario.MANOBRADOR.value,
     )
 
     passagens: Mapped[list["PassagemServico"]] = relationship(

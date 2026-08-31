@@ -4,6 +4,7 @@ import type {
   CicloConsultaFiltros,
   CicloConsultaLista,
   PassagemConsulta,
+  PassagemHistoricoLista,
   PassagemPayload,
   PassagemResultado,
   Terminal,
@@ -23,6 +24,10 @@ export const passagemService = {
   },
   consultar: (id: string) =>
     apiClient.request<PassagemConsulta>(`/passagens/${id}`),
+  consultarHistorico: (id: string, pagina = 1) =>
+    apiClient.request<PassagemHistoricoLista>(
+      `/passagens/${id}/historico?pagina=${pagina}&por_pagina=20`,
+    ),
   consultarCiclo: (id: string) =>
     apiClient.request<CicloPassagem>(`/passagens/ciclos/${id}`),
   recuperarRascunho: (data: string, turma: string, turno: string) =>

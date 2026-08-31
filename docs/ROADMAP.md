@@ -55,6 +55,20 @@ Cada item deve ganhar uma task detalhada apenas depois que seu gate for decidido
 - política de retenção e tratamento dos dados operacionais;
 - ambiente e público do primeiro deploy.
 
+## Decisões confirmadas para a Task 022
+
+- perfis explícitos `MANOBRADOR`, `INSTRUTOR` e `MONITOR_QUALIDADE` associados
+  à matrícula cadastrada, sem inferência pelo número;
+- usuários existentes permanecem como `MANOBRADOR` por padrão;
+- atribuição inicial de Instrutores e Monitores por procedimento administrativo
+  seguro no banco, sem criar tela administrativa nesta etapa;
+- todos os usuários autenticados continuam consultando o conteúdo final;
+- somente Instrutores e Monitores de Qualidade consultam snapshots de edição;
+- histórico exibe versão, data/hora, responsável pela alteração e comparação
+  entre o estado anterior e o conteúdo final;
+- PIN, hashes, tokens, códigos de ativação e demais dados de autenticação nunca
+  fazem parte do histórico consultável.
+
 ## Regra de execução
 
 Executar uma task por branch e PR. Mudança funcional exige critério de aceite,

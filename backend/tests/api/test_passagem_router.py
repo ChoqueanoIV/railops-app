@@ -12,6 +12,7 @@ from app.features.passagens.models import (
     CicloPassagem,
     EstadoCicloPassagem,
     PassagemServico,
+    PassagemServicoHistorico,
     PassagemTeconDetalhe,
     Terminal,
     Turma,
@@ -225,6 +226,61 @@ def test_consultar_passagem_inexistente_retorna_404(monkeypatch):
     with pytest.raises(ApiError) as erro:
         passagem_controller.consultar_passagem(
             uuid.uuid4(), criar_service(), Usuario(id=uuid.uuid4())
+        )
+
+    assert erro.value.status_code == 404
+    assert erro.value.code == "PASSAGEM_NOT_FOUND"
+
+
+def test_consultar_historico_retorna_estado_atual_autor_e_paginacao(monkeypatch):
+    passagem = criar_passagem_completa_para_snapshot()
+    alterador = Usuario(nome="Instrutor", matricula="87654321")
+    item = PassagemServicoHistorico(
+        passagem_id=passagem.id,
+        versao=2,
+        snapshot={"passagem": {"observacoes": "Estado anterior"}},
+        alterado_por=uuid.uuid4(),
+        alterado_em=datetime(2026, 8, 30, 15, 45, tzinfo=UTC),
+        alterador=alterador,
+    )
+    service = criar_service()
+    monkeypatch.setattr(
+        service,
+        "consultar_historico",
+        MagicMock(return_value=(passagem, [item], 21)),
+    )
+    monkeypatch.setattr(service, "passagem_editavel", MagicMock(return_value=False))
+
+    resposta = passagem_controller.consultar_historico_passagem(
+        passagem.id,
+        pagina=2,
+        por_pagina=20,
+        service=service,
+        usuario_atual=Usuario(id=uuid.uuid4()),
+    )
+
+    assert resposta.passagem_atual.id == passagem.id
+    assert resposta.itens[0].versao == 2
+    assert resposta.itens[0].alterador.matricula == "87654321"
+    assert resposta.itens[0].snapshot["passagem"]["observacoes"] == "Estado anterior"
+    assert resposta.paginacao.total_paginas == 2
+
+
+def test_consultar_historico_inexistente_retorna_404(monkeypatch):
+    service = criar_service()
+    monkeypatch.setattr(
+        service,
+        "consultar_historico",
+        MagicMock(side_effect=PassagemError("Passagem de serviço não encontrada.")),
+    )
+
+    with pytest.raises(ApiError) as erro:
+        passagem_controller.consultar_historico_passagem(
+            uuid.uuid4(),
+            pagina=1,
+            por_pagina=20,
+            service=service,
+            usuario_atual=Usuario(id=uuid.uuid4()),
         )
 
     assert erro.value.status_code == 404

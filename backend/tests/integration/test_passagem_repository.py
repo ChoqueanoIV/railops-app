@@ -266,6 +266,42 @@ def test_passagem_repository_registra_proxima_versao_sem_commit():
     db.commit.assert_not_called()
 
 
+def test_passagem_repository_lista_historico_ordenado_e_paginado():
+    db = MagicMock()
+    consulta = db.query.return_value.filter.return_value
+    consulta.count.return_value = 21
+    pagina = consulta.options.return_value.order_by.return_value.offset.return_value.limit.return_value
+    historicos = [PassagemServicoHistorico(versao=2)]
+    pagina.all.return_value = historicos
+    repository = PassagemRepository(db)
+    passagem_id = uuid.uuid4()
+
+    itens, total = repository.listar_historico(passagem_id, pagina=2, por_pagina=20)
+
+    assert itens == historicos
+    assert total == 21
+    consulta.count.assert_called_once_with()
+    consulta.options.return_value.order_by.assert_called_once()
+    consulta.options.return_value.order_by.return_value.offset.assert_called_once_with(
+        20
+    )
+    pagina.all.assert_called_once_with()
+
+
+def test_passagem_repository_aceita_historico_vazio():
+    db = MagicMock()
+    consulta = db.query.return_value.filter.return_value
+    consulta.count.return_value = 0
+    pagina = consulta.options.return_value.order_by.return_value.offset.return_value.limit.return_value
+    pagina.all.return_value = []
+    repository = PassagemRepository(db)
+
+    itens, total = repository.listar_historico(uuid.uuid4(), pagina=1, por_pagina=20)
+
+    assert itens == []
+    assert total == 0
+
+
 def test_passagem_repository_confirma_edicao_em_uma_transacao():
     db = MagicMock()
     repository = PassagemRepository(db)

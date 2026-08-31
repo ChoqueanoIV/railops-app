@@ -212,6 +212,16 @@ export function PassagensListPage() {
                   >
                     Ver passagem completa
                   </Link>
+                  {ciclo.passagens.map((passagem) => (
+                    <Link
+                      key={passagem.id}
+                      className="text-link"
+                      to={`/passagens/${passagem.id}/historico`}
+                    >
+                      Histórico{' '}
+                      {passagem.terminal === 'BRISAMAR' ? 'Brisamar' : 'TECON'}
+                    </Link>
+                  ))}
                 </article>
               ))}
             </div>

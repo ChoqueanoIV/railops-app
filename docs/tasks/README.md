@@ -34,11 +34,12 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 019C | Rascunho e confirmação consolidada da passagem | 019B |
 | 020 | Descoberta e contrato de consulta | 019C |
 | 021 | Listagem e filtros de passagens | 020 |
+| 022 | Histórico auditável de edições | 020, 021 |
 
-As correções 019B e 019C e o contrato da Task 020 estão concluídos. A Task 021
-possui plano detalhado em
-[`021-passage-list-filters.md`](021-passage-list-filters.md). As entregas
-022–026 continuam condicionadas aos gates registrados no roadmap; criar cada
+As correções 019B e 019C e as Tasks 020 e 021 estão concluídas. A Task 022
+está em execução, com gate aprovado e plano detalhado em
+[`022-auditable-edit-history.md`](022-auditable-edit-history.md). As entregas
+023–026 continuam condicionadas aos gates registrados no roadmap; criar cada
 task detalhada somente após aprovar seu gate.
 
 ## Como pedir uma task ao Codex

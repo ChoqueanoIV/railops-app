@@ -14,6 +14,7 @@ from app.features.passagens.models import (
     PassagemLinhaOcupacao,
     PassagemRadioUso,
     PassagemServico,
+    PassagemServicoHistorico,
     PassagemTeconDetalhe,
     Terminal,
     Turma,
@@ -318,6 +319,15 @@ class PassagemService:
         if passagem is None:
             raise PassagemError("Passagem de serviço não encontrada.")
         return passagem
+
+    def consultar_historico(
+        self, passagem_id: uuid.UUID, pagina: int, por_pagina: int
+    ) -> tuple[PassagemServico, list[PassagemServicoHistorico], int]:
+        passagem = self.obter_por_id(passagem_id)
+        itens, total = self.passagem_repository.listar_historico(
+            passagem_id, pagina, por_pagina
+        )
+        return passagem, itens, total
 
     @classmethod
     def passagem_editavel(
