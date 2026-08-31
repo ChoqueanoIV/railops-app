@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
-import { passagemService } from './service';
+import { passagemService, salvarDownload } from './service';
 import type {
   CicloPassagem,
   PassagemConsulta,
@@ -23,6 +23,7 @@ function RevisaoCiclo({ cicloId }: { cicloId: string }) {
   const [ciclo, setCiclo] = useState<CicloPassagem | null>(null);
   const [erro, setErro] = useState('');
   const [confirmando, setConfirmando] = useState(false);
+  const [baixandoPdf, setBaixandoPdf] = useState(false);
 
   useEffect(() => {
     passagemService
@@ -46,6 +47,21 @@ function RevisaoCiclo({ cicloId }: { cicloId: string }) {
       setErro(e instanceof Error ? e.message : 'Não foi possível confirmar.');
     } finally {
       setConfirmando(false);
+    }
+  }
+
+  async function baixarPdf() {
+    setBaixandoPdf(true);
+    setErro('');
+    try {
+      const arquivo = await passagemService.baixarPdfIndividual(cicloId);
+      salvarDownload(arquivo.blob, arquivo.filename);
+    } catch (e) {
+      setErro(
+        e instanceof Error ? e.message : 'Não foi possível baixar o PDF.',
+      );
+    } finally {
+      setBaixandoPdf(false);
     }
   }
 
@@ -116,10 +132,19 @@ function RevisaoCiclo({ cicloId }: { cicloId: string }) {
           </button>
         )}
         {confirmado && (
-          <p role="status">
-            Confirmação final concluída. Brisamar e TECON estão bloqueados para
-            edição.
-          </p>
+          <>
+            <p role="status">
+              Confirmação final concluída. Brisamar e TECON estão bloqueados
+              para edição.
+            </p>
+            <button
+              className="button"
+              disabled={baixandoPdf}
+              onClick={baixarPdf}
+            >
+              {baixandoPdf ? 'Gerando PDF...' : 'Baixar PDF'}
+            </button>
+          </>
         )}
         <Link className="text-link" to="/terminal">
           Voltar aos terminais

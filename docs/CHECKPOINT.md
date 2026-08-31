@@ -1,6 +1,6 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 30/08/2026
+Atualizado em: 31/08/2026
 
 ## Estado seguro atual
 
@@ -12,7 +12,9 @@ Atualizado em: 30/08/2026
 - Task 020 concluída, validada e integrada;
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
-- Task 023 com gate aprovado e planejamento detalhado, sem implementação;
+- Task 023 implementada e validada localmente, aguardando commit, push e CI;
+- baseline da Task 023 preservado; validação final com 171 testes backend e 28
+  testes React;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -51,6 +53,32 @@ Atualizado em: 30/08/2026
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
 `main`.
+
+## Validação da task 023
+
+- PDF individual disponível a qualquer usuário autenticado para ciclos
+  confirmados, reunindo Brisamar e TECON;
+- PDF e CSV consolidados restritos a Instrutor e Monitor de Qualidade;
+- filtros existentes reutilizados, período padrão de 30 dias e limite máximo
+  de um ano por arquivo;
+- CSV UTF-8 com uma linha por ciclo, listas determinísticas e proteção contra
+  fórmulas de planilha;
+- arquivos gerados em memória e entregues como download, sem persistência no
+  servidor e sem snapshots ou credenciais;
+- interface React com downloads autenticados, carregamento, erros e preservação
+  da sessão em resposta 403;
+- 171 testes backend e 28 testes React aprovados;
+- Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check e build Vite
+  aprovados;
+- PDFs individual e consolidado inspecionados visualmente, inclusive com
+  paginação multipágina;
+- imagem Docker reconstruída, backend saudável e `/ready` aprovado sem alterar
+  o volume PostgreSQL;
+- homologação HTTP real aprovou 403 para Manobrador e 200 em CSV/PDF para
+  Instrutor; usuários temporários foram removidos pelos UUIDs criados;
+- banco local sem ciclo confirmado para homologação HTTP individual; cenário
+  coberto por testes automatizados e inspeção visual;
+- CI remota pendente da publicação desta branch.
 
 ## Validação da task 022
 
@@ -137,12 +165,12 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar `docs/tasks/023-exports-reports.md`;
-2. executar o baseline completo antes de alterar código funcional;
-3. implementar somente a Task 023, preservando filtros e permissões atuais;
-4. validar que arquivos não persistem e não expõem snapshots ou credenciais.
+1. revisar o diff final da Task 023;
+2. criar commit em PT-BR e publicar `feat/exportacoes-relatorios`;
+3. abrir ou atualizar o PR da Task 023 e aguardar Backend e Frontend na CI;
+4. após integração, preparar o gate da Task 024 sem iniciá-la automaticamente.
 
-Não implementar os itens 023–026 antes da aprovação de seus gates de negócio.
+Não implementar os itens 024–026 antes da aprovação de seus gates de negócio.
 
 ## Restrições de continuidade
 

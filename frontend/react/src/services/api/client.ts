@@ -24,6 +24,11 @@ interface ApiClientOptions {
   timeoutMs?: number;
 }
 
+export interface ApiDownload {
+  blob: Blob;
+  filename: string;
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
@@ -117,6 +122,67 @@ export class ApiClient {
       if (error instanceof ApiClientError) {
         throw error;
       }
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        throw new ApiClientError(
+          'O servidor demorou para responder. Tente novamente.',
+          null,
+          'REQUEST_TIMEOUT',
+        );
+      }
+      throw new ApiClientError(
+        'Não foi possível conectar ao servidor.',
+        null,
+        'NETWORK_ERROR',
+      );
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  }
+
+  async download(path: string): Promise<ApiDownload> {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(
+      () => controller.abort(),
+      this.timeoutMs,
+    );
+    const headers = new Headers();
+    const token = tokenStorage.get();
+    if (token) headers.set('Authorization', `Bearer ${token}`);
+
+    try {
+      const response = await (this.fetcher ?? fetch)(`${this.baseUrl}${path}`, {
+        headers,
+        signal: controller.signal,
+      });
+      if (!response.ok) {
+        const body = await readBody(response);
+        if (response.status === 401) {
+          tokenStorage.clear();
+          window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
+        }
+        if (isApiErrorEnvelope(body)) {
+          throw new ApiClientError(
+            body.error.message,
+            response.status,
+            body.error.code,
+            body.error.details,
+          );
+        }
+        throw new ApiClientError(
+          'Não foi possível concluir a solicitação.',
+          response.status,
+          'HTTP_ERROR',
+        );
+      }
+
+      const disposicao = response.headers.get('content-disposition') ?? '';
+      const nome = /filename="?([^";]+)"?/i.exec(disposicao)?.[1];
+      return {
+        blob: await response.blob(),
+        filename: nome ?? 'railops-exportacao',
+      };
+    } catch (error) {
+      if (error instanceof ApiClientError) throw error;
       if (error instanceof DOMException && error.name === 'AbortError') {
         throw new ApiClientError(
           'O servidor demorou para responder. Tente novamente.',

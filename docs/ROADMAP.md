@@ -12,8 +12,8 @@ O RailOps já possui autenticação, primeiro acesso, seleção de terminal, cri
 consulta por identificador, edição autorizada e confirmação de passagens de
 Brisamar e TECON. Backend, frontend, banco, Docker e CI estão automatizados.
 
-Ainda não existem listagem navegável, filtros, consulta visual dos snapshots de
-edição, exportações, relatórios consolidados ou deploy público.
+Listagem navegável, filtros, consulta visual dos snapshots e exportações em PDF
+e CSV já foram implementados. Ainda não existe deploy público.
 
 ## Sequência proposta
 
@@ -51,7 +51,6 @@ Cada item deve ganhar uma task detalhada apenas depois que seu gate for decidido
 
 ## Decisões ainda pendentes
 
-- quais relatórios são úteis e se a saída deve ser tela, CSV ou PDF;
 - política de retenção e tratamento dos dados operacionais;
 - ambiente e público do primeiro deploy.
 

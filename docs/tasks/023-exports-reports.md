@@ -1,6 +1,6 @@
 # Exportações e relatórios
 
-Status: `PLANEJADA`
+Status: `IMPLEMENTADA — AGUARDANDO CI/PR`
 
 ## Objetivo
 
@@ -143,18 +143,43 @@ conteúdo final já aprovados.
 
 ## Critérios de aceite
 
-- [ ] PDF individual reúne Brisamar e TECON e respeita acesso autenticado;
-- [ ] PDF e CSV consolidados são restritos aos perfis especiais;
-- [ ] filtros e período máximo de um ano são aplicados corretamente;
-- [ ] uma linha CSV representa um ciclo completo sem duplicação;
-- [ ] nomes e matrículas operacionais aparecem conforme aprovado;
-- [ ] snapshots e dados de autenticação não aparecem nos arquivos;
-- [ ] arquivos são gerados sob demanda e não persistidos;
-- [ ] downloads autenticados funcionam na interface React;
-- [ ] endpoints existentes e regras operacionais permanecem inalterados;
+- [x] PDF individual reúne Brisamar e TECON e respeita acesso autenticado;
+- [x] PDF e CSV consolidados são restritos aos perfis especiais;
+- [x] filtros e período máximo de um ano são aplicados corretamente;
+- [x] uma linha CSV representa um ciclo completo sem duplicação;
+- [x] nomes e matrículas operacionais aparecem conforme aprovado;
+- [x] snapshots e dados de autenticação não aparecem nos arquivos;
+- [x] arquivos são gerados sob demanda e não persistidos;
+- [x] downloads autenticados funcionam na interface React;
+- [x] endpoints existentes e regras operacionais permanecem inalterados;
 - [ ] backend, frontend, Docker e CI são aprovados;
-- [ ] documentação e checkpoint registram as evidências finais.
+- [x] documentação e checkpoint registram as evidências finais.
 
 ## Evidências
 
-A preencher durante a execução da task.
+- baseline anterior à implementação: 156 testes backend e 23 testes React;
+- Ruff, formatter Ruff, mypy, ESLint, Prettier e type-check aprovados;
+- build Vite de produção aprovado;
+- branch funcional criada a partir da `main` limpa após a integração da Task
+  022;
+- nenhum código funcional ou schema de banco alterado nesta etapa.
+- backend parcial implementado: PDF individual, PDF consolidado e CSV
+  consolidado gerados sob demanda;
+- consolidados protegidos por perfil especial, período padrão de 30 dias e
+  intervalo máximo de um ano;
+- CSV validado com uma linha por ciclo, UTF-8 com BOM, listas determinísticas e
+  proteção contra fórmulas de planilha;
+- PDF individual e consolidado validados visualmente, inclusive paginação;
+- 171 testes backend, Ruff, formatter Ruff e mypy aprovados após esta etapa.
+- frontend React conectado aos três downloads com token somente no cabeçalho,
+  filtros ativos, carregamento, erro e preservação da sessão em resposta 403;
+- 28 testes React, ESLint, Prettier, type-check e build Vite aprovados.
+- imagem Docker reconstruída com `reportlab`, backend saudável e endpoint
+  `/ready` aprovado sem alterar o volume PostgreSQL;
+- homologação HTTP real: Manobrador recebeu 403 nos consolidados e Instrutor
+  recebeu 200 no CSV e no PDF, com tipos de conteúdo corretos;
+- usuários aleatórios da homologação removidos pelos UUIDs criados; o banco
+  local não continha ciclo confirmado para repetir o PDF individual via HTTP;
+  esse cenário permanece coberto pelos testes automatizados e pela inspeção
+  visual do PDF com ciclo completo;
+- CI remota pendente da publicação da branch e abertura/atualização do PR.

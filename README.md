@@ -4,9 +4,9 @@ Sistema web para digitalizar a passagem de serviço entre turnos no Pátio
 Brisamar e no Terminal TECON, preservando as regras operacionais existentes.
 
 > **Status:** MVP funcional, testado e com CI. Login, primeiro acesso, seleção
-> de terminal, criação, edição e confirmação de passagens estão disponíveis no
-> React. A API preserva o estado anterior de cada edição. Ainda não há deploy
-> público nem telas dedicadas para histórico, filtros ou relatórios.
+> de terminal, criação, edição, confirmação, consulta, histórico e exportações
+> estão disponíveis no React. A API preserva o estado anterior de cada edição.
+> Ainda não há deploy público.
 
 ## Funcionalidades disponíveis
 
@@ -16,6 +16,9 @@ Brisamar e no Terminal TECON, preservando as regras operacionais existentes.
 - data operacional baseada no início do turno, inclusive no turno noturno;
 - validações de domínio e janela de edição no backend;
 - confirmação do registro e histórico persistido das edições;
+- consulta filtrada e paginada das passagens confirmadas;
+- histórico visual restrito a Instrutores e Monitores de Qualidade;
+- PDF individual e exportações consolidadas em PDF e CSV;
 - PostgreSQL versionado por migrations Alembic;
 - Swagger/OpenAPI, testes automatizados e GitHub Actions.
 
@@ -291,7 +294,7 @@ Planejado, ainda não concluído:
 
 - hardening final e limpeza segura dos adaptadores/fallbacks;
 - validação operacional e de UX com usuários;
-- histórico visual de edições, exportações e relatórios;
+- testes E2E dos fluxos críticos;
 - estratégia de deploy e observabilidade.
 
 O estado de retomada fica em [`docs/CHECKPOINT.md`](docs/CHECKPOINT.md), o índice

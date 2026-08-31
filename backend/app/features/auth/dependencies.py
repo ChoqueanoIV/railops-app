@@ -41,6 +41,21 @@ def obter_usuario_atual(
         ) from None
 
 
+def exigir_perfil_especial(
+    usuario_atual: Usuario = Depends(obter_usuario_atual),
+) -> Usuario:
+    if usuario_atual.perfil not in {
+        PerfilUsuario.INSTRUTOR,
+        PerfilUsuario.MONITOR_QUALIDADE,
+    }:
+        raise ApiError(
+            status_code=403,
+            code="SPECIAL_ACCESS_DENIED",
+            message="Usuário sem permissão para acessar este recurso.",
+        )
+    return usuario_atual
+
+
 def exigir_consulta_historico(
     usuario_atual: Usuario = Depends(obter_usuario_atual),
 ) -> Usuario:

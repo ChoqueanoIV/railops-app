@@ -8,8 +8,11 @@ ENDPOINTS_PUBLICOS = {
     "/passagens/brisamar": {"post"},
     "/passagens/tecon": {"post"},
     "/passagens/ciclos": {"get"},
+    "/passagens/ciclos/exportacoes.csv": {"get"},
+    "/passagens/ciclos/exportacoes.pdf": {"get"},
     "/passagens/ciclos/rascunho": {"get"},
     "/passagens/ciclos/{ciclo_id}": {"get"},
+    "/passagens/ciclos/{ciclo_id}/exportacao.pdf": {"get"},
     "/passagens/ciclos/{ciclo_id}/confirmar": {"post"},
     "/passagens/{passagem_id}": {"get", "put"},
     "/passagens/{passagem_id}/historico": {"get"},
@@ -50,8 +53,11 @@ def test_openapi_mantem_autenticacao_apenas_nas_rotas_de_passagem():
         "/passagens/brisamar",
         "/passagens/tecon",
         "/passagens/ciclos",
+        "/passagens/ciclos/exportacoes.csv",
+        "/passagens/ciclos/exportacoes.pdf",
         "/passagens/ciclos/rascunho",
         "/passagens/ciclos/{ciclo_id}",
+        "/passagens/ciclos/{ciclo_id}/exportacao.pdf",
         "/passagens/ciclos/{ciclo_id}/confirmar",
         "/passagens/{passagem_id}",
         "/passagens/{passagem_id}/historico",
@@ -71,6 +77,8 @@ def test_openapi_documenta_erros_conhecidos_com_schema_unico():
         ("/passagens/{passagem_id}", "get"): {"401", "404"},
         ("/passagens/{passagem_id}", "put"): {"400", "401"},
         ("/passagens/{passagem_id}/historico", "get"): {"401", "403", "404"},
+        ("/passagens/ciclos/exportacoes.csv", "get"): {"401", "403", "422"},
+        ("/passagens/ciclos/exportacoes.pdf", "get"): {"401", "403", "422"},
     }
 
     for (caminho, metodo), status_esperados in respostas_esperadas.items():

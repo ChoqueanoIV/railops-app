@@ -2,7 +2,7 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ApiClientError } from '@/services/api/client';
-import { passagemService } from './service';
+import { passagemService, salvarDownload } from './service';
 import type {
   CicloConsultaFiltros,
   CicloConsultaLista,
@@ -40,6 +40,8 @@ export function PassagensListPage() {
   const [resultado, setResultado] = useState<CicloConsultaLista | null>(null);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState('');
+  const [erroExportacao, setErroExportacao] = useState('');
+  const [exportando, setExportando] = useState<'csv' | 'pdf' | null>(null);
 
   const consultar = useCallback(async () => {
     setCarregando(true);
@@ -78,6 +80,25 @@ export function PassagensListPage() {
 
   const mudarPagina = (pagina: number) => {
     setFiltros((atual) => ({ ...atual, pagina }));
+  };
+
+  const exportar = async (formato: 'csv' | 'pdf') => {
+    setExportando(formato);
+    setErroExportacao('');
+    try {
+      const arquivo = await passagemService.baixarConsolidado(formato, filtros);
+      salvarDownload(arquivo.blob, arquivo.filename);
+    } catch (error) {
+      setErroExportacao(
+        error instanceof ApiClientError && error.status === 403
+          ? 'Seu perfil não possui permissão para exportações consolidadas.'
+          : error instanceof Error
+            ? error.message
+            : 'Não foi possível gerar a exportação.',
+      );
+    } finally {
+      setExportando(null);
+    }
   };
 
   return (
@@ -162,7 +183,28 @@ export function PassagensListPage() {
           >
             Limpar filtros
           </button>
+          <button
+            className="button button--secondary"
+            type="button"
+            disabled={exportando !== null}
+            onClick={() => void exportar('csv')}
+          >
+            {exportando === 'csv' ? 'Gerando CSV...' : 'Exportar CSV'}
+          </button>
+          <button
+            className="button button--secondary"
+            type="button"
+            disabled={exportando !== null}
+            onClick={() => void exportar('pdf')}
+          >
+            {exportando === 'pdf' ? 'Gerando PDF...' : 'Exportar PDF'}
+          </button>
         </div>
+        {erroExportacao && (
+          <p className="status status--error" role="alert">
+            {erroExportacao}
+          </p>
+        )}
       </form>
 
       <section className="passage-results" aria-live="polite">
