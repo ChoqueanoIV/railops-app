@@ -4,7 +4,7 @@ Atualizado em: 30/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
+- branch de continuidade: `feat/exportacoes-relatorios`;
 - PR mais recente: [#45 — histórico auditável de edições](https://github.com/ChoqueanoIV/railops-app/pull/45), mesclada;
 - merge consolidado na `main`: `0d30b51`;
 - Task 019B concluída, validada e integrada;
@@ -12,6 +12,7 @@ Atualizado em: 30/08/2026
 - Task 020 concluída, validada e integrada;
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
+- Task 023 com gate aprovado e planejamento detalhado, sem implementação;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -136,10 +137,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar o gate da Task 023 no `docs/ROADMAP.md`;
-2. decidir formato, período, campos e finalidade das exportações e relatórios;
-3. criar a task detalhada somente após aprovação explícita dessas decisões;
-4. não implementar a Task 023 antes do gate de negócio.
+1. revisar `docs/tasks/023-exports-reports.md`;
+2. executar o baseline completo antes de alterar código funcional;
+3. implementar somente a Task 023, preservando filtros e permissões atuais;
+4. validar que arquivos não persistem e não expõem snapshots ou credenciais.
 
 Não implementar os itens 023–026 antes da aprovação de seus gates de negócio.
 

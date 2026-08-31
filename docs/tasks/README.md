@@ -35,12 +35,15 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 020 | Descoberta e contrato de consulta | 019C |
 | 021 | Listagem e filtros de passagens | 020 |
 | 022 | Histórico auditável de edições | 020, 021 |
+| 023 | Exportações e relatórios | 021, 022 |
 
 As correções 019B e 019C e as Tasks 020–022 estão concluídas. O histórico e
 suas evidências estão registrados em
 [`022-auditable-edit-history.md`](022-auditable-edit-history.md). As entregas
-023–026 continuam condicionadas aos gates registrados no roadmap; criar cada
-task detalhada somente após aprovar seu gate.
+A Task 023 possui gate aprovado e plano detalhado em
+[`023-exports-reports.md`](023-exports-reports.md). As entregas 024–026
+continuam condicionadas aos gates registrados no roadmap; criar cada task
+detalhada somente após aprovar seu gate.
 
 ## Como pedir uma task ao Codex
 
