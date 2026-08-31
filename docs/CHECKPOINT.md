@@ -56,11 +56,17 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 - endpoint paginado de histórico restrito a Instrutor e Monitor de Qualidade;
 - comparação legível entre cada snapshot anterior e o conteúdo final;
 - resposta 403 preserva a sessão autenticada do Manobrador;
-- 153 testes backend e 21 testes React aprovados;
+- 156 testes backend e 23 testes React aprovados;
+- histórico vazio, recurso inexistente, múltiplas versões, ordenação e
+  paginação cobertos por testes automatizados;
 - Ruff, mypy, ESLint, Prettier, type-check e build Vite aprovados;
 - migration `a2b3c4d5e6f7` aprovada em PostgreSQL real com upgrade, downgrade e
   novo upgrade, preservando usuário e aplicando o perfil padrão;
 - banco temporário de validação removido e banco persistente não alterado;
+- HTTP real isolado aprovado para os três perfis: Manobrador acessa o conteúdo
+  final e recebe 403 no histórico; Instrutor e Monitor recebem 200 no histórico;
+- resposta real contém versão e autor, sem campos de autenticação;
+- contêiner e banco temporários da homologação HTTP removidos ao final;
 - procedimento administrativo idempotente de atribuição de perfil documentado;
 - nenhuma regra operacional de Brisamar, TECON, turno, edição ou confirmação
   foi modificada.
@@ -127,12 +133,9 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. ampliar os testes da Task 022 para histórico vazio, múltiplas versões,
-   ordenação e paginação;
-2. validar o fluxo HTTP real com perfis `MANOBRADOR`, `INSTRUTOR` e
-   `MONITOR_QUALIDADE` em dados temporários e reversíveis;
-3. executar todos os gates locais e revisar o diff final;
-4. concluir a Task 022, criar commit, publicar PR e aguardar os jobs remotos.
+1. executar todos os gates locais e revisar o diff final;
+2. concluir a Task 022, criar commit complementar e publicar a branch;
+3. abrir o PR da Task 022 e aguardar os jobs remotos antes do merge.
 
 Não implementar os itens 020–026 antes da homologação e da aprovação de seus
 gates de negócio.

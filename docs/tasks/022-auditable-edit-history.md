@@ -158,9 +158,9 @@ códigos de ativação durante esse procedimento.
 ## Evidências
 
 - baseline anterior à implementação: 148 testes backend e 18 testes React;
-- após a implementação: 153 testes backend aprovados;
-- 21 testes React aprovados, incluindo acesso permitido, bloqueio 403 e
-  preservação da sessão válida;
+- após a ampliação dos cenários: 156 testes backend aprovados;
+- 23 testes React aprovados, incluindo acesso permitido, bloqueio 403,
+  preservação da sessão, histórico vazio, múltiplas versões e paginação;
 - Ruff, mypy, ESLint, Prettier e type-check aprovados;
 - build Vite de produção aprovado;
 - migration `a2b3c4d5e6f7` validada em PostgreSQL real isolado com upgrade,
@@ -168,4 +168,11 @@ códigos de ativação durante esse procedimento.
 - usuário de teste preservado nos dois sentidos e perfil padrão
   `MANOBRADOR` confirmado;
 - banco temporário `railops_migration_task022` removido ao final;
+- fluxo HTTP real validado em instância isolada: conteúdo final `200` para
+  Manobrador, histórico `403` para Manobrador e `200` para Instrutor e Monitor
+  de Qualidade;
+- resposta HTTP confirmou versão, autor da alteração e ausência de campos de
+  autenticação;
+- contêiner `railops-task022-http` e banco `railops_http_task022` removidos ao
+  final da homologação;
 - banco persistente e regras operacionais não foram alterados.

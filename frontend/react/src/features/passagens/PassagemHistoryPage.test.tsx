@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -60,6 +61,55 @@ describe('histórico auditável da passagem', () => {
       ),
     ).toBeVisible();
     expect(sessionStorage.getItem('access_token')).toBe('jwt-valido');
+  });
+
+  it('informa quando a passagem ainda não possui edições', async () => {
+    const resposta = historico();
+    resposta.itens = [];
+    resposta.paginacao.total_itens = 0;
+    resposta.paginacao.total_paginas = 0;
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(responder(resposta)));
+
+    render(
+      <MemoryRouter initialEntries={['/passagens/passagem-1/historico']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(
+      await screen.findByText('Esta passagem ainda não possui edições.'),
+    ).toBeVisible();
+  });
+
+  it('mostra múltiplas versões e solicita a próxima página', async () => {
+    const user = userEvent.setup();
+    const primeira = historico();
+    primeira.itens.push({
+      ...primeira.itens[0],
+      versao: 2,
+      alterado_em: '2026-08-30T18:50:00Z',
+    });
+    primeira.paginacao.total_itens = 21;
+    primeira.paginacao.total_paginas = 2;
+    const fetchMock = vi.fn().mockResolvedValue(responder(primeira));
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(
+      <MemoryRouter initialEntries={['/passagens/passagem-1/historico']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(
+      await screen.findByRole('heading', { name: 'Versão 1' }),
+    ).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Versão 2' })).toBeVisible();
+    await user.click(screen.getByRole('button', { name: 'Próxima' }));
+
+    expect(fetchMock).toHaveBeenLastCalledWith(
+      expect.stringContaining('pagina=2&por_pagina=20'),
+      expect.anything(),
+    );
   });
 });
 

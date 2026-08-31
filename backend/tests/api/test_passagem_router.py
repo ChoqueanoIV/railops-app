@@ -266,6 +266,27 @@ def test_consultar_historico_retorna_estado_atual_autor_e_paginacao(monkeypatch)
     assert resposta.paginacao.total_paginas == 2
 
 
+def test_consultar_historico_inexistente_retorna_404(monkeypatch):
+    service = criar_service()
+    monkeypatch.setattr(
+        service,
+        "consultar_historico",
+        MagicMock(side_effect=PassagemError("Passagem de serviço não encontrada.")),
+    )
+
+    with pytest.raises(ApiError) as erro:
+        passagem_controller.consultar_historico_passagem(
+            uuid.uuid4(),
+            pagina=1,
+            por_pagina=20,
+            service=service,
+            usuario_atual=Usuario(id=uuid.uuid4()),
+        )
+
+    assert erro.value.status_code == 404
+    assert erro.value.code == "PASSAGEM_NOT_FOUND"
+
+
 def test_listar_ciclos_retorna_responsavel_e_paginacao(monkeypatch):
     usuario = Usuario(id=uuid.uuid4(), nome="Responsável", matricula="30032552")
     ciclo = CicloPassagem(
