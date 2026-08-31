@@ -1,6 +1,6 @@
 # Exportações e relatórios
 
-Status: `IMPLEMENTADA — AGUARDANDO CI/PR`
+Status: `CONCLUÍDA — AGUARDANDO MERGE`
 
 ## Objetivo
 
@@ -152,7 +152,7 @@ conteúdo final já aprovados.
 - [x] arquivos são gerados sob demanda e não persistidos;
 - [x] downloads autenticados funcionam na interface React;
 - [x] endpoints existentes e regras operacionais permanecem inalterados;
-- [ ] backend, frontend, Docker e CI são aprovados;
+- [x] backend, frontend, Docker e CI são aprovados;
 - [x] documentação e checkpoint registram as evidências finais.
 
 ## Evidências
@@ -182,4 +182,4 @@ conteúdo final já aprovados.
   local não continha ciclo confirmado para repetir o PDF individual via HTTP;
   esse cenário permanece coberto pelos testes automatizados e pela inspeção
   visual do PDF com ciclo completo;
-- CI remota pendente da publicação da branch e abertura/atualização do PR.
+- jobs remotos `Backend` e `Frontend` aprovados no PR #46.

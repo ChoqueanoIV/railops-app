@@ -12,7 +12,7 @@ Atualizado em: 31/08/2026
 - Task 020 concluída, validada e integrada;
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
-- Task 023 implementada e validada localmente, aguardando commit, push e CI;
+- Task 023 concluída e validada no PR #46, aguardando merge;
 - baseline da Task 023 preservado; validação final com 171 testes backend e 28
   testes React;
 - commit do roadmap da fase 2: `9082444`;
@@ -78,7 +78,8 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
   Instrutor; usuários temporários foram removidos pelos UUIDs criados;
 - banco local sem ciclo confirmado para homologação HTTP individual; cenário
   coberto por testes automatizados e inspeção visual;
-- CI remota pendente da publicação desta branch.
+- jobs remotos `Backend` e `Frontend` aprovados no PR #46;
+- commit funcional: `34b3b31`.
 
 ## Validação da task 022
 
@@ -165,10 +166,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar o diff final da Task 023;
-2. criar commit em PT-BR e publicar `feat/exportacoes-relatorios`;
-3. abrir ou atualizar o PR da Task 023 e aguardar Backend e Frontend na CI;
-4. após integração, preparar o gate da Task 024 sem iniciá-la automaticamente.
+1. revisar e mesclar o PR #46;
+2. atualizar a `main` local após o merge;
+3. registrar o merge final no checkpoint;
+4. preparar o gate da Task 024 sem iniciá-la automaticamente.
 
 Não implementar os itens 024–026 antes da aprovação de seus gates de negócio.
 
