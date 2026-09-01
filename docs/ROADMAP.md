@@ -90,6 +90,17 @@ Cada item deve ganhar uma task detalhada apenas depois que seu gate for decidido
 - PDF e CSV são gerados sob demanda e entregues ao navegador, sem armazenamento
   no RailOps após o download.
 
+## Decisões confirmadas para a Task 024
+
+- automatizar primeiro acesso/login, ciclo completo, bloqueio após confirmação,
+  consulta/downloads, permissões e recuperação de sessão inválida;
+- usar Playwright com Chromium como navegador inicial;
+- executar React, API e PostgreSQL reais em ambiente E2E isolado;
+- executar a suíte localmente e em job próprio na CI de cada PR;
+- criar e descartar dados determinísticos sem tocar no banco cotidiano;
+- manter screenshots, vídeos e traces somente quando houver falha;
+- não alterar regras de negócio nem ampliar o escopo funcional do produto.
+
 ## Regra de execução
 
 Executar uma task por branch e PR. Mudança funcional exige critério de aceite,

@@ -209,8 +209,8 @@ npm run build
 
 Estado validado neste checkpoint:
 
-- backend: 148 testes e cobertura atual de 91%;
-- frontend: 18 testes;
+- backend: 171 testes;
+- frontend: 28 testes;
 - formatter, lint, type-check, build e pre-commit aprovados;
 - CI executa jobs independentes de backend e frontend em PRs e na `main`.
 

@@ -1,10 +1,10 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 31/08/2026
+Atualizado em: 01/09/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
+- branch de continuidade: `test/e2e-fluxos-criticos`;
 - PR mais recente: [#46 — exportações e relatórios](https://github.com/ChoqueanoIV/railops-app/pull/46), mesclada;
 - merge consolidado na `main`: `a8cab9d`;
 - Task 019B concluída, validada e integrada;
@@ -13,6 +13,7 @@ Atualizado em: 31/08/2026
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
 - Task 023 concluída, validada e integrada;
+- gate da Task 024 aprovado e task detalhada, ainda sem implementação;
 - baseline da Task 023 preservado; validação final com 171 testes backend e 28
   testes React;
 - commit do roadmap da fase 2: `9082444`;
@@ -168,12 +169,12 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. preparar e aprovar o gate de negócio da Task 024;
-2. detalhar os fluxos críticos que receberão testes E2E;
-3. criar a task executável somente após as decisões do gate;
-4. não iniciar implementação da Task 024 automaticamente.
+1. revisar `docs/tasks/024-e2e-critical-flows.md`;
+2. executar o baseline antes de instalar dependências;
+3. implementar somente a infraestrutura e os fluxos da Task 024;
+4. preservar integralmente regras, contratos e dados cotidianos.
 
-Não implementar os itens 024–026 antes da aprovação de seus gates de negócio.
+Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.
 
 ## Restrições de continuidade
 
