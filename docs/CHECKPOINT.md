@@ -13,8 +13,8 @@ Atualizado em: 01/09/2026
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
 - Task 023 concluída, validada e integrada;
-- Task 024 em andamento: ambiente isolado, primeiro acesso/login, ciclo completo
-  e consulta/PDF individual aprovados de ponta a ponta;
+- Task 024 em andamento: ambiente isolado e quatro fluxos críticos aprovados de
+  ponta a ponta; resta a recuperação de sessão inválida e a integração na CI;
 - baseline da Task 023 preservado; validação atual com 176 testes backend, 28
   testes React e smoke real no Chromium;
 - commit do roadmap da fase 2: `9082444`;
@@ -78,7 +78,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
   assinatura `%PDF-` e ausência do JWT na URL;
 - `Content-Disposition` exposto pelo CORS para preservar no navegador o nome
   definido pela API;
-- suíte E2E atual com 4 testes aprovados em paralelo;
+- permissões reais aprovadas: Manobrador bloqueado por 403 sem logout e
+  Instrutor autorizado no histórico e nos consolidados CSV/PDF;
+- CSV/PDF consolidados validados sem nomes de campos de autenticação;
+- suíte E2E atual com 5 testes aprovados em paralelo e sem dependência de ordem;
 - ambiente cotidiano permaneceu saudável e `/ready` respondeu `ok` após o
   ciclo;
 - 176 testes backend e 28 testes React aprovados;
@@ -200,8 +203,8 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 ## Próximo passo obrigatório
 
 1. revisar `docs/tasks/024-e2e-critical-flows.md`;
-2. implementar o fluxo E2E de permissões e exportações consolidadas;
-3. implementar a recuperação de sessão inválida;
+2. implementar a recuperação de sessão inválida;
+3. adicionar o job E2E separado na CI e concluir as evidências da task;
 4. preservar integralmente regras, contratos e dados cotidianos.
 
 Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.

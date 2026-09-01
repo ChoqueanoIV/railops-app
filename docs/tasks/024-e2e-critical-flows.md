@@ -139,8 +139,8 @@ Scripts esperados:
 
 - [ ] cinco fluxos críticos executam contra React, API e PostgreSQL reais;
 - [x] banco E2E é isolado e não afeta dados cotidianos;
-- [ ] suíte não depende de ordem nem de dados deixados por execução anterior;
-- [ ] downloads e permissões são validados pelos perfis aprovados;
+- [x] suíte não depende de ordem nem de dados deixados por execução anterior;
+- [x] downloads e permissões são validados pelos perfis aprovados;
 - [ ] nenhum token ou segredo aparece em URL, log ou artefato;
 - [ ] falhas produzem evidência útil sem persistência em execuções aprovadas;
 - [x] `npm run test:e2e` funciona localmente de forma documentada;
@@ -198,5 +198,12 @@ Scripts esperados:
   teste de regressão dedicado;
 - suíte conjunta atual: 4 testes E2E aprovados em paralelo e 176 testes backend
   aprovados;
+- fluxo 4 aprovado: Manobrador recebe 403 em histórico, CSV e PDF consolidados
+  sem perder a sessão; Instrutor consulta o histórico e baixa os dois formatos;
+- CSV consolidado validado por cabeçalho, presença do ciclo e ausência de campos
+  de autenticação; PDF validado por nome, MIME, tamanho e assinatura `%PDF-`;
+- preparação comum extraída para suporte reutilizável, com identidades
+  operacionais distintas; 5 testes E2E aprovados simultaneamente sem depender
+  de ordem ou dados residuais;
 - nenhuma regra de negócio alterada; as correções funcionais isolam os estados
   de Brisamar/TECON e expõem ao navegador o nome dos downloads.
