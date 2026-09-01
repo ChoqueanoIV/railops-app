@@ -38,8 +38,8 @@ de demonstração e troubleshooting, consulte o [`README principal`](../README.m
 - lint, formatter, type-check, build, pre-commit, Docker e CI validados;
 - legado e adaptadores preservados temporariamente para uma remoção segura;
 - consulta navegável de passagens confirmadas com filtros e paginação;
-- ambiente E2E real e isolado aprovado; os cinco fluxos críticos ainda estão em
-  implementação;
+- ambiente E2E real e isolado aprovado, com os cinco fluxos críticos executados
+  localmente e na CI;
 
 ## Como executar o plano
 

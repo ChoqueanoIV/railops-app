@@ -1,6 +1,6 @@
 # Testes E2E dos fluxos críticos
 
-Status: `EM ANDAMENTO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 
@@ -144,9 +144,9 @@ Scripts esperados:
 - [x] nenhum token ou segredo aparece em URL, log ou artefato;
 - [x] falhas produzem evidência útil sem persistência em execuções aprovadas;
 - [x] `npm run test:e2e` funciona localmente de forma documentada;
-- [ ] job E2E passa na CI sem substituir gates existentes;
+- [x] job E2E passa na CI sem substituir gates existentes;
 - [x] testes backend/frontend atuais permanecem aprovados;
-- [ ] documentação e checkpoint registram as evidências finais.
+- [x] documentação e checkpoint registram as evidências finais.
 
 ## Evidências
 
@@ -213,6 +213,8 @@ Scripts esperados:
   Compose isolado e publicação de relatório, screenshot, vídeo e trace somente
   em falhas;
 - validação estrutural da CI protegida por teste dedicado; comprovação remota do
-  novo job pendente no PR;
+  novo job aprovada no PR #47;
+- PR #47 aprovado pelos jobs remotos `Frontend` (28s), `Backend` (1m) e `E2E`
+  (1m46s), sem substituir ou enfraquecer os gates existentes;
 - nenhuma regra de negócio alterada; as correções funcionais isolam os estados
   de Brisamar/TECON e expõem ao navegador o nome dos downloads.

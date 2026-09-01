@@ -303,13 +303,12 @@ Não edite `backend/requirements*.txt` manualmente.
 
 Concluído: caracterização das regras, arquitetura por features, contratos de
 erro, dependências reproduzíveis, testes, qualidade estática, Docker, fluxos
-React e CI.
+React, CI e automação E2E dos cinco fluxos críticos.
 
 Planejado, ainda não concluído:
 
 - hardening final e limpeza segura dos adaptadores/fallbacks;
 - validação operacional e de UX com usuários;
-- automação dos cinco fluxos E2E críticos (infraestrutura e smoke concluídos);
 - estratégia de deploy e observabilidade.
 
 O estado de retomada fica em [`docs/CHECKPOINT.md`](docs/CHECKPOINT.md), o índice
