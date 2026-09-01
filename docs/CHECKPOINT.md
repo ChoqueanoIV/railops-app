@@ -13,9 +13,9 @@ Atualizado em: 01/09/2026
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
 - Task 023 concluída, validada e integrada;
-- Task 024 em andamento: ambiente isolado e quatro fluxos críticos aprovados de
-  ponta a ponta; resta a recuperação de sessão inválida e a integração na CI;
-- baseline da Task 023 preservado; validação atual com 176 testes backend, 28
+- Task 024 em andamento: cinco fluxos críticos aprovados localmente e job E2E
+  configurado; resta comprovar os três jobs no PR;
+- baseline da Task 023 preservado; validação atual com 177 testes backend, 28
   testes React e smoke real no Chromium;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
@@ -82,9 +82,14 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
   Instrutor autorizado no histórico e nos consolidados CSV/PDF;
 - CSV/PDF consolidados validados sem nomes de campos de autenticação;
 - suíte E2E atual com 5 testes aprovados em paralelo e sem dependência de ordem;
+- recuperação de sessão inválida aprovada com 401 real, limpeza do JWT e retorno
+  seguro ao login;
+- suíte funcional completa com 6 testes E2E paralelos;
+- job `E2E` separado configurado na CI, preservando `Backend` e `Frontend` e
+  publicando artefatos somente em falhas;
 - ambiente cotidiano permaneceu saudável e `/ready` respondeu `ok` após o
   ciclo;
-- 176 testes backend e 28 testes React aprovados;
+- 177 testes backend e 28 testes React aprovados;
 - Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check e build Vite
   aprovados;
 - nenhum contrato HTTP, comportamento de tela ou regra de negócio foi alterado.
@@ -203,8 +208,8 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 ## Próximo passo obrigatório
 
 1. revisar `docs/tasks/024-e2e-critical-flows.md`;
-2. implementar a recuperação de sessão inválida;
-3. adicionar o job E2E separado na CI e concluir as evidências da task;
+2. publicar o incremento final da Task 024 e abrir o pull request;
+3. confirmar os jobs remotos Backend, Frontend e E2E;
 4. preservar integralmente regras, contratos e dados cotidianos.
 
 Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.

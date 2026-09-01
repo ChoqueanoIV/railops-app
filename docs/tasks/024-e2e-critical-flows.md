@@ -137,15 +137,15 @@ Scripts esperados:
 
 ## Critérios de aceite
 
-- [ ] cinco fluxos críticos executam contra React, API e PostgreSQL reais;
+- [x] cinco fluxos críticos executam contra React, API e PostgreSQL reais;
 - [x] banco E2E é isolado e não afeta dados cotidianos;
 - [x] suíte não depende de ordem nem de dados deixados por execução anterior;
 - [x] downloads e permissões são validados pelos perfis aprovados;
-- [ ] nenhum token ou segredo aparece em URL, log ou artefato;
-- [ ] falhas produzem evidência útil sem persistência em execuções aprovadas;
+- [x] nenhum token ou segredo aparece em URL, log ou artefato;
+- [x] falhas produzem evidência útil sem persistência em execuções aprovadas;
 - [x] `npm run test:e2e` funciona localmente de forma documentada;
 - [ ] job E2E passa na CI sem substituir gates existentes;
-- [ ] testes backend/frontend atuais permanecem aprovados;
+- [x] testes backend/frontend atuais permanecem aprovados;
 - [ ] documentação e checkpoint registram as evidências finais.
 
 ## Evidências
@@ -205,5 +205,14 @@ Scripts esperados:
 - preparação comum extraída para suporte reutilizável, com identidades
   operacionais distintas; 5 testes E2E aprovados simultaneamente sem depender
   de ordem ou dados residuais;
+- fluxo 5 aprovado: um JWT inválido provoca 401 real, é removido da sessão e
+  redireciona ao login sem expor token, matrícula ou PIN;
+- suíte funcional completa: 6 testes E2E aprovados em paralelo, cobrindo os
+  cinco fluxos obrigatórios e o smoke de acesso anônimo;
+- job `E2E` separado adicionado à CI com instalação do Chromium, execução pelo
+  Compose isolado e publicação de relatório, screenshot, vídeo e trace somente
+  em falhas;
+- validação estrutural da CI protegida por teste dedicado; comprovação remota do
+  novo job pendente no PR;
 - nenhuma regra de negócio alterada; as correções funcionais isolam os estados
   de Brisamar/TECON e expõem ao navegador o nome dos downloads.
