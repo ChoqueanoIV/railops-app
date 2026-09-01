@@ -13,10 +13,10 @@ Atualizado em: 01/09/2026
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
 - Task 023 concluída, validada e integrada;
-- Task 024 em andamento: gate aprovado, Playwright instalado e smoke test
-  inicial aprovado;
-- baseline da Task 023 preservado; validação final com 171 testes backend e 28
-  testes React;
+- Task 024 em andamento: gate aprovado, Playwright instalado e ambiente E2E
+  isolado aprovado de ponta a ponta;
+- baseline da Task 023 preservado; validação atual com 175 testes backend, 28
+  testes React e smoke real no Chromium;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -56,6 +56,24 @@ Atualizado em: 01/09/2026
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
 `main`.
+
+## Validação parcial da task 024
+
+- Playwright e Chromium configurados no frontend React;
+- Compose `railops-e2e` independente, com banco temporário em `tmpfs`, API real
+  e migrations;
+- fixture determinística cria usuários Manobrador, Instrutor e de primeiro
+  acesso somente após validar ambiente, host e nome do banco E2E;
+- quatro testes unitários protegem o seed contra configurações cotidianas;
+- `npm run test:e2e` cria o ambiente, prepara os dados, executa o Chromium e
+  remove containers, rede e dados temporários automaticamente;
+- smoke real aprovado contra React, API e PostgreSQL isolados;
+- ambiente cotidiano permaneceu saudável e `/ready` respondeu `ok` após o
+  ciclo;
+- 175 testes backend e 28 testes React aprovados;
+- Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check e build Vite
+  aprovados;
+- nenhum contrato HTTP, comportamento de tela ou regra de negócio foi alterado.
 
 ## Validação da task 023
 
@@ -171,8 +189,9 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 ## Próximo passo obrigatório
 
 1. revisar `docs/tasks/024-e2e-critical-flows.md`;
-2. executar o baseline antes de instalar dependências;
-3. implementar somente a infraestrutura e os fluxos da Task 024;
+2. implementar o fluxo E2E de primeiro acesso e login sobre a infraestrutura
+   isolada já aprovada;
+3. avançar, um fluxo por vez, pelos demais cenários obrigatórios;
 4. preservar integralmente regras, contratos e dados cotidianos.
 
 Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.
@@ -192,7 +211,7 @@ O executável Python dentro do `venv` no OneDrive pode ser bloqueado. Quando
 isso ocorrer, use o Python 3.13 instalado no perfil com os pacotes do ambiente:
 
 ```powershell
-$env:PYTHONPATH=(Resolve-Path 'venv/Lib/site-packages').Path
+$env:PYTHONPATH=(Resolve-Path '.venv/Lib/site-packages').Path
 & 'C:\Users\Leandro CHOQUE\AppData\Local\Programs\Python\Python313\python.exe' -m pytest
 ```
 

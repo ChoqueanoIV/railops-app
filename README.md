@@ -207,10 +207,25 @@ npm run typecheck
 npm run build
 ```
 
+Para executar os testes E2E, mantenha o Docker Desktop ativo e use, também em
+`frontend/react`:
+
+```powershell
+npx playwright install chromium
+npm run test:e2e
+```
+
+O comando cria um PostgreSQL temporário e uma API exclusivos do projeto
+`railops-e2e`, aplica as migrations, prepara somente fixtures fictícias, executa
+o Chromium e remove containers, rede e dados temporários ao final. Ele não usa
+nem apaga o volume do ambiente cotidiano. Para diagnóstico interativo, use
+`npm run test:e2e:ui`.
+
 Estado validado neste checkpoint:
 
-- backend: 171 testes;
+- backend: 175 testes;
 - frontend: 28 testes;
+- smoke E2E real aprovado no Chromium contra API e PostgreSQL isolados;
 - formatter, lint, type-check, build e pre-commit aprovados;
 - CI executa jobs independentes de backend e frontend em PRs e na `main`.
 
@@ -294,7 +309,7 @@ Planejado, ainda não concluído:
 
 - hardening final e limpeza segura dos adaptadores/fallbacks;
 - validação operacional e de UX com usuários;
-- testes E2E dos fluxos críticos;
+- automação dos cinco fluxos E2E críticos (infraestrutura e smoke concluídos);
 - estratégia de deploy e observabilidade.
 
 O estado de retomada fica em [`docs/CHECKPOINT.md`](docs/CHECKPOINT.md), o índice

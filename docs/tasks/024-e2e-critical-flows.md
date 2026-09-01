@@ -85,7 +85,8 @@ telas.
 
 ## Isolamento e dados
 
-- gerar IDs e matrículas exclusivos por execução;
+- usar IDs determinísticos e matrículas reservadas somente dentro do banco E2E,
+  recriado a cada execução;
 - nunca reutilizar ou apagar registros do banco cotidiano;
 - preparar perfis e códigos de ativação por fixture administrativa restrita ao
   ambiente E2E;
@@ -137,12 +138,12 @@ Scripts esperados:
 ## Critérios de aceite
 
 - [ ] cinco fluxos críticos executam contra React, API e PostgreSQL reais;
-- [ ] banco E2E é isolado e não afeta dados cotidianos;
+- [x] banco E2E é isolado e não afeta dados cotidianos;
 - [ ] suíte não depende de ordem nem de dados deixados por execução anterior;
 - [ ] downloads e permissões são validados pelos perfis aprovados;
 - [ ] nenhum token ou segredo aparece em URL, log ou artefato;
 - [ ] falhas produzem evidência útil sem persistência em execuções aprovadas;
-- [ ] `npm run test:e2e` funciona localmente de forma documentada;
+- [x] `npm run test:e2e` funciona localmente de forma documentada;
 - [ ] job E2E passa na CI sem substituir gates existentes;
 - [ ] testes backend/frontend atuais permanecem aprovados;
 - [ ] documentação e checkpoint registram as evidências finais.
@@ -163,4 +164,16 @@ Scripts esperados:
 - Vitest e Playwright separados explicitamente para impedir coleta cruzada;
 - 28 testes React, smoke E2E, lint, Prettier, type-check, build e auditoria npm
   aprovados após a instalação;
+- Compose exclusivo `railops-e2e` aprovado com PostgreSQL em `tmpfs`, API real,
+  migrations e desmontagem automática com remoção dos dados temporários;
+- fixture determinística protegida por `RAILOPS_ENV=test`, host `db` e banco
+  `railops_e2e`; quatro testes impedem execução contra configuração cotidiana;
+- ciclo local `npm run test:e2e` aprovado de ponta a ponta: ambiente criado,
+  três perfis fictícios preparados, smoke no Chromium aprovado e ambiente
+  removido;
+- containers cotidianos `railops-app-backend-1` e `railops-app-db-1`
+  permaneceram saudáveis e `/ready` respondeu `ok` após o ciclo isolado;
+- validação completa após a infraestrutura: 175 testes backend, 28 testes
+  React, Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check e build Vite
+  aprovados;
 - nenhum código funcional ou regra de negócio alterado nesta etapa.
