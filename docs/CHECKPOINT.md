@@ -13,8 +13,8 @@ Atualizado em: 01/09/2026
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
 - Task 023 concluída, validada e integrada;
-- Task 024 em andamento: gate aprovado, Playwright instalado e ambiente E2E
-  isolado aprovado de ponta a ponta;
+- Task 024 em andamento: gate aprovado, ambiente E2E isolado e fluxo de primeiro
+  acesso/login aprovados de ponta a ponta;
 - baseline da Task 023 preservado; validação atual com 175 testes backend, 28
   testes React e smoke real no Chromium;
 - commit do roadmap da fase 2: `9082444`;
@@ -68,6 +68,8 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 - `npm run test:e2e` cria o ambiente, prepara os dados, executa o Chromium e
   remove containers, rede e dados temporários automaticamente;
 - smoke real aprovado contra React, API e PostgreSQL isolados;
+- primeiro acesso e login reais aprovados, incluindo seleção de terminais e
+  ausência do JWT na URL e no conteúdo visível;
 - ambiente cotidiano permaneceu saudável e `/ready` respondeu `ok` após o
   ciclo;
 - 175 testes backend e 28 testes React aprovados;

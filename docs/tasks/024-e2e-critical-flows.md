@@ -176,4 +176,9 @@ Scripts esperados:
 - validação completa após a infraestrutura: 175 testes backend, 28 testes
   React, Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check e build Vite
   aprovados;
+- fluxo 1 aprovado no Chromium real: primeiro acesso, definição do PIN, login,
+  seleção de terminais e comprovação de que o JWT não aparece na URL nem no
+  conteúdo visível;
+- suíte E2E com smoke e primeiro acesso: 2 testes aprovados em banco recém-criado
+  e descartado ao final;
 - nenhum código funcional ou regra de negócio alterado nesta etapa.
