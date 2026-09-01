@@ -90,4 +90,51 @@ describe('ApiClient', () => {
     expect(tokenStorage.get()).toBe('jwt-valido');
     expect(listener).not.toHaveBeenCalled();
   });
+
+  it('baixa arquivo autenticado e usa o nome do cabeçalho', async () => {
+    tokenStorage.set('jwt-download');
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response('arquivo', {
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': 'attachment; filename="relatorio.pdf"',
+        },
+      }),
+    );
+
+    const arquivo = await new ApiClient({
+      baseUrl: 'https://api.exemplo',
+      fetcher,
+    }).download('/relatorio');
+
+    expect(arquivo.filename).toBe('relatorio.pdf');
+    expect(arquivo.blob.size).toBeGreaterThan(0);
+    const [url, init] = fetcher.mock.calls[0];
+    expect(url).toBe('https://api.exemplo/relatorio');
+    expect(String(url)).not.toContain('jwt-download');
+    expect(new Headers(init?.headers).get('Authorization')).toBe(
+      'Bearer jwt-download',
+    );
+  });
+
+  it('preserva a sessão quando download consolidado recebe 403', async () => {
+    tokenStorage.set('jwt-valido');
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(
+      jsonResponse(
+        {
+          error: {
+            code: 'SPECIAL_ACCESS_DENIED',
+            message: 'Usuário sem permissão.',
+            details: null,
+          },
+        },
+        403,
+      ),
+    );
+
+    await expect(
+      new ApiClient({ fetcher }).download('/exportacoes.csv'),
+    ).rejects.toMatchObject({ status: 403 });
+    expect(tokenStorage.get()).toBe('jwt-valido');
+  });
 });

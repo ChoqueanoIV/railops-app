@@ -12,8 +12,8 @@ O RailOps já possui autenticação, primeiro acesso, seleção de terminal, cri
 consulta por identificador, edição autorizada e confirmação de passagens de
 Brisamar e TECON. Backend, frontend, banco, Docker e CI estão automatizados.
 
-Ainda não existem listagem navegável, filtros, consulta visual dos snapshots de
-edição, exportações, relatórios consolidados ou deploy público.
+Listagem navegável, filtros, consulta visual dos snapshots e exportações em PDF
+e CSV já foram implementados. Ainda não existe deploy público.
 
 ## Sequência proposta
 
@@ -51,7 +51,6 @@ Cada item deve ganhar uma task detalhada apenas depois que seu gate for decidido
 
 ## Decisões ainda pendentes
 
-- quais relatórios são úteis e se a saída deve ser tela, CSV ou PDF;
 - política de retenção e tratamento dos dados operacionais;
 - ambiente e público do primeiro deploy.
 
@@ -68,6 +67,28 @@ Cada item deve ganhar uma task detalhada apenas depois que seu gate for decidido
   entre o estado anterior e o conteúdo final;
 - PIN, hashes, tokens, códigos de ativação e demais dados de autenticação nunca
   fazem parte do histórico consultável.
+
+## Decisões confirmadas para a Task 023
+
+- exportações atendem tanto à análise operacional quanto ao arquivamento
+  formal;
+- CSV consolidado disponível para análise em planilhas;
+- PDF individual reúne Brisamar e TECON de uma passagem completa;
+- PDF consolidado reúne o período filtrado e apresenta resumo geral;
+- Manobrador pode exportar somente o PDF individual das passagens confirmadas
+  que já pode consultar;
+- Instrutor e Monitor de Qualidade podem exportar PDF individual, PDF
+  consolidado e CSV;
+- histórico de edições e snapshots não entram nas exportações desta task;
+- arquivos incluem dados operacionais finais, nomes e matrículas de responsável
+  e equipe;
+- PIN, hashes, tokens, códigos de ativação e demais dados de autenticação nunca
+  são exportados;
+- consolidados reutilizam os filtros atuais, adotam 30 dias por padrão e
+  permitem no máximo um ano por arquivo;
+- arquivos registram filtros aplicados e data/hora de geração;
+- PDF e CSV são gerados sob demanda e entregues ao navegador, sem armazenamento
+  no RailOps após o download.
 
 ## Regra de execução
 

@@ -334,5 +334,89 @@ def test_listar_ciclos_retorna_responsavel_e_paginacao(monkeypatch):
     assert resposta.paginacao.total_paginas == 2
 
 
+def test_exportar_ciclo_pdf_retorna_download_autenticado(monkeypatch):
+    usuario = Usuario(id=uuid.uuid4(), nome="Responsável", matricula="30032552")
+    ciclo = CicloPassagem(
+        id=uuid.uuid4(),
+        data=date(2026, 8, 31),
+        turma=Turma.C,
+        turno=Turno.DIURNO,
+        estado=EstadoCicloPassagem.CONFIRMADO,
+        criado_por=usuario.id,
+        confirmado_em=datetime(2026, 8, 31, 18, 45, tzinfo=UTC),
+        criador=usuario,
+        passagens=[criar_passagem_completa_para_snapshot()],
+    )
+    ciclo_service = passagem_controller.PassagemCicloService(MagicMock())
+    monkeypatch.setattr(
+        ciclo_service,
+        "obter_confirmado_para_exportacao",
+        MagicMock(return_value=ciclo),
+    )
+
+    resposta = passagem_controller.exportar_ciclo_pdf(ciclo.id, ciclo_service, usuario)
+
+    assert resposta.media_type == "application/pdf"
+    assert bytes(resposta.body).startswith(b"%PDF-")
+    assert resposta.headers["content-disposition"] == (
+        f'attachment; filename="railops-passagem-2026-08-31-{ciclo.id}.pdf"'
+    )
+
+
+def test_exportar_ciclos_csv_retorna_download_com_periodo(monkeypatch):
+    ciclo = criar_ciclo_confirmado_para_exportacao()
+    ciclo_service = passagem_controller.PassagemCicloService(MagicMock())
+    monkeypatch.setattr(
+        ciclo_service,
+        "listar_para_exportacao",
+        MagicMock(return_value=([ciclo], date(2026, 8, 1), date(2026, 8, 31))),
+    )
+
+    resposta = passagem_controller.exportar_ciclos_csv(
+        CicloConsultaFiltros(), ciclo_service, ciclo.criador
+    )
+
+    assert resposta.media_type == "text/csv; charset=utf-8"
+    assert bytes(resposta.body).startswith(b"\xef\xbb\xbfprotocolo,")
+    assert resposta.headers["content-disposition"] == (
+        'attachment; filename="railops-passagens-2026-08-01-2026-08-31.csv"'
+    )
+
+
+def test_exportar_ciclos_pdf_retorna_download_com_periodo(monkeypatch):
+    ciclo = criar_ciclo_confirmado_para_exportacao()
+    ciclo_service = passagem_controller.PassagemCicloService(MagicMock())
+    monkeypatch.setattr(
+        ciclo_service,
+        "listar_para_exportacao",
+        MagicMock(return_value=([ciclo], date(2026, 8, 1), date(2026, 8, 31))),
+    )
+
+    resposta = passagem_controller.exportar_ciclos_pdf(
+        CicloConsultaFiltros(), ciclo_service, ciclo.criador
+    )
+
+    assert resposta.media_type == "application/pdf"
+    assert bytes(resposta.body).startswith(b"%PDF-")
+    assert resposta.headers["content-disposition"] == (
+        'attachment; filename="railops-passagens-2026-08-01-2026-08-31.pdf"'
+    )
+
+
+def criar_ciclo_confirmado_para_exportacao() -> CicloPassagem:
+    usuario = Usuario(id=uuid.uuid4(), nome="Responsável", matricula="30032552")
+    return CicloPassagem(
+        id=uuid.uuid4(),
+        data=date(2026, 8, 31),
+        turma=Turma.C,
+        turno=Turno.DIURNO,
+        estado=EstadoCicloPassagem.CONFIRMADO,
+        criado_por=usuario.id,
+        confirmado_em=datetime(2026, 8, 31, 18, 45, tzinfo=UTC),
+        criador=usuario,
+        passagens=[criar_passagem_completa_para_snapshot()],
+    )
+
+
 def criar_service() -> passagem_controller.PassagemService:
     return passagem_controller.PassagemService(MagicMock(), MagicMock(), MagicMock())

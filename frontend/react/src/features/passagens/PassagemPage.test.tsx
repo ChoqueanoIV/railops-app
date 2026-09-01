@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -6,7 +6,10 @@ import { App } from '@/app/App';
 
 describe('migração das passagens para React', () => {
   beforeEach(() => sessionStorage.setItem('access_token', 'jwt-de-teste'));
-  afterEach(() => vi.unstubAllGlobals());
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
 
   it('permite registrar separadamente os lados e travessões de L22 e L24', () => {
     render(
@@ -90,9 +93,47 @@ describe('migração das passagens para React', () => {
       screen.getByRole('button', { name: 'Confirmar passagem completa' }),
     ).toBeEnabled();
   });
+
+  it('baixa o PDF individual somente após a confirmação', async () => {
+    const user = userEvent.setup();
+    const ciclo = cicloCompleto('CONFIRMADO');
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify(ciclo), {
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response('pdf', {
+          headers: {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': 'attachment; filename="passagem.pdf"',
+          },
+        }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+    vi.stubGlobal('URL', {
+      ...URL,
+      createObjectURL: vi.fn(() => 'blob:pdf'),
+      revokeObjectURL: vi.fn(),
+    });
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+
+    render(
+      <MemoryRouter initialEntries={['/confirmacao?ciclo=ciclo-1']}>
+        <App />
+      </MemoryRouter>,
+    );
+    await user.click(await screen.findByRole('button', { name: 'Baixar PDF' }));
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    expect(String(fetchMock.mock.calls[1][0])).toContain(
+      '/passagens/ciclos/ciclo-1/exportacao.pdf',
+    );
+  });
 });
 
-function cicloCompleto() {
+function cicloCompleto(estado: 'RASCUNHO' | 'CONFIRMADO' = 'RASCUNHO') {
   const base = {
     data: '2026-08-30',
     turma: 'C',
@@ -104,15 +145,15 @@ function cicloCompleto() {
     equipe: [{ nome: 'Operador', matricula: '12345678' }],
     ocupacoes_linhas: [],
     radios_utilizados: [],
-    editavel: true,
+    editavel: estado === 'RASCUNHO',
   };
   return {
     id: 'ciclo-1',
     data: '2026-08-30',
     turma: 'C',
     turno: 'DIURNO',
-    estado: 'RASCUNHO',
-    confirmado_em: null,
+    estado,
+    confirmado_em: estado === 'CONFIRMADO' ? '2026-08-30T21:50:00Z' : null,
     terminal_pendente: null,
     passagens: [
       {

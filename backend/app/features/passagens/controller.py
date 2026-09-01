@@ -1,13 +1,14 @@
 import uuid
-from datetime import date
+from datetime import date, datetime
 from math import ceil
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Response
 
 from app.api.errors import ApiError, resposta_erro
 from app.features.auth.dependencies import (
     exigir_consulta_historico,
+    exigir_perfil_especial,
     obter_usuario_atual,
 )
 from app.features.auth.models import Usuario
@@ -16,6 +17,11 @@ from app.features.passagens.dependencies import (
     obter_passagem_service,
 )
 from app.features.passagens.exceptions import PassagemError
+from app.features.passagens.exports import (
+    CsvPassagensConsolidadas,
+    PdfPassagemIndividual,
+    PdfPassagensConsolidadas,
+)
 from app.features.passagens.models import (
     CicloPassagem,
     PassagemServico,
@@ -46,7 +52,11 @@ from app.features.passagens.schemas import (
     ResponsavelResumoResponse,
     TeconDetalheRequest,
 )
-from app.features.passagens.service import PassagemCicloService, PassagemService
+from app.features.passagens.service import (
+    FUSO_OPERACAO,
+    PassagemCicloService,
+    PassagemService,
+)
 
 router = APIRouter(prefix="/passagens", tags=["Passagens de serviço"])
 
@@ -237,6 +247,72 @@ def listar_ciclos_confirmados(
     )
 
 
+def _listar_exportacao(
+    filtros: CicloConsultaFiltros,
+    ciclo_service: PassagemCicloService,
+) -> tuple[list[CicloPassagem], date, date]:
+    try:
+        return ciclo_service.listar_para_exportacao(filtros)
+    except PassagemError as erro:
+        raise ApiError(
+            status_code=422, code="PASSAGEM_EXPORT_INVALID", message=str(erro)
+        ) from erro
+
+
+@router.get(
+    "/ciclos/exportacoes.csv",
+    summary="Baixar CSV consolidado das passagens confirmadas",
+    response_class=Response,
+    responses={
+        200: {"content": {"text/csv": {}}},
+        401: resposta_erro("Não autenticado"),
+        403: resposta_erro("Perfil sem permissão"),
+        422: resposta_erro("Período de exportação inválido"),
+    },
+)
+def exportar_ciclos_csv(
+    filtros: Annotated[CicloConsultaFiltros, Query()],
+    ciclo_service: PassagemCicloService = Depends(obter_ciclo_service),
+    _usuario_atual: Usuario = Depends(exigir_perfil_especial),
+) -> Response:
+    ciclos, data_inicio, data_fim = _listar_exportacao(filtros, ciclo_service)
+    conteudo = CsvPassagensConsolidadas().gerar(ciclos)
+    nome = f"railops-passagens-{data_inicio.isoformat()}-{data_fim.isoformat()}.csv"
+    return Response(
+        content=conteudo,
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": f'attachment; filename="{nome}"'},
+    )
+
+
+@router.get(
+    "/ciclos/exportacoes.pdf",
+    summary="Baixar PDF consolidado das passagens confirmadas",
+    response_class=Response,
+    responses={
+        200: {"content": {"application/pdf": {}}},
+        401: resposta_erro("Não autenticado"),
+        403: resposta_erro("Perfil sem permissão"),
+        422: resposta_erro("Período de exportação inválido"),
+    },
+)
+def exportar_ciclos_pdf(
+    filtros: Annotated[CicloConsultaFiltros, Query()],
+    ciclo_service: PassagemCicloService = Depends(obter_ciclo_service),
+    _usuario_atual: Usuario = Depends(exigir_perfil_especial),
+) -> Response:
+    ciclos, data_inicio, data_fim = _listar_exportacao(filtros, ciclo_service)
+    conteudo = PdfPassagensConsolidadas().gerar(
+        ciclos, data_inicio, data_fim, datetime.now(FUSO_OPERACAO)
+    )
+    nome = f"railops-passagens-{data_inicio.isoformat()}-{data_fim.isoformat()}.pdf"
+    return Response(
+        content=conteudo,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{nome}"'},
+    )
+
+
 @router.get(
     "/ciclos/rascunho",
     response_model=CicloPassagemResponse,
@@ -277,6 +353,36 @@ def consultar_ciclo(
             status_code=404, code="CICLO_NOT_FOUND", message=str(erro)
         ) from erro
     return montar_resposta_ciclo(ciclo, passagem_service, usuario_atual)
+
+
+@router.get(
+    "/ciclos/{ciclo_id}/exportacao.pdf",
+    summary="Baixar PDF individual da passagem completa",
+    response_class=Response,
+    responses={
+        200: {"content": {"application/pdf": {}}},
+        401: resposta_erro("Não autenticado"),
+        404: resposta_erro("Passagem confirmada não encontrada"),
+    },
+)
+def exportar_ciclo_pdf(
+    ciclo_id: uuid.UUID,
+    ciclo_service: PassagemCicloService = Depends(obter_ciclo_service),
+    _usuario_atual: Usuario = Depends(obter_usuario_atual),
+) -> Response:
+    try:
+        ciclo = ciclo_service.obter_confirmado_para_exportacao(ciclo_id)
+    except PassagemError as erro:
+        raise ApiError(
+            status_code=404, code="CICLO_NOT_FOUND", message=str(erro)
+        ) from erro
+    conteudo = PdfPassagemIndividual().gerar(ciclo)
+    nome = f"railops-passagem-{ciclo.data.isoformat()}-{ciclo.id}.pdf"
+    return Response(
+        content=conteudo,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{nome}"'},
+    )
 
 
 @router.post(

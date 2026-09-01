@@ -38,6 +38,26 @@ export const passagemService = {
     apiClient.request<CicloPassagem>(`/passagens/ciclos/${id}/confirmar`, {
       method: 'POST',
     }),
+  baixarPdfIndividual: (id: string) =>
+    apiClient.download(`/passagens/ciclos/${id}/exportacao.pdf`),
+  baixarConsolidado: (
+    formato: 'csv' | 'pdf',
+    filtros: CicloConsultaFiltros,
+  ) => {
+    const parametros = new URLSearchParams();
+    Object.entries(filtros).forEach(([chave, valor]) => {
+      if (
+        !['pagina', 'por_pagina'].includes(chave) &&
+        valor !== undefined &&
+        valor !== ''
+      ) {
+        parametros.set(chave, String(valor));
+      }
+    });
+    return apiClient.download(
+      `/passagens/ciclos/exportacoes.${formato}?${parametros}`,
+    );
+  },
   salvar: (terminal: Terminal, payload: PassagemPayload, id?: string) => {
     const body: Partial<PassagemPayload> = { ...payload };
     if (id) {
@@ -54,3 +74,12 @@ export const passagemService = {
     );
   },
 };
+
+export function salvarDownload(blob: Blob, filename: string): void {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}

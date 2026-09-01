@@ -115,9 +115,50 @@ class PassagemCicloService:
         )
         return itens, total, data_inicio, data_fim
 
+    def listar_para_exportacao(
+        self,
+        filtros: CicloConsultaFiltros,
+        hoje: date | None = None,
+    ) -> tuple[list[CicloPassagem], date, date]:
+        data_fim = filtros.data_fim or hoje or datetime.now(FUSO_OPERACAO).date()
+        data_inicio = filtros.data_inicio or (data_fim - timedelta(days=29))
+        if data_fim < data_inicio:
+            raise PassagemError("A data final não pode ser anterior à data inicial.")
+        if data_fim - data_inicio > timedelta(days=365):
+            raise PassagemError(
+                "O período máximo para exportação é de um ano. "
+                "Divida a consulta em arquivos separados."
+            )
+
+        itens: list[CicloPassagem] = []
+        pagina = 1
+        por_pagina = 100
+        while True:
+            lote, total = self.repository.listar_ciclos_confirmados(
+                data_inicio=data_inicio,
+                data_fim=data_fim,
+                turma=filtros.turma,
+                turno=filtros.turno,
+                responsavel=filtros.responsavel,
+                protocolo=filtros.protocolo,
+                pagina=pagina,
+                por_pagina=por_pagina,
+            )
+            itens.extend(lote)
+            if len(itens) >= total or not lote:
+                break
+            pagina += 1
+        return itens, data_inicio, data_fim
+
     def obter_por_id(self, ciclo_id: uuid.UUID, responsavel: Usuario) -> CicloPassagem:
         ciclo = self.repository.buscar_ciclo_por_id(ciclo_id)
         return self._validar_consulta(ciclo, responsavel)
+
+    def obter_confirmado_para_exportacao(self, ciclo_id: uuid.UUID) -> CicloPassagem:
+        ciclo = self.repository.buscar_ciclo_por_id(ciclo_id)
+        if ciclo is None or ciclo.estado != EstadoCicloPassagem.CONFIRMADO:
+            raise PassagemError("Passagem confirmada não encontrada.")
+        return ciclo
 
     def obter_por_identidade(
         self,

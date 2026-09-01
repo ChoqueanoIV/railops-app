@@ -12,6 +12,7 @@ dependencies = [
     "pydantic==2.13.4",
     "python-dotenv==1.2.2",
     "python-jose[cryptography]==3.5.0",
+    "reportlab>=5.0.1",
     "sqlalchemy==2.0.51",
     "tzdata==2026.3; sys_platform == 'win32'",
     "uvicorn==0.52.1",

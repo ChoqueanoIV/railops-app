@@ -37,7 +37,7 @@ de demonstração e troubleshooting, consulte o [`README principal`](../README.m
 - lint, formatter, type-check, build, pre-commit, Docker e CI validados;
 - legado e adaptadores preservados temporariamente para uma remoção segura;
 - consulta navegável de passagens confirmadas com filtros e paginação;
-- sem deploy público, histórico visual de edições, exportações ou relatórios.
+- sem deploy público e sem testes E2E completos dos fluxos críticos.
 
 ## Como executar o plano
 

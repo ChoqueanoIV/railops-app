@@ -1,10 +1,10 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 30/08/2026
+Atualizado em: 31/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
+- branch de continuidade: `feat/exportacoes-relatorios`;
 - PR mais recente: [#45 — histórico auditável de edições](https://github.com/ChoqueanoIV/railops-app/pull/45), mesclada;
 - merge consolidado na `main`: `0d30b51`;
 - Task 019B concluída, validada e integrada;
@@ -12,6 +12,9 @@ Atualizado em: 30/08/2026
 - Task 020 concluída, validada e integrada;
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
+- Task 023 concluída e validada no PR #46, aguardando merge;
+- baseline da Task 023 preservado; validação final com 171 testes backend e 28
+  testes React;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -50,6 +53,33 @@ Atualizado em: 30/08/2026
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
 `main`.
+
+## Validação da task 023
+
+- PDF individual disponível a qualquer usuário autenticado para ciclos
+  confirmados, reunindo Brisamar e TECON;
+- PDF e CSV consolidados restritos a Instrutor e Monitor de Qualidade;
+- filtros existentes reutilizados, período padrão de 30 dias e limite máximo
+  de um ano por arquivo;
+- CSV UTF-8 com uma linha por ciclo, listas determinísticas e proteção contra
+  fórmulas de planilha;
+- arquivos gerados em memória e entregues como download, sem persistência no
+  servidor e sem snapshots ou credenciais;
+- interface React com downloads autenticados, carregamento, erros e preservação
+  da sessão em resposta 403;
+- 171 testes backend e 28 testes React aprovados;
+- Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check e build Vite
+  aprovados;
+- PDFs individual e consolidado inspecionados visualmente, inclusive com
+  paginação multipágina;
+- imagem Docker reconstruída, backend saudável e `/ready` aprovado sem alterar
+  o volume PostgreSQL;
+- homologação HTTP real aprovou 403 para Manobrador e 200 em CSV/PDF para
+  Instrutor; usuários temporários foram removidos pelos UUIDs criados;
+- banco local sem ciclo confirmado para homologação HTTP individual; cenário
+  coberto por testes automatizados e inspeção visual;
+- jobs remotos `Backend` e `Frontend` aprovados no PR #46;
+- commit funcional: `34b3b31`.
 
 ## Validação da task 022
 
@@ -136,12 +166,12 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar o gate da Task 023 no `docs/ROADMAP.md`;
-2. decidir formato, período, campos e finalidade das exportações e relatórios;
-3. criar a task detalhada somente após aprovação explícita dessas decisões;
-4. não implementar a Task 023 antes do gate de negócio.
+1. revisar e mesclar o PR #46;
+2. atualizar a `main` local após o merge;
+3. registrar o merge final no checkpoint;
+4. preparar o gate da Task 024 sem iniciá-la automaticamente.
 
-Não implementar os itens 023–026 antes da aprovação de seus gates de negócio.
+Não implementar os itens 024–026 antes da aprovação de seus gates de negócio.
 
 ## Restrições de continuidade
 

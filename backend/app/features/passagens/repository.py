@@ -127,7 +127,24 @@ class PassagemRepository:
     def buscar_ciclo_por_id(self, ciclo_id: uuid.UUID) -> CicloPassagem | None:
         return (
             self.db.query(CicloPassagem)
-            .options(selectinload(CicloPassagem.passagens))
+            .options(
+                selectinload(CicloPassagem.criador),
+                selectinload(CicloPassagem.passagens).selectinload(
+                    PassagemServico.detalhe_brisamar
+                ),
+                selectinload(CicloPassagem.passagens).selectinload(
+                    PassagemServico.detalhe_tecon
+                ),
+                selectinload(CicloPassagem.passagens).selectinload(
+                    PassagemServico.equipe
+                ),
+                selectinload(CicloPassagem.passagens)
+                .selectinload(PassagemServico.ocupacoes_linhas)
+                .selectinload(PassagemLinhaOcupacao.linha),
+                selectinload(CicloPassagem.passagens)
+                .selectinload(PassagemServico.radios_utilizados)
+                .selectinload(PassagemRadioUso.radio),
+            )
             .filter(CicloPassagem.id == ciclo_id)
             .first()
         )

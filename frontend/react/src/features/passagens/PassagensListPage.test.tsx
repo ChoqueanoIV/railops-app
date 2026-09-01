@@ -21,7 +21,10 @@ const resposta = (itens = [cicloConfirmado()]) =>
 
 describe('consulta de passagens', () => {
   beforeEach(() => sessionStorage.setItem('access_token', 'jwt-de-teste'));
-  afterEach(() => vi.unstubAllGlobals());
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
 
   it('lista o ciclo completo com responsável e acesso ao detalhe', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(resposta()));
@@ -80,6 +83,92 @@ describe('consulta de passagens', () => {
     expect(
       await screen.findByText('Nenhuma passagem encontrada neste período.'),
     ).toBeVisible();
+  });
+
+  it('exporta CSV com filtros ativos e token somente no cabeçalho', async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(resposta())
+      .mockResolvedValueOnce(
+        new Response('csv', {
+          headers: {
+            'Content-Type': 'text/csv',
+            'Content-Disposition': 'attachment; filename="passagens.csv"',
+          },
+        }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+    vi.stubGlobal('URL', {
+      ...URL,
+      createObjectURL: vi.fn(() => 'blob:arquivo'),
+      revokeObjectURL: vi.fn(),
+    });
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+
+    render(
+      <MemoryRouter initialEntries={['/passagens']}>
+        <App />
+      </MemoryRouter>,
+    );
+    await screen.findByText('1 passagem(ns) encontrada(s)');
+    await user.selectOptions(screen.getByLabelText('Turma'), 'C');
+    await user.click(screen.getByRole('button', { name: 'Aplicar filtros' }));
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    fetchMock.mockResolvedValueOnce(
+      new Response('csv', {
+        headers: {
+          'Content-Type': 'text/csv',
+          'Content-Disposition': 'attachment; filename="passagens.csv"',
+        },
+      }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Exportar CSV' }));
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3));
+
+    const [url, init] = fetchMock.mock.calls[2];
+    expect(String(url)).toContain('/passagens/ciclos/exportacoes.csv?');
+    expect(String(url)).toContain('turma=C');
+    expect(String(url)).not.toContain('pagina=');
+    expect(String(url)).not.toContain('jwt-de-teste');
+    expect(new Headers(init.headers).get('Authorization')).toBe(
+      'Bearer jwt-de-teste',
+    );
+  });
+
+  it('informa bloqueio de perfil sem encerrar a sessão', async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(resposta())
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            error: {
+              code: 'SPECIAL_ACCESS_DENIED',
+              message: 'Sem permissão.',
+              details: null,
+            },
+          }),
+          { status: 403, headers: { 'Content-Type': 'application/json' } },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(
+      <MemoryRouter initialEntries={['/passagens']}>
+        <App />
+      </MemoryRouter>,
+    );
+    await screen.findByText('1 passagem(ns) encontrada(s)');
+    await user.click(screen.getByRole('button', { name: 'Exportar PDF' }));
+
+    expect(
+      await screen.findByText(
+        'Seu perfil não possui permissão para exportações consolidadas.',
+      ),
+    ).toBeVisible();
+    expect(sessionStorage.getItem('access_token')).toBe('jwt-de-teste');
   });
 
   it('protege a rota quando não existe sessão', () => {
