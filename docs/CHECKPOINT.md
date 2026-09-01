@@ -13,8 +13,8 @@ Atualizado em: 01/09/2026
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
 - Task 023 concluída, validada e integrada;
-- Task 024 em andamento: gate aprovado, ambiente E2E isolado e fluxo de primeiro
-  acesso/login aprovados de ponta a ponta;
+- Task 024 em andamento: ambiente isolado, primeiro acesso/login e ciclo completo
+  com confirmação aprovados de ponta a ponta;
 - baseline da Task 023 preservado; validação atual com 175 testes backend, 28
   testes React e smoke real no Chromium;
 - commit do roadmap da fase 2: `9082444`;
@@ -70,6 +70,11 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 - smoke real aprovado contra React, API e PostgreSQL isolados;
 - primeiro acesso e login reais aprovados, incluindo seleção de terminais e
   ausência do JWT na URL e no conteúdo visível;
+- ciclo Brisamar + TECON aprovado com revisão, confirmação, recarga somente
+  leitura e bloqueio de tentativa posterior de edição;
+- teste E2E encontrou e protegeu a correção do vazamento de estado do formulário
+  Brisamar ao navegar para TECON;
+- suíte E2E atual com 3 testes aprovados em paralelo;
 - ambiente cotidiano permaneceu saudável e `/ready` respondeu `ok` após o
   ciclo;
 - 175 testes backend e 28 testes React aprovados;
@@ -191,9 +196,8 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 ## Próximo passo obrigatório
 
 1. revisar `docs/tasks/024-e2e-critical-flows.md`;
-2. implementar o fluxo E2E de primeiro acesso e login sobre a infraestrutura
-   isolada já aprovada;
-3. avançar, um fluxo por vez, pelos demais cenários obrigatórios;
+2. implementar o fluxo E2E de consulta e PDF individual sobre o ciclo confirmado;
+3. avançar pelos cenários de permissões e recuperação de sessão;
 4. preservar integralmente regras, contratos e dados cotidianos.
 
 Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.

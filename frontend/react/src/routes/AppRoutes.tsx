@@ -16,9 +16,12 @@ export function AppRoutes() {
         <Route path="/terminal" element={<ShellPage />} />
         <Route
           path="/brisamar"
-          element={<PassagemPage terminal="BRISAMAR" />}
+          element={<PassagemPage key="brisamar" terminal="BRISAMAR" />}
         />
-        <Route path="/tecon" element={<PassagemPage terminal="TECON" />} />
+        <Route
+          path="/tecon"
+          element={<PassagemPage key="tecon" terminal="TECON" />}
+        />
         <Route path="/confirmacao" element={<ConfirmationPage />} />
         <Route path="/passagens" element={<PassagensListPage />} />
         <Route

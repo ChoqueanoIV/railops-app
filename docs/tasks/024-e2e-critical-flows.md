@@ -181,4 +181,13 @@ Scripts esperados:
   conteúdo visível;
 - suíte E2E com smoke e primeiro acesso: 2 testes aprovados em banco recém-criado
   e descartado ao final;
-- nenhum código funcional ou regra de negócio alterado nesta etapa.
+- fluxo 2 aprovado no Chromium: Brisamar com ocupações independentes de L22 e
+  L24, TECON no mesmo ciclo, revisão completa, confirmação, recarga somente
+  leitura e tentativa direta de edição bloqueada;
+- o E2E detectou reutilização indevida do estado de Brisamar ao navegar para
+  TECON; as rotas agora montam instâncias independentes do formulário, sem
+  alterar payloads ou regras operacionais;
+- suíte conjunta com smoke, primeiro acesso e ciclo completo: 3 testes E2E
+  aprovados em paralelo;
+- nenhuma regra de negócio ou contrato HTTP alterado nesta etapa; a única
+  correção funcional separa o estado dos formulários Brisamar e TECON.
