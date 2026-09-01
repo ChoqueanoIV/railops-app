@@ -33,7 +33,7 @@ de demonstração e troubleshooting, consulte o [`README principal`](../README.m
 
 - backend FastAPI organizado por features, com PostgreSQL e Alembic;
 - frontend React com autenticação e fluxos de Brisamar e TECON;
-- 175 testes backend, 28 testes frontend e cobertura backend acima do gate de
+- 176 testes backend, 28 testes frontend e cobertura backend acima do gate de
   90%;
 - lint, formatter, type-check, build, pre-commit, Docker e CI validados;
 - legado e adaptadores preservados temporariamente para uma remoção segura;

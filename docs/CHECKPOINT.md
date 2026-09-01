@@ -13,9 +13,9 @@ Atualizado em: 01/09/2026
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
 - Task 023 concluída, validada e integrada;
-- Task 024 em andamento: ambiente isolado, primeiro acesso/login e ciclo completo
-  com confirmação aprovados de ponta a ponta;
-- baseline da Task 023 preservado; validação atual com 175 testes backend, 28
+- Task 024 em andamento: ambiente isolado, primeiro acesso/login, ciclo completo
+  e consulta/PDF individual aprovados de ponta a ponta;
+- baseline da Task 023 preservado; validação atual com 176 testes backend, 28
   testes React e smoke real no Chromium;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
@@ -74,10 +74,14 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
   leitura e bloqueio de tentativa posterior de edição;
 - teste E2E encontrou e protegeu a correção do vazamento de estado do formulário
   Brisamar ao navegar para TECON;
-- suíte E2E atual com 3 testes aprovados em paralelo;
+- consulta filtrada e PDF individual aprovados, incluindo nome, MIME, tamanho,
+  assinatura `%PDF-` e ausência do JWT na URL;
+- `Content-Disposition` exposto pelo CORS para preservar no navegador o nome
+  definido pela API;
+- suíte E2E atual com 4 testes aprovados em paralelo;
 - ambiente cotidiano permaneceu saudável e `/ready` respondeu `ok` após o
   ciclo;
-- 175 testes backend e 28 testes React aprovados;
+- 176 testes backend e 28 testes React aprovados;
 - Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check e build Vite
   aprovados;
 - nenhum contrato HTTP, comportamento de tela ou regra de negócio foi alterado.
@@ -196,8 +200,8 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 ## Próximo passo obrigatório
 
 1. revisar `docs/tasks/024-e2e-critical-flows.md`;
-2. implementar o fluxo E2E de consulta e PDF individual sobre o ciclo confirmado;
-3. avançar pelos cenários de permissões e recuperação de sessão;
+2. implementar o fluxo E2E de permissões e exportações consolidadas;
+3. implementar a recuperação de sessão inválida;
 4. preservar integralmente regras, contratos e dados cotidianos.
 
 Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.

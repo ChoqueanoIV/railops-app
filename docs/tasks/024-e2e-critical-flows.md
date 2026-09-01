@@ -173,7 +173,7 @@ Scripts esperados:
   removido;
 - containers cotidianos `railops-app-backend-1` e `railops-app-db-1`
   permaneceram saudáveis e `/ready` respondeu `ok` após o ciclo isolado;
-- validação completa após a infraestrutura: 175 testes backend, 28 testes
+- validação completa após a infraestrutura: 176 testes backend, 28 testes
   React, Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check e build Vite
   aprovados;
 - fluxo 1 aprovado no Chromium real: primeiro acesso, definição do PIN, login,
@@ -189,5 +189,14 @@ Scripts esperados:
   alterar payloads ou regras operacionais;
 - suíte conjunta com smoke, primeiro acesso e ciclo completo: 3 testes E2E
   aprovados em paralelo;
-- nenhuma regra de negócio ou contrato HTTP alterado nesta etapa; a única
-  correção funcional separa o estado dos formulários Brisamar e TECON.
+- fluxo 3 aprovado no Chromium: ciclo independente, localização por data, turma
+  e responsável, revisão e download autenticado do PDF individual;
+- download validado por nome específico, `Content-Type`, tamanho mínimo,
+  assinatura `%PDF-` e ausência do JWT na URL;
+- o teste revelou que `Content-Disposition` não estava exposto pelo CORS; o
+  backend agora permite ao navegador preservar o nome definido pela API, com
+  teste de regressão dedicado;
+- suíte conjunta atual: 4 testes E2E aprovados em paralelo e 176 testes backend
+  aprovados;
+- nenhuma regra de negócio alterada; as correções funcionais isolam os estados
+  de Brisamar/TECON e expõem ao navegador o nome dos downloads.

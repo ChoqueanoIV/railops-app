@@ -40,7 +40,7 @@ def criar_app(configuracao: Configuracao | None = None) -> FastAPI:
         allow_origins=list(configuracao_ativa.cors_origins),
         allow_methods=["*"],
         allow_headers=["*"],
-        expose_headers=[REQUEST_ID_HEADER],
+        expose_headers=[REQUEST_ID_HEADER, "Content-Disposition"],
     )
     aplicacao.add_middleware(ObservabilidadeMiddleware)
 

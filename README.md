@@ -223,7 +223,7 @@ nem apaga o volume do ambiente cotidiano. Para diagnóstico interativo, use
 
 Estado validado neste checkpoint:
 
-- backend: 175 testes;
+- backend: 176 testes;
 - frontend: 28 testes;
 - smoke E2E real aprovado no Chromium contra API e PostgreSQL isolados;
 - formatter, lint, type-check, build e pre-commit aprovados;
