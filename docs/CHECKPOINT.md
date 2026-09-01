@@ -13,7 +13,8 @@ Atualizado em: 01/09/2026
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
 - Task 023 concluída, validada e integrada;
-- gate da Task 024 aprovado e task detalhada, ainda sem implementação;
+- Task 024 em andamento: gate aprovado, Playwright instalado e smoke test
+  inicial aprovado;
 - baseline da Task 023 preservado; validação final com 171 testes backend e 28
   testes React;
 - commit do roadmap da fase 2: `9082444`;

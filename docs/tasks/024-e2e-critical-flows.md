@@ -1,6 +1,6 @@
 # Testes E2E dos fluxos críticos
 
-Status: `PLANEJADA`
+Status: `EM ANDAMENTO`
 
 ## Objetivo
 
@@ -150,5 +150,17 @@ Scripts esperados:
 ## Evidências
 
 - gate aprovado em 01/09/2026;
-- Playwright ainda não instalado e nenhum código funcional alterado durante o
-  planejamento.
+- planejamento publicado no commit `fec8534`;
+- baseline anterior à implementação: 171 testes backend e 28 testes React;
+- Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check e build Vite
+  aprovados;
+- backend e PostgreSQL locais saudáveis, com `/ready` aprovado;
+- `@playwright/test` e Chromium instalados sem vulnerabilidades reportadas pelo
+  npm;
+- configuração inicial, scripts e exclusão de artefatos adicionados;
+- smoke test real no Chromium aprovado ao redirecionar visitante sem sessão
+  para o login;
+- Vitest e Playwright separados explicitamente para impedir coleta cruzada;
+- 28 testes React, smoke E2E, lint, Prettier, type-check, build e auditoria npm
+  aprovados após a instalação;
+- nenhum código funcional ou regra de negócio alterado nesta etapa.
