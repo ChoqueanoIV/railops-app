@@ -4,15 +4,15 @@ Atualizado em: 31/08/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `feat/exportacoes-relatorios`;
-- PR mais recente: [#45 — histórico auditável de edições](https://github.com/ChoqueanoIV/railops-app/pull/45), mesclada;
-- merge consolidado na `main`: `0d30b51`;
+- branch de continuidade: `main`;
+- PR mais recente: [#46 — exportações e relatórios](https://github.com/ChoqueanoIV/railops-app/pull/46), mesclada;
+- merge consolidado na `main`: `a8cab9d`;
 - Task 019B concluída, validada e integrada;
 - Task 019C concluída, validada e integrada;
 - Task 020 concluída, validada e integrada;
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
-- Task 023 concluída e validada no PR #46, aguardando merge;
+- Task 023 concluída, validada e integrada;
 - baseline da Task 023 preservado; validação final com 171 testes backend e 28
   testes React;
 - commit do roadmap da fase 2: `9082444`;
@@ -49,6 +49,7 @@ Atualizado em: 31/08/2026
 - 020 — descoberta e contrato de consulta: integrada no PR #43.
 - 021 — listagem e filtros de passagens: integrada no PR #44.
 - 022 — histórico auditável de edições: integrada no PR #45.
+- 023 — exportações e relatórios: integrada no PR #46.
 
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
@@ -80,6 +81,7 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
   coberto por testes automatizados e inspeção visual;
 - jobs remotos `Backend` e `Frontend` aprovados no PR #46;
 - commit funcional: `34b3b31`.
+- merge `a8cab9d` integrado na `main` sem conflitos.
 
 ## Validação da task 022
 
@@ -166,10 +168,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar e mesclar o PR #46;
-2. atualizar a `main` local após o merge;
-3. registrar o merge final no checkpoint;
-4. preparar o gate da Task 024 sem iniciá-la automaticamente.
+1. preparar e aprovar o gate de negócio da Task 024;
+2. detalhar os fluxos críticos que receberão testes E2E;
+3. criar a task executável somente após as decisões do gate;
+4. não iniciar implementação da Task 024 automaticamente.
 
 Não implementar os itens 024–026 antes da aprovação de seus gates de negócio.
 

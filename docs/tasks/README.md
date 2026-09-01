@@ -37,9 +37,8 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 022 | Histórico auditável de edições | 020, 021 |
 | 023 | Exportações e relatórios | 021, 022 |
 
-As correções 019B e 019C e as Tasks 020–023 estão concluídas. A Task 023 está
-validada no PR #46 e aguarda integração. As
-evidências das exportações estão registradas em
+As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. As
+evidências das exportações da Task 023 estão registradas em
 [`023-exports-reports.md`](023-exports-reports.md). As entregas 024–026
 continuam condicionadas aos gates registrados no roadmap; criar cada task
 detalhada somente após aprovar seu gate.

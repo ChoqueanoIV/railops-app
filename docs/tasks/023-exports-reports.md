@@ -1,6 +1,6 @@
 # Exportações e relatórios
 
-Status: `CONCLUÍDA — AGUARDANDO MERGE`
+Status: `CONCLUÍDA E INTEGRADA`
 
 ## Objetivo
 
@@ -183,3 +183,4 @@ conteúdo final já aprovados.
   esse cenário permanece coberto pelos testes automatizados e pela inspeção
   visual do PDF com ciclo completo;
 - jobs remotos `Backend` e `Frontend` aprovados no PR #46.
+- PR #46 mesclado na `main` pelo merge `a8cab9d`.
