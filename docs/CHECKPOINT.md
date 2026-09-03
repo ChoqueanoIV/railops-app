@@ -1,20 +1,20 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 01/09/2026
+Atualizado em: 03/09/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `test/e2e-fluxos-criticos`;
-- PR mais recente: [#46 — exportações e relatórios](https://github.com/ChoqueanoIV/railops-app/pull/46), mesclada;
-- merge consolidado na `main`: `a8cab9d`;
+- branch de continuidade: `main`;
+- PR mais recente: [#47 — testes E2E dos fluxos críticos](https://github.com/ChoqueanoIV/railops-app/pull/47), mesclada;
+- merge consolidado na `main`: `1b88fb1`;
 - Task 019B concluída, validada e integrada;
 - Task 019C concluída, validada e integrada;
 - Task 020 concluída, validada e integrada;
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
 - Task 023 concluída, validada e integrada;
-- Task 024 concluída: cinco fluxos críticos aprovados localmente e no job E2E
-  remoto do PR #47;
+- Task 024 concluída e integrada: cinco fluxos críticos aprovados localmente e
+  no job E2E remoto do PR #47;
 - baseline da Task 023 preservado; validação atual com 177 testes backend, 28
   testes React e smoke real no Chromium;
 - commit do roadmap da fase 2: `9082444`;
@@ -87,7 +87,8 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 - suíte funcional completa com 6 testes E2E paralelos;
 - job `E2E` separado configurado na CI, preservando `Backend` e `Frontend` e
   publicando artefatos somente em falhas;
-- PR #47 com `Backend`, `Frontend` e `E2E` aprovados;
+- PR #47 com `Backend`, `Frontend` e `E2E` aprovados e integrado à `main` no
+  merge `1b88fb1`;
 - ambiente cotidiano permaneceu saudável e `/ready` respondeu `ok` após o
   ciclo;
 - 177 testes backend e 28 testes React aprovados;
@@ -208,10 +209,9 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. revisar `docs/tasks/024-e2e-critical-flows.md`;
-2. integrar o PR #47 à `main` e registrar o merge;
-3. decidir o gate da Task 025 antes de iniciar qualquer piloto de deploy;
-4. preservar integralmente regras, contratos e dados cotidianos.
+1. decidir o gate da Task 025 antes de iniciar qualquer piloto de deploy;
+2. preservar integralmente regras, contratos e dados cotidianos;
+3. não iniciar implementação da Task 025 sem aprovação explícita do gate.
 
 Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.
 

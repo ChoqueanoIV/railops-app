@@ -39,7 +39,7 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 024 | Testes E2E dos fluxos críticos | 019–023 |
 
 As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
-Task 024 está concluída no PR #47, com evidências em
+Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
 [`024-e2e-critical-flows.md`](024-e2e-critical-flows.md). As entregas 025–026
 continuam condicionadas aos gates registrados no roadmap.
 
