@@ -215,6 +215,9 @@ frontend/react/.env.local
 frontend/react/playwright-report/
 frontend/react/test-results/
 
+# Backups locais do piloto
+backups/
+
 # PyPI configuration file
 .pypirc
 

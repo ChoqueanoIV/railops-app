@@ -15,6 +15,8 @@ Atualizado em: 03/09/2026
 - Task 023 concluída, validada e integrada;
 - Task 024 concluída e integrada: cinco fluxos críticos aprovados localmente e
   no job E2E remoto do PR #47;
+- Task 025 iniciada na branch `feat/deploy-piloto`, com gate aprovado e
+  infraestrutura declarativa validada; provisionamento externo ainda pendente;
 - baseline da Task 023 preservado; validação atual com 177 testes backend, 28
   testes React e smoke real no Chromium;
 - commit do roadmap da fase 2: `9082444`;
@@ -209,9 +211,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. decidir o gate da Task 025 antes de iniciar qualquer piloto de deploy;
-2. preservar integralmente regras, contratos e dados cotidianos;
-3. não iniciar implementação da Task 025 sem aprovação explícita do gate.
+1. publicar e revisar a infraestrutura inicial da Task 025 em PR próprio;
+2. provisionar Supabase, Render e Cloudflare somente nos planos gratuitos;
+3. homologar o endereço público exclusivamente com dados fictícios;
+4. preservar integralmente regras, contratos e dados cotidianos.
 
 Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.
 
