@@ -36,3 +36,15 @@ def test_ci_frontend_usa_lock_e_todos_os_gates_locais() -> None:
     assert "run: npm run typecheck" in conteudo
     assert "run: npm test" in conteudo
     assert "run: npm run build" in conteudo
+
+
+def test_ci_e2e_usa_docker_chromium_e_publica_somente_falhas() -> None:
+    conteudo = WORKFLOW.read_text(encoding="utf-8")
+
+    assert "name: E2E" in conteudo
+    assert "npx playwright install --with-deps chromium" in conteudo
+    assert "run: npm run test:e2e" in conteudo
+    assert "if: failure()" in conteudo
+    assert "actions/upload-artifact@v7" in conteudo
+    assert "frontend/react/playwright-report" in conteudo
+    assert "frontend/react/test-results" in conteudo

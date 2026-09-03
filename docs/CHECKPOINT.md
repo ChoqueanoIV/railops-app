@@ -1,10 +1,10 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 31/08/2026
+Atualizado em: 01/09/2026
 
 ## Estado seguro atual
 
-- branch de continuidade: `main`;
+- branch de continuidade: `test/e2e-fluxos-criticos`;
 - PR mais recente: [#46 — exportações e relatórios](https://github.com/ChoqueanoIV/railops-app/pull/46), mesclada;
 - merge consolidado na `main`: `a8cab9d`;
 - Task 019B concluída, validada e integrada;
@@ -13,8 +13,10 @@ Atualizado em: 31/08/2026
 - Task 021 concluída, validada e integrada;
 - Task 022 concluída, validada e integrada;
 - Task 023 concluída, validada e integrada;
-- baseline da Task 023 preservado; validação final com 171 testes backend e 28
-  testes React;
+- Task 024 concluída: cinco fluxos críticos aprovados localmente e no job E2E
+  remoto do PR #47;
+- baseline da Task 023 preservado; validação atual com 177 testes backend, 28
+  testes React e smoke real no Chromium;
 - commit do roadmap da fase 2: `9082444`;
 - commits da task 018: `89d4048` e `b3216dd`;
 - commit funcional da task 017: `1cd5756`;
@@ -54,6 +56,44 @@ Atualizado em: 31/08/2026
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
 `main`.
+
+## Validação da task 024
+
+- Playwright e Chromium configurados no frontend React;
+- Compose `railops-e2e` independente, com banco temporário em `tmpfs`, API real
+  e migrations;
+- fixture determinística cria usuários Manobrador, Instrutor e de primeiro
+  acesso somente após validar ambiente, host e nome do banco E2E;
+- quatro testes unitários protegem o seed contra configurações cotidianas;
+- `npm run test:e2e` cria o ambiente, prepara os dados, executa o Chromium e
+  remove containers, rede e dados temporários automaticamente;
+- smoke real aprovado contra React, API e PostgreSQL isolados;
+- primeiro acesso e login reais aprovados, incluindo seleção de terminais e
+  ausência do JWT na URL e no conteúdo visível;
+- ciclo Brisamar + TECON aprovado com revisão, confirmação, recarga somente
+  leitura e bloqueio de tentativa posterior de edição;
+- teste E2E encontrou e protegeu a correção do vazamento de estado do formulário
+  Brisamar ao navegar para TECON;
+- consulta filtrada e PDF individual aprovados, incluindo nome, MIME, tamanho,
+  assinatura `%PDF-` e ausência do JWT na URL;
+- `Content-Disposition` exposto pelo CORS para preservar no navegador o nome
+  definido pela API;
+- permissões reais aprovadas: Manobrador bloqueado por 403 sem logout e
+  Instrutor autorizado no histórico e nos consolidados CSV/PDF;
+- CSV/PDF consolidados validados sem nomes de campos de autenticação;
+- suíte E2E atual com 5 testes aprovados em paralelo e sem dependência de ordem;
+- recuperação de sessão inválida aprovada com 401 real, limpeza do JWT e retorno
+  seguro ao login;
+- suíte funcional completa com 6 testes E2E paralelos;
+- job `E2E` separado configurado na CI, preservando `Backend` e `Frontend` e
+  publicando artefatos somente em falhas;
+- PR #47 com `Backend`, `Frontend` e `E2E` aprovados;
+- ambiente cotidiano permaneceu saudável e `/ready` respondeu `ok` após o
+  ciclo;
+- 177 testes backend e 28 testes React aprovados;
+- Ruff, formatter Ruff, mypy, ESLint, Prettier, type-check e build Vite
+  aprovados;
+- nenhum contrato HTTP, comportamento de tela ou regra de negócio foi alterado.
 
 ## Validação da task 023
 
@@ -168,12 +208,12 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. preparar e aprovar o gate de negócio da Task 024;
-2. detalhar os fluxos críticos que receberão testes E2E;
-3. criar a task executável somente após as decisões do gate;
-4. não iniciar implementação da Task 024 automaticamente.
+1. revisar `docs/tasks/024-e2e-critical-flows.md`;
+2. integrar o PR #47 à `main` e registrar o merge;
+3. decidir o gate da Task 025 antes de iniciar qualquer piloto de deploy;
+4. preservar integralmente regras, contratos e dados cotidianos.
 
-Não implementar os itens 024–026 antes da aprovação de seus gates de negócio.
+Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.
 
 ## Restrições de continuidade
 
@@ -190,7 +230,7 @@ O executável Python dentro do `venv` no OneDrive pode ser bloqueado. Quando
 isso ocorrer, use o Python 3.13 instalado no perfil com os pacotes do ambiente:
 
 ```powershell
-$env:PYTHONPATH=(Resolve-Path 'venv/Lib/site-packages').Path
+$env:PYTHONPATH=(Resolve-Path '.venv/Lib/site-packages').Path
 & 'C:\Users\Leandro CHOQUE\AppData\Local\Programs\Python\Python313\python.exe' -m pytest
 ```
 

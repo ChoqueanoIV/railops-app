@@ -103,3 +103,42 @@ jobs:
 
       - name: Gerar build
         run: npm run build
+
+  e2e:
+    name: E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: frontend/react
+
+    steps:
+      - name: Obter código-fonte
+        uses: actions/checkout@v7
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/react/package-lock.json
+
+      - name: Instalar dependências bloqueadas
+        run: npm ci
+
+      - name: Instalar Chromium e dependências do sistema
+        run: npx playwright install --with-deps chromium
+
+      - name: Executar fluxos críticos
+        run: npm run test:e2e
+
+      - name: Publicar evidências da falha
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-evidencias-${{ github.run_attempt }}
+          path: |
+            frontend/react/playwright-report
+            frontend/react/test-results
+          if-no-files-found: ignore
+          retention-days: 7

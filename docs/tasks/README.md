@@ -36,12 +36,12 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 021 | Listagem e filtros de passagens | 020 |
 | 022 | Histórico auditável de edições | 020, 021 |
 | 023 | Exportações e relatórios | 021, 022 |
+| 024 | Testes E2E dos fluxos críticos | 019–023 |
 
-As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. As
-evidências das exportações da Task 023 estão registradas em
-[`023-exports-reports.md`](023-exports-reports.md). As entregas 024–026
-continuam condicionadas aos gates registrados no roadmap; criar cada task
-detalhada somente após aprovar seu gate.
+As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
+Task 024 está concluída no PR #47, com evidências em
+[`024-e2e-critical-flows.md`](024-e2e-critical-flows.md). As entregas 025–026
+continuam condicionadas aos gates registrados no roadmap.
 
 ## Como pedir uma task ao Codex
 
