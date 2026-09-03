@@ -54,4 +54,9 @@ o desenvolvimento por branch e PR e sem tratar o piloto como produção.
 - Ruff, formatter Ruff, mypy, pre-commit, ESLint, type-check e build Vite
   aprovados;
 - artefato Vite contém o fallback `_redirects` esperado;
+- PR #48 aberto com `Backend`, `Frontend` e `E2E` aprovados;
+- projeto gratuito `railops-piloto` criado no Supabase Free/Nano, na região de
+  São Paulo, com Data API desativada e sem inserção de dados reais;
+- projeto Supabase anterior preservado; Render e Cloudflare permanecem
+  pendentes para a retomada;
 - nenhuma regra de negócio, schema ou contrato foi alterado.
