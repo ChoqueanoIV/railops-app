@@ -213,10 +213,10 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. obter a URI segura do projeto `railops-piloto` sem versioná-la;
-2. provisionar a API no Render Free e validar migrations e `/ready`;
-3. provisionar o React no Cloudflare Pages Free e restringir o CORS;
-4. homologar o endereço público exclusivamente com dados fictícios;
+1. acompanhar o novo build do Pages sem a regra `_redirects` redundante;
+2. cadastrar somente identidades fictícias pelo procedimento administrativo;
+3. homologar os fluxos críticos em `https://railops-piloto.pages.dev`;
+4. após o merge do PR #48, trocar a branch de produção do Pages para `main`;
 5. preservar integralmente regras, contratos e dados cotidianos.
 
 Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.

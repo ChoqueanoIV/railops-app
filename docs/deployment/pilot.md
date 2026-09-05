@@ -53,7 +53,9 @@ pre-deploy separado não integra o plano Free.
 | Saída | `dist` |
 | `VITE_API_BASE_URL` | URL HTTPS da API Render, sem barra final |
 
-`public/_redirects` preserva rotas React abertas diretamente ou recarregadas.
+O Pages aplica seu fallback nativo de SPA porque o artefato não possui uma
+página `404.html`; assim, rotas React abertas diretamente ou recarregadas
+continuam resolvendo para `index.html` sem uma regra `_redirects` redundante.
 
 ## Usuários e homologação
 
