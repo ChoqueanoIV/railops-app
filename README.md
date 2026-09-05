@@ -3,10 +3,24 @@
 Sistema web para digitalizar a passagem de serviço entre turnos no Pátio
 Brisamar e no Terminal TECON, preservando as regras operacionais existentes.
 
-> **Status:** MVP funcional, testado e com CI. Login, primeiro acesso, seleção
-> de terminal, criação, edição, confirmação, consulta, histórico e exportações
-> estão disponíveis no React. A API preserva o estado anterior de cada edição.
-> Ainda não há deploy público.
+> **Status:** piloto funcional, publicado e homologado com dados fictícios.
+> Login, primeiro acesso, ciclo Brisamar + TECON, revisão, confirmação, consulta,
+> histórico e exportações estão disponíveis no React. Backend, Frontend, E2E e
+> deploy são validados continuamente pela CI.
+
+## Piloto público
+
+- aplicação: <https://railops-piloto.pages.dev/login>;
+- API: <https://railops-api-piloto.onrender.com>;
+- finalidade: demonstração e homologação por testadores convidados;
+- dados permitidos: exclusivamente identidades e passagens fictícias.
+
+O piloto usa Cloudflare Pages Free, Render Free e Supabase Free. A primeira
+requisição à API pode levar cerca de 50 segundos quando o Render estiver
+suspenso por inatividade. O ambiente não possui SLA nem backup automático e não
+deve ser usado em uma operação ferroviária real. Credenciais fictícias de teste
+são compartilhadas privadamente pelo responsável do projeto e nunca ficam
+versionadas no repositório.
 
 ## Funcionalidades disponíveis
 
@@ -178,12 +192,15 @@ script em produção ou banco compartilhado.
 
 ## Roteiro de teste manual
 
-1. Confirme `/health` e abra `/docs`.
-2. Conclua primeiro acesso e login no React.
-3. Registre e confirme uma passagem válida de Brisamar.
-4. Edite-a dentro da janela permitida.
-5. Repita o fluxo para TECON e valide os campos das Áreas 1 e 2.
-6. Envie combinações condicionais inválidas e confira as mensagens da API.
+1. Faça login no React com uma identidade fictícia fornecida pelo responsável.
+2. Comece por Brisamar ou TECON e preencha somente informações inventadas.
+3. No Brisamar, valide L22/L24 superior, inferior e travessão simultaneamente.
+4. Conclua o outro terminal dentro do mesmo ciclo.
+5. Revise os dois terminais, faça uma correção e confirme definitivamente.
+6. Tente editar após a confirmação e confira o bloqueio.
+7. Consulte a passagem, aplique filtros e baixe o PDF individual.
+8. Com os perfis autorizados, valide histórico e consolidados PDF/CSV; o
+   Manobrador deve receber 403 nesses recursos sem perder a sessão.
 
 ## Testes e qualidade
 
@@ -225,9 +242,11 @@ Estado validado neste checkpoint:
 
 - backend: 177 testes;
 - frontend: 28 testes;
-- smoke E2E real aprovado no Chromium contra API e PostgreSQL isolados;
+- 6 cenários E2E aprovados no Chromium contra API e PostgreSQL isolados;
 - formatter, lint, type-check, build e pre-commit aprovados;
-- CI executa jobs independentes de backend e frontend em PRs e na `main`.
+- CI executa jobs independentes de Backend, Frontend e E2E em PRs e na `main`;
+- piloto público homologado com os três perfis e rotas diretas do React;
+- frontend estático anterior removido após homologação, sem alterar contratos.
 
 Cada resposta inclui `X-Request-ID` e headers defensivos. A API escreve logs
 JSON com metadados operacionais, sem payloads, PINs, tokens ou credenciais. Em
@@ -255,12 +274,14 @@ railops-app/
 │   ├── tests/               # unitários, integração e API
 │   └── Dockerfile
 ├── frontend/
-│   ├── react/src/
-│   │   ├── app/             # bootstrap e rotas
-│   │   ├── features/        # auth, shell e passagens
-│   │   ├── services/        # cliente da API
-│   │   └── test/            # setup dos testes
-│   └── react/                # Vite, testes e configuração do frontend
+│   └── react/
+│       ├── src/
+│       │   ├── app/         # bootstrap e rotas
+│       │   ├── features/    # auth, shell e passagens
+│       │   ├── services/    # cliente da API
+│       │   └── test/        # setup dos testes
+│       ├── e2e/              # fluxos reais no Chromium
+│       └── package.json      # scripts e dependências do frontend
 ├── docs/                    # arquitetura, padrões, tasks e checkpoint
 ├── compose.yaml
 ├── pyproject.toml
@@ -296,19 +317,26 @@ Não edite `backend/requirements*.txt` manualmente.
 - **Frontend sem API:** confira `VITE_API_BASE_URL` e o health da porta 8000.
 - **Compose não sobe:** confirme Docker Desktop ativo e consulte
   `docker compose --env-file .env.docker logs backend db`.
+- **Socket temporário do Docker bloqueado:** encerre o Docker Desktop e reinicie
+  o Windows antes de considerar qualquer reset; não use “factory reset” sem um
+  backup explícito dos volumes.
 - **Banco vazio:** aplique as migrations e prepare o usuário de demonstração.
 
 ## Roadmap
 
 Concluído: caracterização das regras, arquitetura por features, contratos de
-erro, dependências reproduzíveis, testes, qualidade estática, Docker, fluxos
-React, CI e automação E2E dos cinco fluxos críticos.
+erro, dependências reproduzíveis, Docker, React, consulta, histórico,
+exportações, CI, E2E, piloto público gratuito e remoção segura do frontend
+estático anterior.
 
-Planejado, ainda não concluído:
+Próximas evoluções dependem de feedback e de aprovação explícita de um novo
+gate. Possibilidades ainda não autorizadas incluem:
 
-- hardening final e limpeza segura dos adaptadores/fallbacks;
-- validação operacional e de UX com usuários;
-- estratégia de deploy e observabilidade.
+- melhorias de usabilidade identificadas por testadores;
+- administração segura de usuários e perfis;
+- monitoramento, backup e recuperação adequados para uso real;
+- novos terminais e relatórios, somente após validação das regras;
+- preparação de infraestrutura de produção com segurança, retenção e SLA.
 
 O estado de retomada fica em [`docs/CHECKPOINT.md`](docs/CHECKPOINT.md), o índice
 técnico em [`docs/README.md`](docs/README.md) e o backlog em
