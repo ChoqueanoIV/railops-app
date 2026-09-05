@@ -73,11 +73,12 @@ o desenvolvimento por branch e PR e sem tratar o piloto como produção.
   nativo do Pages;
 - 28 testes React, type-check e build Vite aprovados novamente após o primeiro
   deploy;
+- deploy `1e4820d` concluído com sucesso no Pages sem aviso de redirecionamento,
+  seguido de nova validação pública de `/brisamar`;
 - nenhuma regra de negócio, schema ou contrato foi alterado.
 
 ## Pendências para concluir
 
-- publicar a remoção da regra `_redirects` redundante e confirmar build limpo;
 - cadastrar apenas identidades fictícias pelo procedimento administrativo;
 - homologar os fluxos críticos no endereço público com os três perfis;
 - após o merge do PR #48, trocar a branch de produção do Pages para `main`;
