@@ -59,4 +59,8 @@ o desenvolvimento por branch e PR e sem tratar o piloto como produção.
   São Paulo, com Data API desativada e sem inserção de dados reais;
 - projeto Supabase anterior preservado; Render e Cloudflare permanecem
   pendentes para a retomada;
+- primeiro deploy Render construiu a imagem, mas falhou com status 127 antes da
+  conexão ao banco porque o comando composto foi interpretado como executável;
+- inicialização corrigida para script POSIX dedicado, sem alterar aplicação,
+  migrations, contratos ou dados;
 - nenhuma regra de negócio, schema ou contrato foi alterado.

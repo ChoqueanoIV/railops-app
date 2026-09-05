@@ -39,8 +39,9 @@ variáveis secretas do Render.
 3. Preencha `CORS_ORIGINS` com a URL exata do Cloudflare Pages; nunca use `*`.
 4. Aguarde `/ready` responder `200` com estado `ok`.
 
-O serviço executa `alembic upgrade head` antes do Uvicorn. A migration fica no
-comando de inicialização porque pre-deploy separado não integra o plano Free.
+O serviço executa `backend/scripts/start_render.sh`, que aplica
+`alembic upgrade head` antes do Uvicorn. O fluxo fica na inicialização porque
+pre-deploy separado não integra o plano Free.
 
 ### React no Cloudflare Pages
 
