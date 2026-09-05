@@ -1,6 +1,6 @@
 # Remoção segura do frontend legado
 
-Status: `EM ANDAMENTO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 
@@ -65,9 +65,9 @@ contratos HTTP, compatibilidades históricas ou comportamento observável.
 - [x] React permanece com todas as rotas e fluxos homologados;
 - [x] nenhuma compatibilidade de API, banco ou histórico foi removida;
 - [x] backend, frontend, E2E, lint, tipos e build permanecem aprovados;
-- [ ] deploy público permanece saudável após a integração;
-- [ ] documentação e checkpoint refletem o estado final;
-- [ ] nenhuma regra de negócio, schema ou contrato HTTP foi alterado.
+- [x] deploy público permanece saudável após a integração;
+- [x] documentação e checkpoint refletem o estado final;
+- [x] nenhuma regra de negócio, schema ou contrato HTTP foi alterado.
 
 ## Evidências
 
@@ -92,3 +92,7 @@ contratos HTTP, compatibilidades históricas ou comportamento observável.
   somente no inventário desta task, sem consumidor ativo.
 - PR #50 aprovado nos jobs Backend, Frontend, E2E e Cloudflare Pages; o E2E
   remoto executou os fluxos reais contra React, API e PostgreSQL isolados.
+- PR #50 integrado à `main` no merge `e6b5400`;
+- checks da própria `main` aprovados, incluindo o E2E posterior ao merge;
+- piloto público aprovado após a integração: `/ready`, CORS, `/login` e rota
+  direta `/brisamar` responderam corretamente.
