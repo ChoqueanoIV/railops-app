@@ -1,6 +1,6 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 03/09/2026
+Atualizado em: 05/09/2026
 
 ## Estado seguro atual
 
@@ -17,8 +17,11 @@ Atualizado em: 03/09/2026
   no job E2E remoto do PR #47;
 - Task 025 iniciada na branch `feat/deploy-piloto`, com gate aprovado,
   infraestrutura declarativa validada e PR #48 com todos os checks aprovados;
-- projeto PostgreSQL gratuito exclusivo `railops-piloto` criado no Supabase,
-  em São Paulo, sem dados reais; Render e Cloudflare ainda não provisionados;
+- piloto publicado em Cloudflare Pages, Render Free e Supabase Free, somente
+  com identidades e dados fictícios;
+- homologação pública aprovada com Manobrador, Instrutor e Monitor de Qualidade,
+  incluindo primeiro acesso, ciclo completo, confirmação, bloqueio de edição,
+  PDF, histórico e CSV conforme as permissões vigentes;
 - baseline da Task 023 preservado; validação atual com 177 testes backend, 28
   testes React e smoke real no Chromium;
 - commit do roadmap da fase 2: `9082444`;
@@ -213,9 +216,9 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. cadastrar somente identidades fictícias pelo procedimento administrativo;
-2. homologar os fluxos críticos em `https://railops-piloto.pages.dev`;
-3. após o merge do PR #48, trocar a branch de produção do Pages para `main`;
+1. confirmar novamente os checks do PR #48 e integrá-lo à `main`;
+2. trocar a branch de produção do Pages para `main` e confirmar o novo deploy;
+3. registrar a conclusão final da Task 025;
 4. preservar integralmente regras, contratos e dados cotidianos.
 
 Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.

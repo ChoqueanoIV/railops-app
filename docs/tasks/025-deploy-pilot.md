@@ -37,7 +37,7 @@ o desenvolvimento por branch e PR e sem tratar o piloto como produção.
 - [x] React possui fallback nativo do Pages para rotas diretas;
 - [x] API aplica migrations e expõe `/ready`;
 - [x] frontend, API e banco gratuitos provisionados;
-- [ ] fluxos críticos aprovados no endereço público com dados fictícios;
+- [x] fluxos críticos aprovados no endereço público com dados fictícios;
 - [x] CORS restrito à origem pública aprovada;
 - [x] checks locais e remotos aprovados;
 - [ ] checkpoint registra URLs, limitações e resultado final.
@@ -76,10 +76,25 @@ o desenvolvimento por branch e PR e sem tratar o piloto como produção.
 - deploy `1e4820d` concluído com sucesso no Pages sem aviso de redirecionamento,
   seguido de nova validação pública de `/brisamar`;
 - nenhuma regra de negócio, schema ou contrato foi alterado.
+- quatro identidades exclusivamente fictícias foram cadastradas e ativadas no
+  banco do piloto, cobrindo primeiro acesso, Manobrador, Instrutor e Monitor de
+  Qualidade, sem versionar credenciais;
+- o plano gratuito do Render apresentou a suspensão esperada; após o despertar
+  da API, o primeiro acesso foi concluído sem escrita parcial;
+- login público de Manobrador e ciclo completo Brisamar + TECON aprovados, com
+  revisão consolidada, correção anterior à confirmação e bloqueio posterior;
+- L22 e L24 foram validadas com ocupações simultâneas superior e inferior e com
+  seus respectivos travessões;
+- tentativa de edição pela URL direta após a confirmação foi bloqueada pela
+  aplicação;
+- PDF individual retornou HTTP 200 para Manobrador; histórico e CSV consolidado
+  retornaram HTTP 403 para esse perfil, preservando as autorizações;
+- histórico e CSV consolidado retornaram HTTP 200 para Instrutor e Monitor de
+  Qualidade;
+- toda a homologação pública utilizou nomes, observações, códigos e composições
+  fictícios, sem dados cotidianos.
 
 ## Pendências para concluir
 
-- cadastrar apenas identidades fictícias pelo procedimento administrativo;
-- homologar os fluxos críticos no endereço público com os três perfis;
 - após o merge do PR #48, trocar a branch de produção do Pages para `main`;
 - registrar o resultado final e as limitações no checkpoint.
