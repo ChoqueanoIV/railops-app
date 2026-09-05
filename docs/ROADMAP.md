@@ -1,6 +1,6 @@
 # Roadmap do produto — fase 2
 
-Status: `PROPOSTO`
+Status: `EM EXECUÇÃO`
 
 Este roadmap começa após a conclusão do pacote técnico das tasks 001–018. A
 ordem prioriza validação do produto existente antes de ampliar seu escopo e
@@ -30,9 +30,9 @@ e CSV já foram implementados. Ainda não existe deploy público.
 | 025 | Estratégia e piloto de deploy | 019, 024 | plataforma, custo, dados, backup e acesso |
 | 026 | Remoção segura do fallback legado | 019, 024, 025 | React homologado no ambiente alvo |
 
-Os IDs 020–024 estão concluídos. Os IDs 025–026 representam direção planejada,
-não autorização para implementar. Cada item deve ganhar uma task detalhada
-apenas depois que seu gate for decidido.
+Os IDs 020–024 estão concluídos. O gate da Task 025 foi aprovado em 03/09/2026
+para um piloto gratuito exclusivamente com dados fictícios. A Task 026 continua
+como direção planejada e não está autorizada para implementação.
 
 ## Decisões confirmadas para a Task 020
 
@@ -50,10 +50,15 @@ apenas depois que seu gate for decidido.
   TECON; não haverá filtro por terminal, pois todo ciclo confirmado contém os
   dois terminais.
 
-## Decisões ainda pendentes
+## Decisões confirmadas para a Task 025
 
-- política de retenção e tratamento dos dados operacionais;
-- ambiente e público do primeiro deploy.
+- piloto sem dados operacionais reais; somente identidades e passagens fictícias;
+- frontend no Cloudflare Pages Free, API no Render Free e PostgreSQL no Supabase Free;
+- custo máximo de R$ 0 e nenhum upgrade ou cobrança automática;
+- URL pública compartilhada com testadores convidados;
+- backup lógico manual antes de mudanças relevantes;
+- limitações dos planos gratuitos aceitas para homologação;
+- uso operacional real, retenção e backup automático exigem novo gate.
 
 ## Decisões confirmadas para a Task 022
 

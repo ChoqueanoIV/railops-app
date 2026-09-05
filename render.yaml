@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: railops-api-piloto
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    dockerCommand: sh /app/scripts/start_render.sh
+    healthCheckPath: /ready
+    envVars:
+      - key: RAILOPS_ENV
+        value: production
+      - key: API_TITLE
+        value: RailOps API
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false

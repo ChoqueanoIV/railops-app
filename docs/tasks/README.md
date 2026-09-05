@@ -37,11 +37,13 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 022 | Histórico auditável de edições | 020, 021 |
 | 023 | Exportações e relatórios | 021, 022 |
 | 024 | Testes E2E dos fluxos críticos | 019–023 |
+| 025 | Estratégia e piloto de deploy | 019, 024 |
 
 As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
 Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
 [`024-e2e-critical-flows.md`](024-e2e-critical-flows.md). As entregas 025–026
-continuam condicionadas aos gates registrados no roadmap.
+continuam condicionadas aos gates registrados no roadmap. A Task 025 está em
+andamento após aprovação explícita de seu gate em 03/09/2026.
 
 ## Como pedir uma task ao Codex
 
