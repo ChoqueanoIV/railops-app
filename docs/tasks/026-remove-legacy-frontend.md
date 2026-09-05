@@ -64,7 +64,7 @@ contratos HTTP, compatibilidades históricas ou comportamento observável.
 - [x] somente o frontend estático antigo foi removido;
 - [x] React permanece com todas as rotas e fluxos homologados;
 - [x] nenhuma compatibilidade de API, banco ou histórico foi removida;
-- [ ] backend, frontend, E2E, lint, tipos e build permanecem aprovados;
+- [x] backend, frontend, E2E, lint, tipos e build permanecem aprovados;
 - [ ] deploy público permanece saudável após a integração;
 - [ ] documentação e checkpoint refletem o estado final;
 - [ ] nenhuma regra de negócio, schema ou contrato HTTP foi alterado.
@@ -90,3 +90,5 @@ contratos HTTP, compatibilidades históricas ou comportamento observável.
   Ruff, formatter Ruff, mypy, ESLint, Prettier, TypeScript e build Vite;
 - busca estrutural posterior encontrou referências aos caminhos removidos
   somente no inventário desta task, sem consumidor ativo.
+- PR #50 aprovado nos jobs Backend, Frontend, E2E e Cloudflare Pages; o E2E
+  remoto executou os fluxos reais contra React, API e PostgreSQL isolados.
