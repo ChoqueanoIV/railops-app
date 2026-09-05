@@ -237,11 +237,13 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 1. manter o piloto restrito a testadores convidados e dados fictícios;
 2. coletar feedback sem alterar regras de negócio implicitamente;
-3. aprovar explicitamente o gate da Task 026 antes de remover qualquer fallback
-   legado;
+3. retomar a Task 026 pela baseline de testes antes de remover o frontend
+   estático legado;
 4. preservar integralmente regras, contratos e dados cotidianos.
 
-Não implementar a Task 026 antes da aprovação de seu gate de negócio.
+O gate da Task 026 foi aprovado em 05/09/2026. A baseline local principal foi
+aprovada e o frontend estático autorizado foi removido; a validação posterior e
+o PR ainda estão pendentes.
 
 ## Restrições de continuidade
 

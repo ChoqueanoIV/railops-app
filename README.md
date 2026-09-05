@@ -39,8 +39,8 @@ As regras protegidas pela caracterização estão em
 
 O backend está organizado por features (`auth` e `passagens`) e mantém
 adaptadores temporários para imports antigos. O React usa uma API tipada e
-centralizada. Os HTML/CSS/JavaScript anteriores permanecem apenas como fallback
-durante a validação operacional.
+centralizada e é a única interface web mantida no repositório. O frontend
+estático anterior foi removido após homologação local, automatizada e pública.
 
 ## Execução rápida com Docker
 
@@ -260,8 +260,7 @@ railops-app/
 │   │   ├── features/        # auth, shell e passagens
 │   │   ├── services/        # cliente da API
 │   │   └── test/            # setup dos testes
-│   ├── css/ e js/           # fallback legado temporário
-│   └── *.html               # fallback legado temporário
+│   └── react/                # Vite, testes e configuração do frontend
 ├── docs/                    # arquitetura, padrões, tasks e checkpoint
 ├── compose.yaml
 ├── pyproject.toml

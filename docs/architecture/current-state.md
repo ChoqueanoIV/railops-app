@@ -121,10 +121,11 @@ das passagens do Brisamar e TECON e a confirmação do registro. Os formulários
 usam tipos alinhados aos schemas da API e o cliente HTTP central; regras de
 domínio e autorização de edição permanecem no backend.
 
-Os arquivos HTML, CSS e JavaScript anteriores permanecem intactos como fallback
-temporário, permitindo validação operacional antes de sua remoção em uma etapa
-posterior. A consulta de passagens confirmadas possui filtros e paginação;
-histórico visual de edições e exportações já possuem interface React dedicada.
+O frontend estático anterior foi removido após homologação local, automatizada
+e pública do React. A consulta de passagens confirmadas possui filtros e
+paginação; histórico visual de edições e exportações possuem interface React
+dedicada. Compatibilidades de API, banco e registros históricos permanecem
+preservadas e não fazem parte dessa remoção.
 
 A suíte React contém 28 testes. Prettier, ESLint, TypeScript e o build Vite são
 executados localmente e pelo GitHub Actions.

@@ -4,7 +4,9 @@ Estas regras complementam o `AGENTS.md` da raiz.
 
 ## Estratégia
 
-O frontend atual é legado HTML/CSS/JavaScript. A migração para React + TypeScript deve ser incremental e não pode impedir o uso dos fluxos atuais até que a tela substituta esteja validada.
+O frontend atual é React + TypeScript. A implementação anterior em HTML, CSS e
+JavaScript foi removida após homologação, e não deve ser reintroduzida como
+atalho para mudanças funcionais.
 
 ## Stack alvo
 

@@ -36,7 +36,8 @@ de demonstração e troubleshooting, consulte o [`README principal`](../README.m
 - 177 testes backend, 28 testes frontend e cobertura backend acima do gate de
   90%;
 - lint, formatter, type-check, build, pre-commit, Docker e CI validados;
-- legado e adaptadores preservados temporariamente para uma remoção segura;
+- frontend estático anterior removido; adaptadores e compatibilidades de API,
+  banco e histórico preservados;
 - consulta navegável de passagens confirmadas com filtros e paginação;
 - ambiente E2E real e isolado aprovado, com os cinco fluxos críticos executados
   localmente e na CI;
