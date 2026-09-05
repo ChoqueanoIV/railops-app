@@ -41,9 +41,9 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 
 As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
 Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
-[`024-e2e-critical-flows.md`](024-e2e-critical-flows.md). As entregas 025–026
-continuam condicionadas aos gates registrados no roadmap. A Task 025 está em
-andamento após aprovação explícita de seu gate em 03/09/2026.
+[`024-e2e-critical-flows.md`](024-e2e-critical-flows.md). A Task 025 foi
+concluída e integrada pelo PR #48 após aprovação explícita de seu gate em
+03/09/2026. A Task 026 continua condicionada ao gate registrado no roadmap.
 
 ## Como pedir uma task ao Codex
 

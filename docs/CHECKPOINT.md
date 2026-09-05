@@ -5,8 +5,8 @@ Atualizado em: 05/09/2026
 ## Estado seguro atual
 
 - branch de continuidade: `main`;
-- PR mais recente: [#47 — testes E2E dos fluxos críticos](https://github.com/ChoqueanoIV/railops-app/pull/47), mesclada;
-- merge consolidado na `main`: `1b88fb1`;
+- PR mais recente: [#48 — piloto gratuito de deploy](https://github.com/ChoqueanoIV/railops-app/pull/48), mesclada;
+- merge consolidado na `main`: `ebc15b2`;
 - Task 019B concluída, validada e integrada;
 - Task 019C concluída, validada e integrada;
 - Task 020 concluída, validada e integrada;
@@ -15,8 +15,8 @@ Atualizado em: 05/09/2026
 - Task 023 concluída, validada e integrada;
 - Task 024 concluída e integrada: cinco fluxos críticos aprovados localmente e
   no job E2E remoto do PR #47;
-- Task 025 iniciada na branch `feat/deploy-piloto`, com gate aprovado,
-  infraestrutura declarativa validada e PR #48 com todos os checks aprovados;
+- Task 025 concluída e integrada, com infraestrutura gratuita publicada,
+  homologação pública aprovada e provedores acompanhando a branch `main`;
 - piloto publicado em Cloudflare Pages, Render Free e Supabase Free, somente
   com identidades e dados fictícios;
 - homologação pública aprovada com Manobrador, Instrutor e Monitor de Qualidade,
@@ -63,6 +63,25 @@ Atualizado em: 05/09/2026
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
 `main`.
+
+## Validação da task 025
+
+- frontend público em `https://railops-piloto.pages.dev` e API pública em
+  `https://railops-api-piloto.onrender.com`;
+- Cloudflare Pages, Render e Supabase mantidos nos planos gratuitos;
+- quatro identidades fictícias ativadas para cobrir primeiro acesso e os três
+  perfis, sem credenciais versionadas;
+- ciclo completo Brisamar + TECON aprovado, incluindo L22/L24 simultâneas,
+  travessões, revisão, correção, confirmação e bloqueio posterior de edição;
+- PDF individual aprovado para Manobrador; histórico e CSV retornaram 403 para
+  esse perfil e 200 para Instrutor e Monitor de Qualidade;
+- suspensão e atraso de partida do Render Free observados e aceitos; a retomada
+  não produziu escrita parcial;
+- PR #48 aprovado nos jobs Backend, Frontend, E2E e Cloudflare Pages e integrado
+  no merge `ebc15b2`;
+- Cloudflare Pages e Blueprint Render configurados para acompanhar `main`;
+- validação pós-migração aprovou `/ready`, CORS e rotas diretas públicas;
+- nenhuma regra de negócio, schema ou contrato HTTP foi alterado.
 
 ## Validação da task 024
 
@@ -216,12 +235,13 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. confirmar novamente os checks do PR #48 e integrá-lo à `main`;
-2. trocar a branch de produção do Pages para `main` e confirmar o novo deploy;
-3. registrar a conclusão final da Task 025;
+1. manter o piloto restrito a testadores convidados e dados fictícios;
+2. coletar feedback sem alterar regras de negócio implicitamente;
+3. aprovar explicitamente o gate da Task 026 antes de remover qualquer fallback
+   legado;
 4. preservar integralmente regras, contratos e dados cotidianos.
 
-Não implementar os itens 025–026 antes da aprovação de seus gates de negócio.
+Não implementar a Task 026 antes da aprovação de seu gate de negócio.
 
 ## Restrições de continuidade
 
