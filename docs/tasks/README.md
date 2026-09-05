@@ -44,8 +44,8 @@ As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas.
 Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
 [`024-e2e-critical-flows.md`](024-e2e-critical-flows.md). A Task 025 foi
 concluída e integrada pelo PR #48 após aprovação explícita de seu gate em
-03/09/2026. O gate da Task 026 foi aprovado em 05/09/2026 e sua execução está
-pausada antes da baseline de testes.
+03/09/2026. A Task 026 foi concluída e integrada pelo PR #50 após aprovação de
+seu gate em 05/09/2026.
 
 ## Como pedir uma task ao Codex
 

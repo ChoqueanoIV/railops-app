@@ -5,8 +5,8 @@ Atualizado em: 05/09/2026
 ## Estado seguro atual
 
 - branch de continuidade: `main`;
-- PR mais recente: [#48 — piloto gratuito de deploy](https://github.com/ChoqueanoIV/railops-app/pull/48), mesclada;
-- merge consolidado na `main`: `ebc15b2`;
+- PR mais recente: [#50 — remoção do frontend legado](https://github.com/ChoqueanoIV/railops-app/pull/50), mesclada;
+- merge consolidado na `main`: `e6b5400`;
 - Task 019B concluída, validada e integrada;
 - Task 019C concluída, validada e integrada;
 - Task 020 concluída, validada e integrada;
@@ -17,6 +17,8 @@ Atualizado em: 05/09/2026
   no job E2E remoto do PR #47;
 - Task 025 concluída e integrada, com infraestrutura gratuita publicada,
   homologação pública aprovada e provedores acompanhando a branch `main`;
+- Task 026 concluída e integrada: frontend estático anterior removido sem
+  alteração de regras, contratos ou compatibilidades históricas;
 - piloto publicado em Cloudflare Pages, Render Free e Supabase Free, somente
   com identidades e dados fictícios;
 - homologação pública aprovada com Manobrador, Instrutor e Monitor de Qualidade,
@@ -59,6 +61,9 @@ Atualizado em: 05/09/2026
 - 021 — listagem e filtros de passagens: integrada no PR #44.
 - 022 — histórico auditável de edições: integrada no PR #45.
 - 023 — exportações e relatórios: integrada no PR #46.
+- 024 — testes E2E dos fluxos críticos: integrada no PR #47.
+- 025 — estratégia e piloto de deploy: integrada no PR #48.
+- 026 — remoção segura do frontend legado: integrada no PR #50.
 
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
@@ -82,6 +87,22 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 - Cloudflare Pages e Blueprint Render configurados para acompanhar `main`;
 - validação pós-migração aprovou `/ready`, CORS e rotas diretas públicas;
 - nenhuma regra de negócio, schema ou contrato HTTP foi alterado.
+
+## Validação da task 026
+
+- cinco HTML, cinco JavaScript e um CSS anteriores ao React removidos;
+- React permaneceu como única interface web, com todas as rotas homologadas;
+- contratos HTTP, adaptadores internos, migrations, schema e registros
+  históricos preservados;
+- antes e depois: 177 testes backend e 28 testes React aprovados, além de Ruff,
+  formatter Ruff, mypy, ESLint, Prettier, TypeScript e build Vite;
+- Docker Desktop local bloqueou o E2E por um socket temporário travado; nenhum
+  volume ou configuração foi redefinido;
+- E2E remoto aprovado duas vezes no PR #50 e novamente na `main` após o merge;
+- Backend, Frontend e Cloudflare Pages também aprovados;
+- piloto público saudável após o merge, com `/ready`, CORS, `/login` e
+  `/brisamar` validados;
+- PR #50 integrado no merge `e6b5400` sem mudança de regra de negócio.
 
 ## Validação da task 024
 
@@ -237,13 +258,11 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 1. manter o piloto restrito a testadores convidados e dados fictícios;
 2. coletar feedback sem alterar regras de negócio implicitamente;
-3. retomar a Task 026 pela baseline de testes antes de remover o frontend
-   estático legado;
+3. definir e aprovar um novo gate antes de iniciar outra evolução funcional;
 4. preservar integralmente regras, contratos e dados cotidianos.
 
-O gate da Task 026 foi aprovado em 05/09/2026. A baseline local principal foi
-aprovada e o frontend estático autorizado foi removido; a validação posterior e
-o PR ainda estão pendentes.
+A Task 026 foi concluída e integrada em 05/09/2026. Não há task de implementação
+autorizada após ela neste checkpoint.
 
 ## Restrições de continuidade
 

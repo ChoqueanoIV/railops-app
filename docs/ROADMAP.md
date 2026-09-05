@@ -32,8 +32,9 @@ e CSV já foram implementados. Ainda não existe deploy público.
 
 Os IDs 020–025 estão concluídos. O piloto gratuito da Task 025 foi homologado
 exclusivamente com dados fictícios e integrado pelo PR #48. O gate da Task 026
-foi aprovado em 05/09/2026 com remoção limitada ao frontend estático anterior
-ao React e preservação explícita das compatibilidades de API, banco e histórico.
+foi aprovado em 05/09/2026 e concluído pelo PR #50, com remoção limitada ao
+frontend estático anterior ao React e preservação das compatibilidades de API,
+banco e histórico.
 
 ## Decisões confirmadas para a Task 020
 
