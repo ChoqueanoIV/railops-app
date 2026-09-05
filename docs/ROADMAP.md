@@ -30,8 +30,8 @@ e CSV já foram implementados. Ainda não existe deploy público.
 | 025 | Estratégia e piloto de deploy | 019, 024 | plataforma, custo, dados, backup e acesso |
 | 026 | Remoção segura do fallback legado | 019, 024, 025 | React homologado no ambiente alvo |
 
-Os IDs 020–024 estão concluídos. O gate da Task 025 foi aprovado em 03/09/2026
-para um piloto gratuito exclusivamente com dados fictícios. A Task 026 continua
+Os IDs 020–025 estão concluídos. O piloto gratuito da Task 025 foi homologado
+exclusivamente com dados fictícios e integrado pelo PR #48. A Task 026 continua
 como direção planejada e não está autorizada para implementação.
 
 ## Decisões confirmadas para a Task 020

@@ -1,6 +1,6 @@
 # Estratégia e piloto de deploy
 
-Status: `EM ANDAMENTO`
+Status: `CONCLUÍDA`
 
 ## Objetivo
 
@@ -40,7 +40,7 @@ o desenvolvimento por branch e PR e sem tratar o piloto como produção.
 - [x] fluxos críticos aprovados no endereço público com dados fictícios;
 - [x] CORS restrito à origem pública aprovada;
 - [x] checks locais e remotos aprovados;
-- [ ] checkpoint registra URLs, limitações e resultado final.
+- [x] checkpoint registra URLs, limitações e resultado final.
 
 ## Evidências parciais
 
@@ -66,8 +66,7 @@ o desenvolvimento por branch e PR e sem tratar o piloto como produção.
   migrations, contratos ou dados;
 - API publicada em `https://railops-api-piloto.onrender.com`, com `/health` e
   `/ready` respondendo HTTP 200;
-- frontend publicado em `https://railops-piloto.pages.dev` a partir da branch
-  `feat/deploy-piloto`;
+- frontend publicado em `https://railops-piloto.pages.dev`;
 - CORS confirmou `https://railops-piloto.pages.dev` como origem exata;
 - acesso direto a `/brisamar` resolveu para o login, confirmando o fallback
   nativo do Pages;
@@ -94,7 +93,12 @@ o desenvolvimento por branch e PR e sem tratar o piloto como produção.
 - toda a homologação pública utilizou nomes, observações, códigos e composições
   fictícios, sem dados cotidianos.
 
-## Pendências para concluir
+## Encerramento
 
-- após o merge do PR #48, trocar a branch de produção do Pages para `main`;
-- registrar o resultado final e as limitações no checkpoint.
+- PR #48 integrado à `main` no merge `ebc15b2`;
+- branches de produção do Cloudflare Pages e do Blueprint Render alteradas para
+  `main`, mantendo os deploys automáticos;
+- validação posterior confirmou `/ready` em HTTP 200, CORS restrito à origem
+  pública e as rotas `/login` e `/brisamar` em HTTP 200;
+- o piloto permanece gratuito, sujeito a suspensão, latência e disponibilidade
+  dos planos Free e inadequado para uso operacional real.
