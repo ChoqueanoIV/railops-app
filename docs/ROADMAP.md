@@ -31,8 +31,9 @@ e CSV já foram implementados. Ainda não existe deploy público.
 | 026 | Remoção segura do fallback legado | 019, 024, 025 | React homologado no ambiente alvo |
 
 Os IDs 020–025 estão concluídos. O piloto gratuito da Task 025 foi homologado
-exclusivamente com dados fictícios e integrado pelo PR #48. A Task 026 continua
-como direção planejada e não está autorizada para implementação.
+exclusivamente com dados fictícios e integrado pelo PR #48. O gate da Task 026
+foi aprovado em 05/09/2026 com remoção limitada ao frontend estático anterior
+ao React e preservação explícita das compatibilidades de API, banco e histórico.
 
 ## Decisões confirmadas para a Task 020
 
