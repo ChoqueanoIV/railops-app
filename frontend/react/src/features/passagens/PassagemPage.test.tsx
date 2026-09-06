@@ -52,6 +52,42 @@ describe('migração das passagens para React', () => {
     ).toBeVisible();
   });
 
+  it('torna os registros obrigatórios ou permite declarar ausência', async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={['/brisamar']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    const observacoes = screen.getByLabelText('Observações');
+    const ocorrencias = screen.getByLabelText('Relatório de ocorrências');
+    expect(observacoes).toBeRequired();
+    expect(ocorrencias).toBeRequired();
+
+    await user.click(screen.getByLabelText('Sem observações'));
+    await user.click(screen.getByLabelText('Sem alterações'));
+    expect(observacoes).toBeDisabled();
+    expect(ocorrencias).toBeDisabled();
+  });
+
+  it('converte textos digitados para maiúsculas e explica a inclusão na equipe', async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={['/brisamar']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    await user.type(screen.getByLabelText('Nome'), 'João da Silva');
+    await user.type(screen.getByLabelText('Observações'), 'Pátio normal');
+    expect(screen.getByLabelText('Nome')).toHaveValue('JOÃO DA SILVA');
+    expect(screen.getByLabelText('Observações')).toHaveValue('PÁTIO NORMAL');
+    expect(
+      screen.getByRole('button', { name: 'Adicionar outro membro à equipe' }),
+    ).toBeVisible();
+  });
+
   it('protege também as novas rotas sem sessão', () => {
     sessionStorage.clear();
     render(
@@ -92,6 +128,8 @@ describe('migração das passagens para React', () => {
     expect(
       screen.getByRole('button', { name: 'Confirmar passagem completa' }),
     ).toBeEnabled();
+    expect(screen.getByText('Não')).toBeVisible();
+    expect(screen.queryByText('false')).not.toBeInTheDocument();
   });
 
   it('baixa o PDF individual somente após a confirmação', async () => {
