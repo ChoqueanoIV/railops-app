@@ -24,7 +24,10 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
   await page
     .getByLabel('Veículos da linha Travessão L24')
     .fill('Travessão L24 E2E');
-  await page.getByLabel('Observações').fill('Brisamar revisado no E2E');
+  await page
+    .getByLabel('Observações', { exact: true })
+    .fill('Brisamar revisado no E2E');
+  await page.getByLabel('Sem alterações', { exact: true }).check();
   await page
     .getByRole('button', { name: 'Enviar passagem de serviço' })
     .click();
@@ -32,9 +35,11 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
   await expect(page).toHaveURL(/\/tecon\?ciclo=/);
   await preencherEquipe(page, 'Manobrador E2E TECON');
   await page.getByLabel('Veículos da linha L1').fill('Composição TECON E2E');
-  await page.getByLabel('Observações').fill('TECON revisado no E2E');
   await page
-    .getByLabel('Relatório de ocorrências')
+    .getByLabel('Observações', { exact: true })
+    .fill('TECON revisado no E2E');
+  await page
+    .getByLabel('Relatório de ocorrências', { exact: true })
     .fill('Sem ocorrências no TECON');
   await page
     .getByRole('button', { name: 'Enviar passagem de serviço' })
@@ -50,11 +55,11 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
   await expect(
     page.getByRole('heading', { name: 'Terminal TECON' }),
   ).toBeVisible();
-  await expect(page.getByText('Vagões SUP E2E')).toBeVisible();
-  await expect(page.getByText('Vagões INF E2E')).toBeVisible();
-  await expect(page.getByText('Travessão L22 E2E')).toBeVisible();
-  await expect(page.getByText('Travessão L24 E2E')).toBeVisible();
-  await expect(page.getByText('Composição TECON E2E')).toBeVisible();
+  await expect(page.getByText('VAGÕES SUP E2E')).toBeVisible();
+  await expect(page.getByText('VAGÕES INF E2E')).toBeVisible();
+  await expect(page.getByText('TRAVESSÃO L22 E2E')).toBeVisible();
+  await expect(page.getByText('TRAVESSÃO L24 E2E')).toBeVisible();
+  await expect(page.getByText('COMPOSIÇÃO TECON E2E')).toBeVisible();
 
   const correcaoBrisamar = await page
     .getByRole('link', { name: 'Corrigir Pátio Brisamar' })

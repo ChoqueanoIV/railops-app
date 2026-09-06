@@ -52,5 +52,7 @@ dados históricos.
 - 30 testes React aprovados em 6 arquivos;
 - build Vite aprovado;
 - Prettier aplicado e conferido nos arquivos alterados;
+- roteiro E2E atualizado para selecionar os campos sem ambiguidade, cumprir a
+  nova validação do Brisamar e verificar a saída em maiúsculas;
 - diff limitado ao formulário, à revisão consolidada, aos testes e à
   documentação desta correção.
