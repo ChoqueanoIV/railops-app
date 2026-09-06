@@ -12,6 +12,11 @@ const caminhoTerminal = (terminal: Terminal) =>
   terminal === 'BRISAMAR' ? '/brisamar' : '/tecon';
 const nomeTerminal = (terminal: Terminal) =>
   terminal === 'BRISAMAR' ? 'Pátio Brisamar' : 'Terminal TECON';
+const formatarDetalhe = (valor: unknown) => {
+  if (valor == null || valor === '') return 'Não informado';
+  if (typeof valor === 'boolean') return valor ? 'Sim' : 'Não';
+  return String(valor);
+};
 
 export function ConfirmationPage() {
   const [params] = useSearchParams();
@@ -163,6 +168,13 @@ function DetalhePassagem({
   cicloId: string;
   confirmado: boolean;
 }) {
+  const teconSemAtendimento =
+    passagem.terminal === 'TECON' &&
+    'houve_atendimento' in passagem.detalhe &&
+    passagem.detalhe.houve_atendimento === false;
+  const detalhes = Object.entries(passagem.detalhe).filter(
+    ([campo]) => !(teconSemAtendimento && campo !== 'houve_atendimento'),
+  );
   return (
     <section className="shell__card review-terminal">
       <h2>{nomeTerminal(passagem.terminal)}</h2>
@@ -193,10 +205,10 @@ function DetalhePassagem({
       </dl>
       <h3>Dados do terminal</h3>
       <dl className="review-lines">
-        {Object.entries(passagem.detalhe).map(([campo, valor]) => (
+        {detalhes.map(([campo, valor]) => (
           <div key={campo}>
             <dt>{campo.replaceAll('_', ' ')}</dt>
-            <dd>{valor == null ? 'Não informado' : String(valor)}</dd>
+            <dd>{formatarDetalhe(valor)}</dd>
           </div>
         ))}
       </dl>

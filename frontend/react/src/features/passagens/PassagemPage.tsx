@@ -41,6 +41,11 @@ const LINHAS: Record<Terminal, string[]> = {
   ],
 };
 const vazio = (valor: string) => valor.trim() || null;
+const maiusculo = (valor: string) => valor.toLocaleUpperCase('pt-BR');
+const SEM_OBSERVACOES = 'SEM OBSERVAÇÕES';
+const SEM_ALTERACOES = 'SEM ALTERAÇÕES';
+const corresponde = (valor: string | null, declaracao: string) =>
+  valor != null && maiusculo(valor.trim()) === declaracao;
 const novaEquipe = (): EquipeMembro => ({ nome: '', matricula: '' });
 const novoRadio = (): RadioUso => ({
   numero: '',
@@ -70,6 +75,8 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
   const [turno, setTurno] = useState<Turno>('DIURNO');
   const [observacoes, setObservacoes] = useState('');
   const [ocorrencias, setOcorrencias] = useState('');
+  const [semObservacoes, setSemObservacoes] = useState(false);
+  const [semAlteracoes, setSemAlteracoes] = useState(false);
   const [mobile, setMobile] = useState(true);
   const [justificativa, setJustificativa] = useState('');
   const [equipe, setEquipe] = useState<EquipeMembro[]>([novaEquipe()]);
@@ -107,8 +114,17 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
         setData(p.data);
         setTurma(p.turma);
         setTurno(p.turno);
-        setObservacoes(p.observacoes ?? '');
-        setOcorrencias(p.relatorio_ocorrencias ?? '');
+        const observacoesAusentes = corresponde(p.observacoes, SEM_OBSERVACOES);
+        const alteracoesAusentes = corresponde(
+          p.relatorio_ocorrencias,
+          SEM_ALTERACOES,
+        );
+        setSemObservacoes(observacoesAusentes);
+        setSemAlteracoes(alteracoesAusentes);
+        setObservacoes(observacoesAusentes ? '' : (p.observacoes ?? ''));
+        setOcorrencias(
+          alteracoesAusentes ? '' : (p.relatorio_ocorrencias ?? ''),
+        );
         setMobile(p.mobile_utilizado);
         setJustificativa(p.mobile_justificativa ?? '');
         setEquipe(p.equipe.length ? p.equipe : [novaEquipe()]);
@@ -167,7 +183,11 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
 
   const alterarEquipe = (i: number, campo: keyof EquipeMembro, valor: string) =>
     setEquipe((atual) =>
-      atual.map((m, j) => (j === i ? { ...m, [campo]: valor } : m)),
+      atual.map((m, j) =>
+        j === i
+          ? { ...m, [campo]: campo === 'nome' ? maiusculo(valor) : valor }
+          : m,
+      ),
     );
   const alterarLinha = (
     i: number,
@@ -175,7 +195,9 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
     valor: string,
   ) =>
     setLinhas((atual) =>
-      atual.map((l, j) => (j === i ? { ...l, [campo]: vazio(valor) } : l)),
+      atual.map((l, j) =>
+        j === i ? { ...l, [campo]: vazio(maiusculo(valor)) } : l,
+      ),
     );
   const alterarRadio = (
     i: number,
@@ -185,7 +207,16 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
     setRadios((atual) =>
       atual.map((r, j) =>
         j === i
-          ? { ...r, [campo]: typeof valor === 'string' ? vazio(valor) : valor }
+          ? {
+              ...r,
+              [campo]:
+                typeof valor === 'string' &&
+                ['numero', 'manobrador_nome', 'falha_descricao'].includes(campo)
+                  ? vazio(maiusculo(valor))
+                  : typeof valor === 'string'
+                    ? vazio(valor)
+                    : valor,
+            }
           : r,
       ),
     );
@@ -194,8 +225,8 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
     data,
     turma,
     turno,
-    observacoes: vazio(observacoes),
-    relatorio_ocorrencias: vazio(ocorrencias),
+    observacoes: semObservacoes ? SEM_OBSERVACOES : vazio(observacoes),
+    relatorio_ocorrencias: semAlteracoes ? SEM_ALTERACOES : vazio(ocorrencias),
     mobile_utilizado: mobile,
     mobile_justificativa: mobile ? null : vazio(justificativa),
     equipe,
@@ -362,7 +393,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
             className="button button--secondary compact"
             onClick={() => setEquipe((a) => [...a, novaEquipe()])}
           >
-            Adicionar membro
+            Adicionar outro membro à equipe
           </button>
         </Section>
         <Section title="Ocupação das linhas">
@@ -383,18 +414,42 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
         <Section title="Registros do turno">
           <Field label="Observações">
             <textarea
-              required={terminal === 'TECON'}
+              required={!semObservacoes}
+              disabled={semObservacoes}
               value={observacoes}
-              onChange={(e) => setObservacoes(e.target.value)}
+              onChange={(e) => setObservacoes(maiusculo(e.target.value))}
             />
           </Field>
+          <label>
+            <input
+              type="checkbox"
+              checked={semObservacoes}
+              onChange={(e) => {
+                setSemObservacoes(e.target.checked);
+                if (e.target.checked) setObservacoes('');
+              }}
+            />{' '}
+            Sem observações
+          </label>
           <Field label="Relatório de ocorrências">
             <textarea
-              required={terminal === 'TECON'}
+              required={!semAlteracoes}
+              disabled={semAlteracoes}
               value={ocorrencias}
-              onChange={(e) => setOcorrencias(e.target.value)}
+              onChange={(e) => setOcorrencias(maiusculo(e.target.value))}
             />
           </Field>
+          <label>
+            <input
+              type="checkbox"
+              checked={semAlteracoes}
+              onChange={(e) => {
+                setSemAlteracoes(e.target.checked);
+                if (e.target.checked) setOcorrencias('');
+              }}
+            />{' '}
+            Sem alterações
+          </label>
           <Choice
             label="O Mobile foi utilizado?"
             value={mobile}
@@ -405,7 +460,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
               <textarea
                 required
                 value={justificativa}
-                onChange={(e) => setJustificativa(e.target.value)}
+                onChange={(e) => setJustificativa(maiusculo(e.target.value))}
               />
             </Field>
           )}
@@ -443,7 +498,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
                 onChange={(e) =>
                   setRecursos((r) => ({
                     ...r,
-                    eots_disponiveis: e.target.value,
+                    eots_disponiveis: maiusculo(e.target.value),
                   }))
                 }
               />
@@ -452,7 +507,10 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
               <textarea
                 value={recursos.eots_avariados}
                 onChange={(e) =>
-                  setRecursos((r) => ({ ...r, eots_avariados: e.target.value }))
+                  setRecursos((r) => ({
+                    ...r,
+                    eots_avariados: maiusculo(e.target.value),
+                  }))
                 }
               />
             </Field>
@@ -476,7 +534,9 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
                     <textarea
                       required
                       value={cargaDescricao}
-                      onChange={(e) => setCargaDescricao(e.target.value)}
+                      onChange={(e) =>
+                        setCargaDescricao(maiusculo(e.target.value))
+                      }
                     />
                   </Field>
                 )}

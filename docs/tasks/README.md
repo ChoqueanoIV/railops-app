@@ -39,6 +39,7 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 024 | Testes E2E dos fluxos críticos | 019–023 |
 | 025 | Estratégia e piloto de deploy | 019, 024 |
 | 026 | Remoção segura do frontend legado | 019, 024, 025 |
+| 027 | Consistência do formulário e da revisão da passagem | 019C, 026 |
 
 As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
 Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
@@ -46,6 +47,8 @@ Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
 concluída e integrada pelo PR #48 após aprovação explícita de seu gate em
 03/09/2026. A Task 026 foi concluída e integrada pelo PR #50 após aprovação de
 seu gate em 05/09/2026.
+A Task 027 foi concluída em 06/09/2026 a partir dos achados da homologação
+humana do formulário e da revisão consolidada.
 
 ## Como pedir uma task ao Codex
 
