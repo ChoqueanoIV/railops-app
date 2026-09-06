@@ -189,14 +189,12 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
           : m,
       ),
     );
-  const alterarLinha = (
-    i: number,
-    campo: 'veiculos' | 'sup_inf',
-    valor: string,
-  ) =>
+  const alterarLinha = (i: number, valor: string) =>
     setLinhas((atual) =>
       atual.map((l, j) =>
-        j === i ? { ...l, [campo]: vazio(maiusculo(valor)) } : l,
+        j === i
+          ? { ...l, veiculos: valor === '' ? null : maiusculo(valor) }
+          : l,
       ),
     );
   const alterarRadio = (
@@ -212,7 +210,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
               [campo]:
                 typeof valor === 'string' &&
                 ['numero', 'manobrador_nome', 'falha_descricao'].includes(campo)
-                  ? vazio(maiusculo(valor))
+                  ? maiusculo(valor)
                   : typeof valor === 'string'
                     ? vazio(valor)
                     : valor,
@@ -230,10 +228,18 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
     mobile_utilizado: mobile,
     mobile_justificativa: mobile ? null : vazio(justificativa),
     equipe,
-    ocupacoes_linhas: linhas,
+    ocupacoes_linhas: linhas.map((linha) => ({
+      ...linha,
+      veiculos: linha.veiculos == null ? null : vazio(linha.veiculos),
+    })),
     radios_utilizados: radios.map((r) => ({
       ...r,
-      falha_descricao: r.apresentou_falha ? r.falha_descricao : null,
+      numero: r.numero.trim(),
+      manobrador_nome: r.manobrador_nome.trim(),
+      falha_descricao:
+        r.apresentou_falha && r.falha_descricao != null
+          ? vazio(r.falha_descricao)
+          : null,
     })),
     detalhe:
       terminal === 'BRISAMAR'
@@ -405,7 +411,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
                   aria-label={`Veículos da linha ${l.codigo_linha}`}
                   placeholder="Veículos ou situação"
                   value={l.veiculos ?? ''}
-                  onChange={(e) => alterarLinha(i, 'veiculos', e.target.value)}
+                  onChange={(e) => alterarLinha(i, e.target.value)}
                 />
               </div>
             ))}
