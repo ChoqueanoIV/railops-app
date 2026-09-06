@@ -40,6 +40,7 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 025 | Estratégia e piloto de deploy | 019, 024 |
 | 026 | Remoção segura do frontend legado | 019, 024, 025 |
 | 027 | Consistência do formulário e da revisão da passagem | 019C, 026 |
+| 028 | Preservação de espaços em textos operacionais | 027 |
 
 As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
 Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
@@ -49,6 +50,8 @@ concluída e integrada pelo PR #48 após aprovação explícita de seu gate em
 seu gate em 05/09/2026.
 A Task 027 foi concluída em 06/09/2026 a partir dos achados da homologação
 humana do formulário e da revisão consolidada.
+A Task 028 corrigiu, em 06/09/2026, a remoção prematura de espaços nos textos
+operacionais convertidos para maiúsculas.
 
 ## Como pedir uma task ao Codex
 

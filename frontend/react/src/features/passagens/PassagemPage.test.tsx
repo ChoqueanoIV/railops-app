@@ -81,8 +81,24 @@ describe('migração das passagens para React', () => {
 
     await user.type(screen.getByLabelText('Nome'), 'João da Silva');
     await user.type(screen.getByLabelText('Observações'), 'Pátio normal');
+    await user.type(
+      screen.getByLabelText('Veículos da linha 16'),
+      'Vagões em teste',
+    );
+    await user.click(screen.getByRole('button', { name: 'Adicionar rádio' }));
+    await user.click(screen.getByLabelText('Apresentou falha'));
+    await user.type(
+      screen.getByLabelText('Descrição da falha'),
+      'Falha no botão',
+    );
     expect(screen.getByLabelText('Nome')).toHaveValue('JOÃO DA SILVA');
     expect(screen.getByLabelText('Observações')).toHaveValue('PÁTIO NORMAL');
+    expect(screen.getByLabelText('Veículos da linha 16')).toHaveValue(
+      'VAGÕES EM TESTE',
+    );
+    expect(screen.getByLabelText('Descrição da falha')).toHaveValue(
+      'FALHA NO BOTÃO',
+    );
     expect(
       screen.getByRole('button', { name: 'Adicionar outro membro à equipe' }),
     ).toBeVisible();
