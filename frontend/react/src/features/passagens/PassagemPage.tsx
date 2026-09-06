@@ -44,6 +44,7 @@ const vazio = (valor: string) => valor.trim() || null;
 const maiusculo = (valor: string) => valor.toLocaleUpperCase('pt-BR');
 const SEM_OBSERVACOES = 'SEM OBSERVAÇÕES';
 const SEM_ALTERACOES = 'SEM ALTERAÇÕES';
+const LINHA_LIVRE = 'LIVRE';
 const corresponde = (valor: string | null, declaracao: string) =>
   valor != null && maiusculo(valor.trim()) === declaracao;
 const novaEquipe = (): EquipeMembro => ({ nome: '', matricula: '' });
@@ -195,6 +196,14 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
         j === i
           ? { ...l, veiculos: valor === '' ? null : maiusculo(valor) }
           : l,
+      ),
+    );
+  const alterarLinhaLivre = (i: number, livre: boolean) =>
+    setLinhas((atual) =>
+      atual.map((linha, indice) =>
+        indice === i
+          ? { ...linha, veiculos: livre ? LINHA_LIVRE : null }
+          : linha,
       ),
     );
   const alterarRadio = (
@@ -410,52 +419,77 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
                 <input
                   aria-label={`Veículos da linha ${l.codigo_linha}`}
                   placeholder="Veículos ou situação"
-                  value={l.veiculos ?? ''}
+                  required={!corresponde(l.veiculos, LINHA_LIVRE)}
+                  disabled={corresponde(l.veiculos, LINHA_LIVRE)}
+                  value={
+                    corresponde(l.veiculos, LINHA_LIVRE)
+                      ? ''
+                      : (l.veiculos ?? '')
+                  }
                   onChange={(e) => alterarLinha(i, e.target.value)}
                 />
+                <label className="inline-check">
+                  <input
+                    type="checkbox"
+                    aria-label={`Linha ${l.codigo_linha} livre`}
+                    checked={corresponde(l.veiculos, LINHA_LIVRE)}
+                    onChange={(e) => alterarLinhaLivre(i, e.target.checked)}
+                  />{' '}
+                  Livre
+                </label>
               </div>
             ))}
           </div>
         </Section>
         <Section title="Registros do turno">
-          <Field label="Observações">
+          <div className="record-field">
+            <div className="record-field__heading">
+              <label htmlFor="observacoes">Observações</label>
+              <label className="inline-check">
+                <input
+                  type="checkbox"
+                  checked={semObservacoes}
+                  onChange={(e) => {
+                    setSemObservacoes(e.target.checked);
+                    if (e.target.checked) setObservacoes('');
+                  }}
+                />{' '}
+                Sem observações
+              </label>
+            </div>
             <textarea
+              id="observacoes"
               required={!semObservacoes}
               disabled={semObservacoes}
               value={observacoes}
               onChange={(e) => setObservacoes(maiusculo(e.target.value))}
             />
-          </Field>
-          <label>
-            <input
-              type="checkbox"
-              checked={semObservacoes}
-              onChange={(e) => {
-                setSemObservacoes(e.target.checked);
-                if (e.target.checked) setObservacoes('');
-              }}
-            />{' '}
-            Sem observações
-          </label>
-          <Field label="Relatório de ocorrências">
+          </div>
+          <div className="record-field">
+            <div className="record-field__heading">
+              <label htmlFor="relatorio-ocorrencias">
+                Relatório de ocorrências
+              </label>
+              <label className="inline-check">
+                <input
+                  type="checkbox"
+                  checked={semAlteracoes}
+                  onChange={(e) => {
+                    setSemAlteracoes(e.target.checked);
+                    if (e.target.checked) setOcorrencias('');
+                  }}
+                />{' '}
+                Sem alterações
+              </label>
+            </div>
             <textarea
+              id="relatorio-ocorrencias"
               required={!semAlteracoes}
               disabled={semAlteracoes}
               value={ocorrencias}
               onChange={(e) => setOcorrencias(maiusculo(e.target.value))}
             />
-          </Field>
-          <label>
-            <input
-              type="checkbox"
-              checked={semAlteracoes}
-              onChange={(e) => {
-                setSemAlteracoes(e.target.checked);
-                if (e.target.checked) setOcorrencias('');
-              }}
-            />{' '}
-            Sem alterações
-          </label>
+          </div>
           <Choice
             label="O Mobile foi utilizado?"
             value={mobile}

@@ -32,6 +32,26 @@ describe('migração das passagens para React', () => {
       screen.getByLabelText('Veículos da linha Travessão L24'),
     ).toBeVisible();
     expect(screen.queryByText('Posição')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Veículos da linha 16')).toBeRequired();
+    expect(screen.getByLabelText('Linha 16 livre')).not.toBeChecked();
+  });
+
+  it('permite declarar uma linha livre ou exige a descrição da ocupação', async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={['/tecon']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    const ocupacao = screen.getByLabelText('Veículos da linha L1');
+    await user.click(screen.getByLabelText('Linha L1 livre'));
+    expect(ocupacao).toBeDisabled();
+    expect(ocupacao).not.toBeRequired();
+
+    await user.click(screen.getByLabelText('Linha L1 livre'));
+    expect(ocupacao).toBeEnabled();
+    expect(ocupacao).toBeRequired();
   });
 
   it('mostra apenas os detalhes aplicáveis ao atendimento TECON', async () => {
