@@ -271,6 +271,40 @@ select {
   min-height: 6rem;
   resize: vertical;
 }
+.record-field {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  color: #dce6f1;
+}
+.record-field__heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 650;
+}
+.record-field textarea {
+  min-height: 6rem;
+  width: 100%;
+  padding: 0.75rem;
+  resize: vertical;
+  border: 1px solid #405268;
+  border-radius: 0.6rem;
+  color: #f8fafc;
+  background: #0b1622;
+}
+.inline-check {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.inline-check input {
+  flex: 0 0 auto;
+}
 .lines-grid {
   display: grid;
   gap: 0.65rem;
@@ -471,6 +505,9 @@ select {
 @media (max-width: 600px) {
   .line-row {
     grid-template-columns: 1fr;
+  }
+  .record-field__heading {
+    align-items: flex-start;
   }
   .operation-header {
     display: grid;

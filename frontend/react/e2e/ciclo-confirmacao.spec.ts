@@ -28,6 +28,7 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
     .getByLabel('Observações', { exact: true })
     .fill('Brisamar revisado no E2E');
   await page.getByLabel('Sem alterações', { exact: true }).check();
+  await marcarLinhasVaziasComoLivres(page);
   await page
     .getByRole('button', { name: 'Enviar passagem de serviço' })
     .click();
@@ -41,6 +42,7 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
   await page
     .getByLabel('Relatório de ocorrências', { exact: true })
     .fill('Sem ocorrências no TECON');
+  await marcarLinhasVaziasComoLivres(page);
   await page
     .getByRole('button', { name: 'Enviar passagem de serviço' })
     .click();
@@ -98,6 +100,18 @@ async function autenticar(page: Page) {
 async function preencherEquipe(page: Page, nome: string) {
   await page.getByLabel('Nome').fill(nome);
   await page.getByLabel('Matrícula (8 dígitos)').fill(MATRICULA);
+}
+
+async function marcarLinhasVaziasComoLivres(page: Page) {
+  const caixas = page.getByRole('checkbox', { name: /^Linha .+ livre$/ });
+  for (let indice = 0; indice < (await caixas.count()); indice += 1) {
+    const caixa = caixas.nth(indice);
+    const rotulo = await caixa.getAttribute('aria-label');
+    const linha = rotulo?.replace(/^Linha /, '').replace(/ livre$/, '');
+    if (!linha) continue;
+    const ocupacao = page.getByLabel(`Veículos da linha ${linha}`);
+    if ((await ocupacao.inputValue()) === '') await caixa.check();
+  }
 }
 
 async function obterOperacaoAtual(
