@@ -20,7 +20,7 @@ test('remove a sessão inválida após 401 e retorna ao login sem expor credenci
   await resposta401;
 
   await expect(
-    page.getByRole('heading', { name: 'Acessar o RailOps' }),
+    page.getByRole('heading', { name: 'Acessar a passagem digital' }),
   ).toBeVisible();
   await expect(page).toHaveURL(/\/login$/);
   expect(

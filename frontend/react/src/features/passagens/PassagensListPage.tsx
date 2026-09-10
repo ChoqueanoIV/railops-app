@@ -2,6 +2,7 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ApiClientError } from '@/services/api/client';
+import { ProductBrand } from '@/components/ProductBrand';
 import { passagemService, salvarDownload } from './service';
 import type {
   CicloConsultaFiltros,
@@ -106,6 +107,7 @@ export function PassagensListPage() {
       <header className="operation-header">
         <Link to="/terminal">← Início</Link>
         <div>
+          <ProductBrand compact />
           <span className="shell__eyebrow">Histórico operacional</span>
           <h1>Consultar passagens</h1>
           <p className="muted">

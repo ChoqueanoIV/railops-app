@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { ProductBrand } from '@/components/ProductBrand';
 
 import { ApiClientError } from '@/services/api/client';
 import { passagemService } from './service';
@@ -78,6 +79,7 @@ export function PassagemHistoryPage() {
       <header className="operation-header">
         <Link to="/passagens">← Passagens</Link>
         <div>
+          <ProductBrand compact />
           <span className="shell__eyebrow">Auditoria operacional</span>
           <h1>Histórico de edições</h1>
           <p className="muted passage-protocol">Passagem {passagemId}</p>

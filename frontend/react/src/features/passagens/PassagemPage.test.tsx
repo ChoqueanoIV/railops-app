@@ -19,7 +19,10 @@ describe('migração das passagens para React', () => {
       </MemoryRouter>,
     );
     expect(
-      screen.getByRole('heading', { name: 'Nova passagem de serviço' }),
+      screen.getByRole('heading', { name: 'Nova passagem de turno' }),
+    ).toBeVisible();
+    expect(
+      screen.getByRole('navigation', { name: 'Etapas do preenchimento' }),
     ).toBeVisible();
     expect(screen.getByLabelText('Veículos da linha 16')).toBeVisible();
     expect(screen.getByLabelText('Veículos da linha 22 SUP')).toBeVisible();
@@ -156,7 +159,7 @@ describe('migração das passagens para React', () => {
       </MemoryRouter>,
     );
     expect(
-      screen.getByRole('heading', { name: 'Acessar o RailOps' }),
+      screen.getByRole('heading', { name: 'Acessar a passagem digital' }),
     ).toBeVisible();
   });
 

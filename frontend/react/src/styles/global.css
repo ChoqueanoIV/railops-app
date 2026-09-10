@@ -1,6 +1,13 @@
 :root {
-  color: #e7edf5;
-  background: #0a111b;
+  color: #172033;
+  background: #eef2f6;
+  --brand-navy: #0b1f3a;
+  --brand-blue: #17375e;
+  --brand-yellow: #f2c300;
+  --surface: #ffffff;
+  --surface-muted: #f4f6f8;
+  --border: #cbd5e1;
+  --muted: #58677a;
   font-family:
     Inter,
     ui-sans-serif,
@@ -21,6 +28,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: #eef2f6;
 }
 
 button,
@@ -30,27 +38,102 @@ select {
   font: inherit;
 }
 
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--brand-blue);
+}
+
+.product-brand {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--brand-yellow);
+}
+
+.product-brand__mark {
+  display: grid;
+  flex: 0 0 2.8rem;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border-radius: 0.55rem 0.55rem 0.1rem;
+  color: var(--brand-navy);
+  background: var(--brand-yellow);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  box-shadow: inset 0 -0.3rem 0 rgb(11 31 58 / 16%);
+}
+
+.product-brand__text {
+  display: grid;
+  color: var(--brand-navy);
+  line-height: 1.15;
+}
+
+.product-brand__text strong {
+  font-size: 1rem;
+}
+
+.product-brand__text small {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.pilot-badge {
+  margin-left: auto;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid #b88e00;
+  border-radius: 999px;
+  color: #5e4900;
+  background: #fff7cc;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.product-brand--compact {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.65rem;
+}
+
+.product-brand--compact .product-brand__mark {
+  flex-basis: 2.2rem;
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
 .shell {
   display: grid;
   min-height: 100vh;
   place-items: center;
   padding: 2rem;
   background:
-    radial-gradient(circle at 20% 10%, rgb(24 95 133 / 35%), transparent 35%),
-    linear-gradient(145deg, #0a111b 0%, #111e2c 100%);
+    linear-gradient(
+        90deg,
+        var(--brand-yellow) 0 22%,
+        #fff 22% 26%,
+        var(--brand-blue) 26%
+      )
+      top / 100% 0.35rem no-repeat,
+    linear-gradient(145deg, #eef2f6 0%, #dfe7ef 100%);
 }
 
 .shell__card {
   width: min(100%, 42rem);
   padding: clamp(2rem, 6vw, 4.5rem);
-  border: 1px solid rgb(148 163 184 / 22%);
+  border: 1px solid var(--border);
   border-radius: 1.5rem;
-  background: rgb(12 22 34 / 82%);
-  box-shadow: 0 2rem 5rem rgb(0 0 0 / 35%);
+  background: var(--surface);
+  box-shadow: 0 1.5rem 4rem rgb(11 31 58 / 14%);
 }
 
 .shell__eyebrow {
-  color: #64d8cb;
+  color: var(--brand-blue);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -59,7 +142,7 @@ select {
 
 .shell h1 {
   margin: 0.75rem 0 1rem;
-  color: #f8fafc;
+  color: var(--brand-navy);
   font-size: clamp(3rem, 12vw, 6rem);
   letter-spacing: -0.06em;
   line-height: 0.95;
@@ -67,7 +150,7 @@ select {
 
 .shell p {
   margin: 0;
-  color: #b8c4d1;
+  color: var(--muted);
   font-size: clamp(1rem, 3vw, 1.2rem);
   line-height: 1.7;
 }
@@ -77,8 +160,8 @@ select {
   padding: 0.85rem 1rem;
   border: 0;
   border-radius: 0.7rem;
-  color: #07151c;
-  background: #64d8cb;
+  color: var(--brand-navy);
+  background: var(--brand-yellow);
   font-weight: 750;
   cursor: pointer;
 }
@@ -88,10 +171,23 @@ select {
   opacity: 0.65;
 }
 
+.button:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgb(242 195 0 / 38%);
+  outline-offset: 2px;
+}
+
 .button--secondary {
   margin-top: 2rem;
-  color: #dbeafe;
-  background: #233547;
+  color: #fff;
+  background: var(--brand-blue);
 }
 
 .auth-page {
@@ -100,29 +196,35 @@ select {
   place-items: center;
   padding: 2rem 1rem;
   background:
-    radial-gradient(circle at 80% 15%, rgb(24 95 133 / 32%), transparent 34%),
-    linear-gradient(145deg, #0a111b 0%, #111e2c 100%);
+    linear-gradient(
+        90deg,
+        var(--brand-yellow) 0 22%,
+        #fff 22% 26%,
+        var(--brand-blue) 26%
+      )
+      top / 100% 0.35rem no-repeat,
+    linear-gradient(145deg, #eef2f6 0%, #dfe7ef 100%);
 }
 
 .auth-card {
   width: min(100%, 30rem);
   padding: clamp(1.5rem, 5vw, 3rem);
-  border: 1px solid rgb(148 163 184 / 22%);
+  border: 1px solid var(--border);
   border-radius: 1.25rem;
-  background: rgb(12 22 34 / 90%);
-  box-shadow: 0 2rem 5rem rgb(0 0 0 / 35%);
+  background: var(--surface);
+  box-shadow: 0 1.5rem 4rem rgb(11 31 58 / 14%);
 }
 
 .auth-card h1 {
   margin: 0.75rem 0;
-  color: #f8fafc;
+  color: var(--brand-navy);
   font-size: clamp(2rem, 8vw, 3rem);
   letter-spacing: -0.045em;
 }
 
 .auth-card__intro {
   margin: 0 0 1.5rem;
-  color: #b8c4d1;
+  color: var(--muted);
   line-height: 1.55;
 }
 
@@ -134,7 +236,7 @@ select {
 .auth-form label {
   display: grid;
   gap: 0.4rem;
-  color: #dce6f1;
+  color: #26364a;
   font-size: 0.9rem;
   font-weight: 650;
 }
@@ -144,14 +246,14 @@ select {
   padding: 0.8rem;
   border: 1px solid #405268;
   border-radius: 0.65rem;
-  color: #f8fafc;
-  background: #0b1622;
+  color: #172033;
+  background: #fff;
   outline: none;
 }
 
 .auth-form input:focus {
-  border-color: #64d8cb;
-  box-shadow: 0 0 0 3px rgb(100 216 203 / 14%);
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px rgb(23 55 94 / 12%);
 }
 
 .auth-message {
@@ -162,20 +264,20 @@ select {
 }
 
 .auth-message--error {
-  color: #fecaca;
-  background: rgb(127 29 29 / 36%);
+  color: #8b1d28;
+  background: #feecef;
 }
 
 .auth-message--success {
-  color: #bbf7d0;
-  background: rgb(20 83 45 / 40%);
+  color: #1f6a39;
+  background: #e8f5ec;
 }
 
 .auth-mode-toggle {
   width: 100%;
   margin-top: 1.25rem;
   border: 0;
-  color: #7de4d9;
+  color: var(--brand-blue);
   background: transparent;
   cursor: pointer;
 }
@@ -191,22 +293,32 @@ select {
   padding: 1.25rem;
   border: 1px solid #405268;
   border-radius: 0.8rem;
-  color: #f8fafc;
-  background: #0b1622;
+  color: var(--brand-navy);
+  background: var(--surface-muted);
   text-decoration: none;
 }
 .terminal-card:hover,
 .terminal-card:focus-visible {
-  border-color: #64d8cb;
+  border-color: var(--brand-yellow);
+  box-shadow: 0 0 0 3px rgb(242 195 0 / 18%);
 }
 .terminal-card span,
 .muted {
-  color: #9eacba;
+  color: var(--muted);
 }
 .operation-page {
   min-height: 100vh;
   padding: clamp(1rem, 4vw, 3rem);
-  background: #0a111b;
+  color: #172033;
+  background:
+    linear-gradient(
+        90deg,
+        var(--brand-yellow) 0 16%,
+        #fff 16% 19%,
+        var(--brand-blue) 19%
+      )
+      top / 100% 0.3rem no-repeat,
+    #eef2f6;
 }
 .operation-header,
 .operation-form {
@@ -221,11 +333,45 @@ select {
 }
 .operation-header a,
 .text-link {
-  color: #7de4d9;
+  color: var(--brand-blue);
 }
 .operation-header h1 {
   margin: 0.4rem 0 0;
-  color: #f8fafc;
+  color: var(--brand-navy);
+}
+
+.form-steps {
+  display: flex;
+  width: min(100%, 70rem);
+  gap: 0.5rem;
+  margin: 0 auto 1rem;
+  padding: 0.75rem;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: #fff;
+  box-shadow: 0 0.35rem 1.25rem rgb(11 31 58 / 6%);
+}
+
+.form-steps a {
+  flex: 1 0 auto;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.5rem;
+  color: var(--brand-blue);
+  background: var(--surface-muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-align: center;
+  text-decoration: none;
+}
+
+.form-steps a:hover {
+  color: var(--brand-navy);
+  background: #fff7cc;
+}
+
+.form-section {
+  scroll-margin-top: 1rem;
 }
 .operation-form {
   display: grid;
@@ -233,13 +379,14 @@ select {
 }
 .form-section {
   padding: clamp(1rem, 3vw, 1.75rem);
-  border: 1px solid #293b4d;
+  border: 1px solid var(--border);
   border-radius: 1rem;
-  background: #101c29;
+  background: var(--surface);
+  box-shadow: 0 0.35rem 1.25rem rgb(11 31 58 / 7%);
 }
 .form-section h2 {
   margin: 0 0 1rem;
-  color: #edf5fc;
+  color: var(--brand-navy);
   font-size: 1.15rem;
 }
 .form-grid {
@@ -251,7 +398,7 @@ select {
   display: grid;
   gap: 0.4rem;
   margin-bottom: 1rem;
-  color: #dce6f1;
+  color: #26364a;
   font-weight: 650;
   text-transform: capitalize;
 }
@@ -264,8 +411,8 @@ select {
   padding: 0.75rem;
   border: 1px solid #405268;
   border-radius: 0.6rem;
-  color: #f8fafc;
-  background: #0b1622;
+  color: #172033;
+  background: #fff;
 }
 .field textarea {
   min-height: 6rem;
@@ -275,7 +422,7 @@ select {
   display: grid;
   gap: 0.4rem;
   margin-bottom: 1rem;
-  color: #dce6f1;
+  color: #26364a;
 }
 .record-field__heading {
   display: flex;
@@ -292,8 +439,8 @@ select {
   resize: vertical;
   border: 1px solid #405268;
   border-radius: 0.6rem;
-  color: #f8fafc;
-  background: #0b1622;
+  color: #172033;
+  background: #fff;
 }
 .inline-check {
   display: inline-flex;
@@ -323,7 +470,7 @@ select {
 .area-row {
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #293b4d;
+  border-bottom: 1px solid var(--border);
 }
 .choice {
   display: flex;
@@ -342,8 +489,8 @@ select {
 }
 .button--danger {
   align-self: center;
-  color: #fee2e2;
-  background: #6b2630;
+  color: #fff;
+  background: #a42834;
 }
 .submit-button {
   width: min(100%, 30rem);
@@ -354,13 +501,13 @@ select {
   margin: 4rem auto;
   padding: 1rem;
   border-radius: 0.7rem;
-  color: #dbeafe;
-  background: #233547;
+  color: #fff;
+  background: var(--brand-blue);
 }
 .status--error {
   margin: 0;
-  color: #fecaca;
-  background: #501d27;
+  color: #8b1d28;
+  background: #feecef;
 }
 .confirmation h1 {
   font-size: clamp(2rem, 7vw, 3.5rem);
@@ -374,10 +521,10 @@ select {
   display: grid;
   gap: 0.2rem;
   padding-bottom: 0.65rem;
-  border-bottom: 1px solid #293b4d;
+  border-bottom: 1px solid var(--border);
 }
 .confirmation dt {
-  color: #9eacba;
+  color: var(--muted);
   font-size: 0.8rem;
   text-transform: uppercase;
 }
@@ -397,7 +544,7 @@ select {
   text-align: center;
 }
 .passage-list-page {
-  color: #edf5fc;
+  color: #172033;
 }
 .filter-panel,
 .passage-results {
@@ -406,9 +553,9 @@ select {
 }
 .filter-panel {
   padding: clamp(1rem, 3vw, 1.75rem);
-  border: 1px solid #293b4d;
+  border: 1px solid var(--border);
   border-radius: 1rem;
-  background: #101c29;
+  background: var(--surface);
 }
 .filter-actions,
 .pagination {
@@ -427,9 +574,9 @@ select {
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem;
-  border: 1px solid #293b4d;
+  border: 1px solid var(--border);
   border-radius: 1rem;
-  background: #101c29;
+  background: var(--surface);
 }
 .passage-card h2,
 .passage-card p {
@@ -440,7 +587,7 @@ select {
   font-family: monospace;
 }
 .result-count {
-  color: #b8c4d1;
+  color: var(--muted);
 }
 .pagination {
   justify-content: center;
@@ -451,7 +598,7 @@ select {
   opacity: 0.45;
 }
 .history-page {
-  color: #edf5fc;
+  color: #172033;
 }
 .history-content {
   width: min(100%, 70rem);
@@ -460,9 +607,9 @@ select {
 .history-summary,
 .history-card {
   padding: 1.25rem;
-  border: 1px solid #293b4d;
+  border: 1px solid var(--border);
   border-radius: 1rem;
-  background: #101c29;
+  background: var(--surface);
 }
 .history-summary {
   display: flex;
@@ -488,11 +635,11 @@ select {
   grid-template-columns: minmax(12rem, 1fr) 2fr 2fr;
   gap: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #293b4d;
+  border-top: 1px solid var(--border);
 }
 .history-diff dt {
   overflow-wrap: anywhere;
-  color: #b8c4d1;
+  color: var(--muted);
 }
 .history-diff dd {
   margin: 0;
@@ -500,12 +647,29 @@ select {
 }
 .history-diff dd span {
   display: block;
-  color: #64d8cb;
+  color: var(--brand-blue);
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
 }
 @media (max-width: 600px) {
+  .product-brand {
+    align-items: flex-start;
+  }
+
+  .pilot-badge {
+    margin-top: 0.2rem;
+  }
+
+  .product-brand__text strong {
+    font-size: 0.9rem;
+  }
+
+  .form-steps {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+  }
   .line-row {
     grid-template-areas:
       'linha livre'

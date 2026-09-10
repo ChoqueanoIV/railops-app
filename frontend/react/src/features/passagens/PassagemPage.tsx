@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ApiClientError } from '@/services/api/client';
+import { ProductBrand } from '@/components/ProductBrand';
 import { passagemService } from './service';
 import type {
   EquipeMembro,
@@ -342,14 +343,23 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
       <header className="operation-header">
         <Link to="/terminal">← Terminais</Link>
         <div>
+          <ProductBrand compact />
           <span className="shell__eyebrow">
             {terminal === 'BRISAMAR' ? 'Pátio Brisamar' : 'Terminal TECON'}
           </span>
-          <h1>{id ? 'Editar' : 'Nova'} passagem de serviço</h1>
+          <h1>{id ? 'Editar' : 'Nova'} passagem de turno</h1>
         </div>
       </header>
+      <nav className="form-steps" aria-label="Etapas do preenchimento">
+        <a href="#turno">1. Turno</a>
+        <a href="#equipe">2. Equipe</a>
+        <a href="#linhas">3. Linhas</a>
+        <a href="#registros">4. Registros</a>
+        <a href="#terminal">5. Terminal</a>
+        <a href="#radios">6. Rádios</a>
+      </nav>
       <form className="operation-form" onSubmit={enviar}>
-        <Section title="Dados do turno">
+        <Section id="turno" title="Dados do turno">
           <div className="form-grid">
             <Field label="Data">
               <input
@@ -376,7 +386,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
             />
           </div>
         </Section>
-        <Section title="Equipe presente">
+        <Section id="equipe" title="Equipe presente">
           {equipe.map((m, i) => (
             <div className="form-grid dynamic-row" key={i}>
               <Field label="Nome">
@@ -415,7 +425,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
             Adicionar outro membro à equipe
           </button>
         </Section>
-        <Section title="Ocupação das linhas">
+        <Section id="linhas" title="Ocupação das linhas">
           <div className="lines-grid">
             {linhas.map((l, i) => (
               <div className="line-row" key={l.codigo_linha}>
@@ -445,7 +455,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
             ))}
           </div>
         </Section>
-        <Section title="Registros do turno">
+        <Section id="registros" title="Registros do turno">
           <div className="record-field">
             <div className="record-field__heading">
               <label htmlFor="observacoes">Observações</label>
@@ -510,7 +520,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
           )}
         </Section>
         {terminal === 'BRISAMAR' ? (
-          <Section title="Recursos entregues">
+          <Section id="terminal" title="Recursos entregues">
             <div className="form-grid">
               {(
                 [
@@ -626,7 +636,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
             </div>
           </Section>
         ) : (
-          <Section title="Atendimento no TECON">
+          <Section id="terminal" title="Atendimento no TECON">
             <Choice
               label="Houve atendimento?"
               value={houveAtendimento}
@@ -706,7 +716,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
             )}
           </Section>
         )}
-        <Section title="Rádios utilizados">
+        <Section id="radios" title="Rádios utilizados">
           <label className="inline-check">
             <input
               type="checkbox"
@@ -811,7 +821,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
             ? 'Enviando...'
             : id
               ? 'Salvar alterações'
-              : 'Enviar passagem de serviço'}
+              : 'Avançar para revisão'}
         </button>
       </form>
     </main>
@@ -819,14 +829,16 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
 }
 
 function Section({
+  id,
   title,
   children,
 }: {
+  id?: string;
   title: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="form-section">
+    <section className="form-section" id={id}>
       <h2>{title}</h2>
       {children}
     </section>
