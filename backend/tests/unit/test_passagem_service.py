@@ -77,6 +77,8 @@ def criar_dados_validos() -> PassagemBrisamarRequest:
             "radios_inoperantes": 1,
             "baterias": 5,
             "carregadores": 2,
+            "eots_disponiveis": "Nenhum EOT disponível",
+            "eots_avariados": "Nenhum EOT avariado",
         },
         radios_utilizados=[
             {

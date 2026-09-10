@@ -29,6 +29,9 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
     .fill('Brisamar revisado no E2E');
   await page.getByLabel('Sem alterações', { exact: true }).check();
   await marcarLinhasVaziasComoLivres(page);
+  await page.getByLabel('Nenhum EOT disponível').check();
+  await page.getByLabel('Nenhum EOT avariado').check();
+  await page.getByLabel('Nenhum rádio utilizado').check();
   await page
     .getByRole('button', { name: 'Enviar passagem de serviço' })
     .click();
@@ -43,6 +46,7 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
     .getByLabel('Relatório de ocorrências', { exact: true })
     .fill('Sem ocorrências no TECON');
   await marcarLinhasVaziasComoLivres(page);
+  await page.getByLabel('Nenhum rádio utilizado').check();
   await page
     .getByRole('button', { name: 'Enviar passagem de serviço' })
     .click();

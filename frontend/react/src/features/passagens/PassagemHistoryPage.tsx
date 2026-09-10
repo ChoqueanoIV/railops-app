@@ -37,7 +37,7 @@ function snapshotAtual(passagem: PassagemConsulta): Record<string, unknown> {
 
 function formatarValor(valor: ValorPlano | undefined) {
   if (valor === undefined || valor === null || valor === '')
-    return 'Não informado';
+    return 'Pendente de correção';
   if (typeof valor === 'boolean') return valor ? 'Sim' : 'Não';
   return String(valor);
 }

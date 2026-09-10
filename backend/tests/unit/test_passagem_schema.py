@@ -95,6 +95,40 @@ def test_passagem_brisamar_exige_ao_menos_uma_ocupacao():
         PassagemBrisamarRequest(**dados)
 
 
+@pytest.mark.parametrize("campo", ("observacoes", "relatorio_ocorrencias"))
+def test_passagem_brisamar_rejeita_registro_em_branco(campo):
+    dados = dados_passagem_validos()
+    dados[campo] = "  "
+
+    with pytest.raises(ValidationError):
+        PassagemBrisamarRequest(**dados)
+
+
+def test_passagem_brisamar_exige_membro_da_equipe():
+    dados = dados_passagem_validos()
+    dados["equipe"] = []
+
+    with pytest.raises(ValidationError, match="membro da equipe"):
+        PassagemBrisamarRequest(**dados)
+
+
+def test_passagem_brisamar_rejeita_linha_sem_ocupacao_declarada():
+    dados = dados_passagem_validos()
+    dados["ocupacoes_linhas"][0]["veiculos"] = None
+
+    with pytest.raises(ValidationError, match="ocupação ou declare como livre"):
+        PassagemBrisamarRequest(**dados)
+
+
+@pytest.mark.parametrize("campo", ("eots_disponiveis", "eots_avariados"))
+def test_passagem_brisamar_exige_situacao_dos_eots(campo):
+    dados = dados_passagem_validos()
+    dados["detalhe"][campo] = None
+
+    with pytest.raises(ValidationError, match="EOTs"):
+        PassagemBrisamarRequest(**dados)
+
+
 def test_passagem_brisamar_exige_descricao_quando_radio_falha():
     dados = dados_passagem_validos()
     dados["radios_utilizados"][0]["apresentou_falha"] = True

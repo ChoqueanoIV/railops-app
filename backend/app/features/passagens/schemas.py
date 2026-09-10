@@ -61,6 +61,36 @@ class RadioUsoRequest(SchemaBase):
         return self
 
 
+def _validar_conteudo_obrigatorio(
+    *,
+    observacoes: str | None,
+    relatorio_ocorrencias: str | None,
+    equipe: list[EquipeMembroRequest],
+    ocupacoes_linhas: list[LinhaOcupacaoRequest],
+) -> None:
+    if not observacoes:
+        raise ValueError("Informe as observações ou declare que não há observações.")
+    if not relatorio_ocorrencias:
+        raise ValueError(
+            "Informe o relatório de ocorrências ou declare que não há alterações."
+        )
+    if not equipe:
+        raise ValueError("Informe ao menos um membro da equipe.")
+    if any(not ocupacao.veiculos for ocupacao in ocupacoes_linhas):
+        raise ValueError("Informe a ocupação ou declare como livre em todas as linhas.")
+
+
+def _validar_detalhe_brisamar(detalhe: BrisamarDetalheRequest) -> None:
+    if not detalhe.eots_disponiveis:
+        raise ValueError(
+            "Informe os EOTs disponíveis ou declare que não há nenhum disponível."
+        )
+    if not detalhe.eots_avariados:
+        raise ValueError(
+            "Informe os EOTs avariados ou declare que não há nenhum avariado."
+        )
+
+
 class PassagemBrisamarRequest(SchemaBase):
     data: date
     turma: Turma
@@ -76,6 +106,13 @@ class PassagemBrisamarRequest(SchemaBase):
 
     @model_validator(mode="after")
     def validar_justificativa_mobile(self) -> Self:
+        _validar_conteudo_obrigatorio(
+            observacoes=self.observacoes,
+            relatorio_ocorrencias=self.relatorio_ocorrencias,
+            equipe=self.equipe,
+            ocupacoes_linhas=self.ocupacoes_linhas,
+        )
+        _validar_detalhe_brisamar(self.detalhe)
         if not self.mobile_utilizado and not self.mobile_justificativa:
             raise ValueError(
                 "A justificativa é obrigatória quando o Mobile não foi utilizado."
@@ -95,6 +132,13 @@ class PassagemBrisamarEdicaoRequest(SchemaBase):
 
     @model_validator(mode="after")
     def validar_justificativa_mobile(self) -> Self:
+        _validar_conteudo_obrigatorio(
+            observacoes=self.observacoes,
+            relatorio_ocorrencias=self.relatorio_ocorrencias,
+            equipe=self.equipe,
+            ocupacoes_linhas=self.ocupacoes_linhas,
+        )
+        _validar_detalhe_brisamar(self.detalhe)
         if not self.mobile_utilizado and not self.mobile_justificativa:
             raise ValueError(
                 "A justificativa é obrigatória quando o Mobile não foi utilizado."
@@ -214,6 +258,12 @@ class PassagemTeconRequest(SchemaBase):
 
     @model_validator(mode="after")
     def validar_justificativa_mobile(self) -> Self:
+        _validar_conteudo_obrigatorio(
+            observacoes=self.observacoes,
+            relatorio_ocorrencias=self.relatorio_ocorrencias,
+            equipe=self.equipe,
+            ocupacoes_linhas=self.ocupacoes_linhas,
+        )
         if not self.mobile_utilizado and not self.mobile_justificativa:
             raise ValueError(
                 "A justificativa é obrigatória quando o Mobile não foi utilizado."
@@ -233,6 +283,12 @@ class PassagemTeconEdicaoRequest(SchemaBase):
 
     @model_validator(mode="after")
     def validar_justificativa_mobile(self) -> Self:
+        _validar_conteudo_obrigatorio(
+            observacoes=self.observacoes,
+            relatorio_ocorrencias=self.relatorio_ocorrencias,
+            equipe=self.equipe,
+            ocupacoes_linhas=self.ocupacoes_linhas,
+        )
         if not self.mobile_utilizado and not self.mobile_justificativa:
             raise ValueError(
                 "A justificativa é obrigatória quando o Mobile não foi utilizado."

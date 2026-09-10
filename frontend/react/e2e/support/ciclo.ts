@@ -86,7 +86,7 @@ function basePayload(data: string, linhas: string[], usuario: CredenciaisE2E) {
     equipe: [{ nome: 'Equipe E2E', matricula: usuario.matricula }],
     ocupacoes_linhas: linhas.map((codigo_linha) => ({
       codigo_linha,
-      veiculos: null,
+      veiculos: 'LIVRE',
       sup_inf: null,
     })),
     radios_utilizados: [],
@@ -118,8 +118,8 @@ function payloadBrisamar(data: string, usuario: CredenciaisE2E) {
       radios_inoperantes: 0,
       baterias: 2,
       carregadores: 1,
-      eots_disponiveis: null,
-      eots_avariados: null,
+      eots_disponiveis: 'NENHUM EOT DISPONÍVEL',
+      eots_avariados: 'NENHUM EOT AVARIADO',
     },
   };
 }

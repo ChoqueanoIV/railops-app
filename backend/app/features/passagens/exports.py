@@ -29,7 +29,7 @@ from app.features.passagens.models import CicloPassagem, PassagemServico, Termin
 
 def _texto(valor: object) -> str:
     if valor is None or valor == "":
-        return "Não informado"
+        return "Pendente de correção"
     if isinstance(valor, bool):
         return "Sim" if valor else "Não"
     return escape(str(valor))
