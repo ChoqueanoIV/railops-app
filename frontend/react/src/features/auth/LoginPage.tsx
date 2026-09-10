@@ -3,6 +3,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth/useAuth';
 import { ApiClientError } from '@/services/api/client';
+import { ProductBrand } from '@/components/ProductBrand';
 
 type AuthMode = 'login' | 'primeiro-acesso';
 
@@ -91,9 +92,10 @@ export function LoginPage() {
   return (
     <main className="auth-page">
       <section className="auth-card" aria-labelledby="auth-title">
-        <span className="shell__eyebrow">Passagem de Serviço Ferroviária</span>
+        <ProductBrand />
+        <span className="shell__eyebrow">Acesso operacional seguro</span>
         <h1 id="auth-title">
-          {firstAccess ? 'Definir primeiro PIN' : 'Acessar o RailOps'}
+          {firstAccess ? 'Definir primeiro PIN' : 'Acessar a passagem digital'}
         </h1>
         <p className="auth-card__intro">
           {firstAccess

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
+import { ProductBrand } from '@/components/ProductBrand';
 import { passagemService, salvarDownload } from './service';
 import type {
   CicloPassagem,
@@ -98,6 +99,7 @@ function RevisaoCiclo({ cicloId }: { cicloId: string }) {
   return (
     <main className="shell review-page">
       <section className="shell__card confirmation">
+        <ProductBrand compact />
         <span className="shell__eyebrow">
           {confirmado ? 'Ciclo confirmado' : 'Revisão antes da confirmação'}
         </span>
@@ -264,6 +266,7 @@ function ErroRevisao({ mensagem }: { mensagem: string }) {
   return (
     <main className="shell">
       <section className="shell__card confirmation">
+        <ProductBrand compact />
         <h1>Revisão indisponível</h1>
         <p role="alert" className="status status--error">
           {mensagem}
@@ -296,6 +299,7 @@ function ConfirmacaoLegada() {
   return (
     <main className="shell">
       <section className="shell__card confirmation">
+        <ProductBrand compact />
         <span className="shell__eyebrow">Registro concluído</span>
         <h1>
           {passagem.operacao === 'edicao'

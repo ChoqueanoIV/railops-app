@@ -14,7 +14,7 @@ describe('shell React', () => {
     );
 
     expect(
-      screen.getByRole('heading', { name: 'Acessar o RailOps' }),
+      screen.getByRole('heading', { name: 'Acessar a passagem digital' }),
     ).toBeVisible();
   });
 
@@ -50,7 +50,9 @@ describe('shell React', () => {
     await user.click(screen.getByRole('button', { name: 'Sair' }));
 
     expect(
-      await screen.findByRole('heading', { name: 'Acessar o RailOps' }),
+      await screen.findByRole('heading', {
+        name: 'Acessar a passagem digital',
+      }),
     ).toBeVisible();
     expect(sessionStorage.getItem('access_token')).toBeNull();
   });

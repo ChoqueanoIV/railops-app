@@ -122,7 +122,9 @@ describe('autenticação React', () => {
     await user.click(screen.getByRole('button', { name: 'Definir meu PIN' }));
 
     expect(
-      await screen.findByRole('heading', { name: 'Acessar o RailOps' }),
+      await screen.findByRole('heading', {
+        name: 'Acessar a passagem digital',
+      }),
     ).toBeVisible();
     expect(screen.getByRole('alert')).toHaveTextContent(
       'PIN definido com sucesso. Agora você pode entrar.',

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/features/auth/useAuth';
+import { ProductBrand } from '@/components/ProductBrand';
 
 export function ShellPage() {
   const { logout } = useAuth();
@@ -7,7 +8,8 @@ export function ShellPage() {
   return (
     <main className="shell">
       <section className="shell__card" aria-labelledby="shell-title">
-        <span className="shell__eyebrow">Passagem de serviço</span>
+        <ProductBrand />
+        <span className="shell__eyebrow">Início do preenchimento</span>
         <h1 id="shell-title">Selecione o terminal</h1>
         <p>
           Registre as informações atualizadas do turno que está sendo encerrado.

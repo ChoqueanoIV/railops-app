@@ -181,7 +181,7 @@ describe('consulta de passagens', () => {
     );
 
     expect(
-      screen.getByRole('heading', { name: 'Acessar o RailOps' }),
+      screen.getByRole('heading', { name: 'Acessar a passagem digital' }),
     ).toBeVisible();
   });
 });

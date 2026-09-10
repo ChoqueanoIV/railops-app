@@ -45,6 +45,7 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 030 | Alinhamento visual da opção de linha livre | 029 |
 | 031 | Contextualização operacional do README | 030 |
 | 032 | Preenchimento obrigatório sem valores indefinidos | 031 |
+| 033 | Identidade visual Passagem de Turno Digital | 032 |
 
 As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
 Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
@@ -66,6 +67,9 @@ benefícios esperados e os limites do piloto gratuito.
 A Task 032 eliminou, em 10/09/2026, a aceitação de conteúdo operacional vazio,
 incluiu declarações explícitas para ausência de EOTs e rádios e removeu valores
 não aplicáveis da revisão final.
+A Task 033 adota “Passagem de Turno Digital” como identidade pública do piloto
+e reorganiza a apresentação visual em azul, amarelo e branco, sem alterar as
+regras de negócio ou utilizar o logotipo oficial da MRS.
 
 ## Como pedir uma task ao Codex
 
