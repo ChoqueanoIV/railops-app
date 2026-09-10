@@ -13,9 +13,24 @@ const caminhoTerminal = (terminal: Terminal) =>
 const nomeTerminal = (terminal: Terminal) =>
   terminal === 'BRISAMAR' ? 'Pátio Brisamar' : 'Terminal TECON';
 const formatarDetalhe = (valor: unknown) => {
-  if (valor == null || valor === '') return 'Não informado';
+  if (valor == null || valor === '') return 'Pendente de correção';
   if (typeof valor === 'boolean') return valor ? 'Sim' : 'Não';
   return String(valor);
+};
+const passagemTemPendencias = (passagem: PassagemConsulta) => {
+  if (!passagem.observacoes?.trim() || !passagem.relatorio_ocorrencias?.trim())
+    return true;
+  if (passagem.equipe.length === 0) return true;
+  if (passagem.ocupacoes_linhas.some((linha) => !linha.veiculos?.trim()))
+    return true;
+  if (
+    passagem.terminal === 'BRISAMAR' &&
+    'eots_disponiveis' in passagem.detalhe &&
+    (!passagem.detalhe.eots_disponiveis?.trim() ||
+      !passagem.detalhe.eots_avariados?.trim())
+  )
+    return true;
+  return false;
 };
 
 export function ConfirmationPage() {
@@ -79,6 +94,7 @@ function RevisaoCiclo({ cicloId }: { cicloId: string }) {
     );
 
   const confirmado = ciclo.estado === 'CONFIRMADO';
+  const possuiPendencias = ciclo.passagens.some(passagemTemPendencias);
   return (
     <main className="shell review-page">
       <section className="shell__card confirmation">
@@ -131,8 +147,18 @@ function RevisaoCiclo({ cicloId }: { cicloId: string }) {
             {erro}
           </p>
         )}
+        {!confirmado && !ciclo.terminal_pendente && possuiPendencias && (
+          <p role="alert" className="status status--error">
+            Existem campos pendentes. Corrija os terminais antes da confirmação
+            final.
+          </p>
+        )}
         {!confirmado && !ciclo.terminal_pendente && (
-          <button className="button" disabled={confirmando} onClick={confirmar}>
+          <button
+            className="button"
+            disabled={confirmando || possuiPendencias}
+            onClick={confirmar}
+          >
             {confirmando ? 'Confirmando...' : 'Confirmar passagem completa'}
           </button>
         )}
@@ -168,23 +194,33 @@ function DetalhePassagem({
   cicloId: string;
   confirmado: boolean;
 }) {
-  const teconSemAtendimento =
-    passagem.terminal === 'TECON' &&
-    'houve_atendimento' in passagem.detalhe &&
-    passagem.detalhe.houve_atendimento === false;
-  const detalhes = Object.entries(passagem.detalhe).filter(
-    ([campo]) => !(teconSemAtendimento && campo !== 'houve_atendimento'),
-  );
+  const detalhes = Object.entries(passagem.detalhe).filter(([campo, valor]) => {
+    if (valor == null || valor === '') return false;
+    if (
+      passagem.terminal !== 'TECON' ||
+      !('houve_atendimento' in passagem.detalhe)
+    )
+      return true;
+    const detalhe = passagem.detalhe;
+    if (!detalhe.houve_atendimento) return campo === 'houve_atendimento';
+    if (campo === 'carga_mal_posicionada_descricao')
+      return detalhe.carga_mal_posicionada === true;
+    if (campo === 'area1_inicio' || campo === 'area1_termino')
+      return detalhe.area1_atendida === true;
+    if (campo === 'area2_inicio' || campo === 'area2_termino')
+      return detalhe.area2_atendida === true;
+    return true;
+  });
   return (
     <section className="shell__card review-terminal">
       <h2>{nomeTerminal(passagem.terminal)}</h2>
       <p>
         <strong>Observações:</strong>{' '}
-        {passagem.observacoes || 'Sem observações'}
+        {passagem.observacoes || 'Pendente de correção'}
       </p>
       <p>
         <strong>Relatório de ocorrências:</strong>{' '}
-        {passagem.relatorio_ocorrencias || 'Sem ocorrências'}
+        {passagem.relatorio_ocorrencias || 'Pendente de correção'}
       </p>
       <h3>Equipe</h3>
       <ul>
@@ -199,7 +235,7 @@ function DetalhePassagem({
         {passagem.ocupacoes_linhas.map((linha) => (
           <div key={linha.codigo_linha}>
             <dt>{linha.codigo_linha}</dt>
-            <dd>{linha.veiculos || 'Não informado'}</dd>
+            <dd>{linha.veiculos || 'Pendente de correção'}</dd>
           </div>
         ))}
       </dl>

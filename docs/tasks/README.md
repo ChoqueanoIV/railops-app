@@ -44,6 +44,7 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 029 | Linhas livres e layout dos registros do turno | 028 |
 | 030 | Alinhamento visual da opção de linha livre | 029 |
 | 031 | Contextualização operacional do README | 030 |
+| 032 | Preenchimento obrigatório sem valores indefinidos | 031 |
 
 As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
 Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
@@ -62,6 +63,9 @@ computador e no celular, sem alterar seu comportamento.
 A Task 031 ampliou, em 10/09/2026, a apresentação pública do projeto para
 explicar a pessoas de fora da ferrovia o problema, o fluxo operacional, os
 benefícios esperados e os limites do piloto gratuito.
+A Task 032 eliminou, em 10/09/2026, a aceitação de conteúdo operacional vazio,
+incluiu declarações explícitas para ausência de EOTs e rádios e removeu valores
+não aplicáveis da revisão final.
 
 ## Como pedir uma task ao Codex
 

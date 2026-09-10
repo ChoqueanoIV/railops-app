@@ -329,8 +329,8 @@ nem apaga o volume do ambiente cotidiano. Para diagnóstico interativo, use
 
 Estado validado neste checkpoint:
 
-- backend: 177 testes;
-- frontend: 31 testes;
+- backend: 184 testes;
+- frontend: 34 testes;
 - 6 cenários E2E aprovados no Chromium contra API e PostgreSQL isolados;
 - formatter, lint, type-check, build e pre-commit aprovados;
 - CI executa jobs independentes de Backend, Frontend e E2E em PRs e na `main`;

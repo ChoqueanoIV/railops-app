@@ -45,6 +45,8 @@ const maiusculo = (valor: string) => valor.toLocaleUpperCase('pt-BR');
 const SEM_OBSERVACOES = 'SEM OBSERVAÇÕES';
 const SEM_ALTERACOES = 'SEM ALTERAÇÕES';
 const LINHA_LIVRE = 'LIVRE';
+const SEM_EOTS_DISPONIVEIS = 'NENHUM EOT DISPONÍVEL';
+const SEM_EOTS_AVARIADOS = 'NENHUM EOT AVARIADO';
 const corresponde = (valor: string | null, declaracao: string) =>
   valor != null && maiusculo(valor.trim()) === declaracao;
 const novaEquipe = (): EquipeMembro => ({ nome: '', matricula: '' });
@@ -83,6 +85,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
   const [equipe, setEquipe] = useState<EquipeMembro[]>([novaEquipe()]);
   const [linhas, setLinhas] = useState<LinhaOcupacao[]>(novasLinhas(terminal));
   const [radios, setRadios] = useState<RadioUso[]>([]);
+  const [semRadios, setSemRadios] = useState(false);
   const [recursos, setRecursos] = useState({
     radios_operantes: 0,
     radios_inoperantes: 0,
@@ -131,6 +134,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
         setEquipe(p.equipe.length ? p.equipe : [novaEquipe()]);
         setLinhas(p.ocupacoes_linhas);
         setRadios(p.radios_utilizados);
+        setSemRadios(p.radios_utilizados.length === 0);
         if (terminal === 'BRISAMAR' && 'radios_operantes' in p.detalhe)
           setRecursos({
             ...p.detalhe,
@@ -532,9 +536,42 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
                 </Field>
               ))}
             </div>
-            <Field label="EOTs disponíveis">
+            <div className="record-field">
+              <div className="record-field__heading">
+                <label htmlFor="eots-disponiveis">EOTs disponíveis</label>
+                <label className="inline-check">
+                  <input
+                    type="checkbox"
+                    checked={corresponde(
+                      recursos.eots_disponiveis,
+                      SEM_EOTS_DISPONIVEIS,
+                    )}
+                    onChange={(e) =>
+                      setRecursos((r) => ({
+                        ...r,
+                        eots_disponiveis: e.target.checked
+                          ? SEM_EOTS_DISPONIVEIS
+                          : '',
+                      }))
+                    }
+                  />{' '}
+                  Nenhum EOT disponível
+                </label>
+              </div>
               <textarea
-                value={recursos.eots_disponiveis}
+                id="eots-disponiveis"
+                required={
+                  !corresponde(recursos.eots_disponiveis, SEM_EOTS_DISPONIVEIS)
+                }
+                disabled={corresponde(
+                  recursos.eots_disponiveis,
+                  SEM_EOTS_DISPONIVEIS,
+                )}
+                value={
+                  corresponde(recursos.eots_disponiveis, SEM_EOTS_DISPONIVEIS)
+                    ? ''
+                    : recursos.eots_disponiveis
+                }
                 onChange={(e) =>
                   setRecursos((r) => ({
                     ...r,
@@ -542,10 +579,43 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
                   }))
                 }
               />
-            </Field>
-            <Field label="EOTs avariados">
+            </div>
+            <div className="record-field">
+              <div className="record-field__heading">
+                <label htmlFor="eots-avariados">EOTs avariados</label>
+                <label className="inline-check">
+                  <input
+                    type="checkbox"
+                    checked={corresponde(
+                      recursos.eots_avariados,
+                      SEM_EOTS_AVARIADOS,
+                    )}
+                    onChange={(e) =>
+                      setRecursos((r) => ({
+                        ...r,
+                        eots_avariados: e.target.checked
+                          ? SEM_EOTS_AVARIADOS
+                          : '',
+                      }))
+                    }
+                  />{' '}
+                  Nenhum EOT avariado
+                </label>
+              </div>
               <textarea
-                value={recursos.eots_avariados}
+                id="eots-avariados"
+                required={
+                  !corresponde(recursos.eots_avariados, SEM_EOTS_AVARIADOS)
+                }
+                disabled={corresponde(
+                  recursos.eots_avariados,
+                  SEM_EOTS_AVARIADOS,
+                )}
+                value={
+                  corresponde(recursos.eots_avariados, SEM_EOTS_AVARIADOS)
+                    ? ''
+                    : recursos.eots_avariados
+                }
                 onChange={(e) =>
                   setRecursos((r) => ({
                     ...r,
@@ -553,7 +623,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
                   }))
                 }
               />
-            </Field>
+            </div>
           </Section>
         ) : (
           <Section title="Atendimento no TECON">
@@ -637,9 +707,16 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
           </Section>
         )}
         <Section title="Rádios utilizados">
-          {radios.length === 0 && (
-            <p className="muted">Nenhum rádio informado.</p>
-          )}
+          <label className="inline-check">
+            <input
+              type="checkbox"
+              required={radios.length === 0}
+              disabled={radios.length > 0}
+              checked={semRadios}
+              onChange={(e) => setSemRadios(e.target.checked)}
+            />{' '}
+            Nenhum rádio utilizado
+          </label>
           {radios.map((r, i) => (
             <div className="radio-card" key={i}>
               <div className="form-grid">
@@ -711,7 +788,11 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
           <button
             type="button"
             className="button button--secondary compact"
-            onClick={() => setRadios((a) => [...a, novoRadio()])}
+            disabled={semRadios}
+            onClick={() => {
+              setSemRadios(false);
+              setRadios((a) => [...a, novoRadio()]);
+            }}
           >
             Adicionar rádio
           </button>

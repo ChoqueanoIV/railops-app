@@ -24,7 +24,7 @@ def dados_tecon_validos() -> dict:
         "observacoes": "Sem alterações.",
         "relatorio_ocorrencias": "Sem ocorrências.",
         "mobile_utilizado": True,
-        "equipe": [],
+        "equipe": [{"nome": "Operador de Teste", "matricula": "12345678"}],
         "ocupacoes_linhas": [
             {"codigo_linha": codigo, "veiculos": "Livre"} for codigo in LINHAS_TECON
         ],
@@ -138,4 +138,12 @@ def test_tecon_exige_observacoes_e_ocorrencias():
     dados["observacoes"] = "  "
 
     with pytest.raises(ValidationError):
+        PassagemTeconRequest(**dados)
+
+
+def test_tecon_rejeita_linha_sem_ocupacao_declarada():
+    dados = dados_tecon_validos()
+    dados["ocupacoes_linhas"][0]["veiculos"] = None
+
+    with pytest.raises(ValidationError, match="ocupação ou declare como livre"):
         PassagemTeconRequest(**dados)

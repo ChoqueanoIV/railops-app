@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from '@/app/App';
+import type { CicloPassagem } from './types';
 
 describe('migração das passagens para React', () => {
   beforeEach(() => sessionStorage.setItem('access_token', 'jwt-de-teste'));
@@ -91,6 +92,29 @@ describe('migração das passagens para React', () => {
     expect(ocorrencias).toBeDisabled();
   });
 
+  it('exige situação dos EOTs e declaração explícita quando nenhum rádio foi usado', async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={['/brisamar']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    const disponiveis = screen.getByLabelText('EOTs disponíveis');
+    const avariados = screen.getByLabelText('EOTs avariados');
+    const semRadios = screen.getByLabelText('Nenhum rádio utilizado');
+    expect(disponiveis).toBeRequired();
+    expect(avariados).toBeRequired();
+    expect(semRadios).toBeRequired();
+
+    await user.click(screen.getByLabelText('Nenhum EOT disponível'));
+    await user.click(screen.getByLabelText('Nenhum EOT avariado'));
+    await user.click(semRadios);
+    expect(disponiveis).toBeDisabled();
+    expect(avariados).toBeDisabled();
+    expect(semRadios).toBeChecked();
+  });
+
   it('converte textos digitados para maiúsculas e explica a inclusão na equipe', async () => {
     const user = userEvent.setup();
     render(
@@ -166,6 +190,74 @@ describe('migração das passagens para React', () => {
     ).toBeEnabled();
     expect(screen.getByText('Não')).toBeVisible();
     expect(screen.queryByText('false')).not.toBeInTheDocument();
+    expect(screen.queryByText('Não informado')).not.toBeInTheDocument();
+  });
+
+  it('oculta detalhes condicionais que não se aplicam ao atendimento', async () => {
+    const ciclo = cicloCompleto();
+    ciclo.passagens[1].detalhe = {
+      houve_atendimento: true,
+      carga_mal_posicionada: false,
+      carga_mal_posicionada_descricao: null,
+      area1_atendida: false,
+      area1_inicio: null,
+      area1_termino: null,
+      area2_atendida: false,
+      area2_inicio: null,
+      area2_termino: null,
+    };
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify(ciclo), {
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      ),
+    );
+
+    render(
+      <MemoryRouter initialEntries={['/confirmacao?ciclo=ciclo-1']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(
+      await screen.findByRole('heading', { name: 'Passagem completa' }),
+    ).toBeVisible();
+    expect(
+      screen.queryByText('carga mal posicionada descricao'),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('area1 inicio')).not.toBeInTheDocument();
+    expect(screen.queryByText('area2 termino')).not.toBeInTheDocument();
+  });
+
+  it('bloqueia a confirmação de um rascunho antigo com campo vazio', async () => {
+    const ciclo = cicloCompleto();
+    ciclo.passagens[0].observacoes = '';
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify(ciclo), {
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      ),
+    );
+
+    render(
+      <MemoryRouter initialEntries={['/confirmacao?ciclo=ciclo-1']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(
+      await screen.findByText(
+        'Existem campos pendentes. Corrija os terminais antes da confirmação final.',
+      ),
+    ).toBeVisible();
+    expect(
+      screen.getByRole('button', { name: 'Confirmar passagem completa' }),
+    ).toBeDisabled();
+    expect(screen.getByText('Pendente de correção')).toBeVisible();
   });
 
   it('baixa o PDF individual somente após a confirmação', async () => {
@@ -207,17 +299,21 @@ describe('migração das passagens para React', () => {
   });
 });
 
-function cicloCompleto(estado: 'RASCUNHO' | 'CONFIRMADO' = 'RASCUNHO') {
+function cicloCompleto(
+  estado: 'RASCUNHO' | 'CONFIRMADO' = 'RASCUNHO',
+): CicloPassagem {
   const base = {
     data: '2026-08-30',
-    turma: 'C',
-    turno: 'DIURNO',
+    turma: 'C' as const,
+    turno: 'DIURNO' as const,
     observacoes: 'Sem alterações',
     relatorio_ocorrencias: 'Sem ocorrências',
     mobile_utilizado: true,
     mobile_justificativa: null,
     equipe: [{ nome: 'Operador', matricula: '12345678' }],
-    ocupacoes_linhas: [],
+    ocupacoes_linhas: [
+      { codigo_linha: 'LINHA TESTE', veiculos: 'LIVRE', sup_inf: null },
+    ],
     radios_utilizados: [],
     editavel: estado === 'RASCUNHO',
   };
@@ -239,8 +335,8 @@ function cicloCompleto(estado: 'RASCUNHO' | 'CONFIRMADO' = 'RASCUNHO') {
           radios_inoperantes: 0,
           baterias: 4,
           carregadores: 2,
-          eots_disponiveis: null,
-          eots_avariados: null,
+          eots_disponiveis: 'NENHUM EOT DISPONÍVEL',
+          eots_avariados: 'NENHUM EOT AVARIADO',
         },
       },
       {
