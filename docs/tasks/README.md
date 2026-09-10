@@ -42,6 +42,7 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 027 | Consistência do formulário e da revisão da passagem | 019C, 026 |
 | 028 | Preservação de espaços em textos operacionais | 027 |
 | 029 | Linhas livres e layout dos registros do turno | 028 |
+| 030 | Alinhamento visual da opção de linha livre | 029 |
 
 As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
 Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
@@ -55,6 +56,8 @@ A Task 028 corrigiu, em 06/09/2026, a remoção prematura de espaços nos textos
 operacionais convertidos para maiúsculas.
 A Task 029 adicionou, em 06/09/2026, a declaração explícita de linha livre e
 reorganizou as opções de ausência dos registros do turno.
+A Task 030 corrigiu, em 10/09/2026, o alinhamento da opção de linha livre no
+computador e no celular, sem alterar seu comportamento.
 
 ## Como pedir uma task ao Codex
 
