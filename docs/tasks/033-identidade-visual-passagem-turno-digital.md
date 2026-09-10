@@ -50,6 +50,7 @@ Executadas em 10/09/2026:
 - build Vite: aprovado;
 - inspeção visual da tela de login em navegador local: aprovada;
 - contratos, payloads, API e banco: não alterados.
+- testes E2E atualizados para os novos textos públicos, sem mudança de fluxo.
 
 O teste de componente do formulário também confirma a presença da navegação
 pelas etapas. A checagem de formatação foi repetida após o último ajuste.
