@@ -43,6 +43,7 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 028 | Preservação de espaços em textos operacionais | 027 |
 | 029 | Linhas livres e layout dos registros do turno | 028 |
 | 030 | Alinhamento visual da opção de linha livre | 029 |
+| 031 | Contextualização operacional do README | 030 |
 
 As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
 Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
@@ -58,6 +59,9 @@ A Task 029 adicionou, em 06/09/2026, a declaração explícita de linha livre e
 reorganizou as opções de ausência dos registros do turno.
 A Task 030 corrigiu, em 10/09/2026, o alinhamento da opção de linha livre no
 computador e no celular, sem alterar seu comportamento.
+A Task 031 ampliou, em 10/09/2026, a apresentação pública do projeto para
+explicar a pessoas de fora da ferrovia o problema, o fluxo operacional, os
+benefícios esperados e os limites do piloto gratuito.
 
 ## Como pedir uma task ao Codex
 

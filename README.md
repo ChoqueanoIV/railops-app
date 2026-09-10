@@ -1,12 +1,101 @@
 # RailOps
 
-Sistema web para digitalizar a passagem de serviço entre turnos no Pátio
-Brisamar e no Terminal TECON, preservando as regras operacionais existentes.
+Sistema web criado para digitalizar a passagem de serviço entre equipes que
+trabalham em turnos no Pátio Brisamar e no Terminal TECON, preservando as
+regras operacionais existentes.
+
+## O projeto em poucas palavras
+
+Em uma operação que funciona continuamente, a equipe que encerra seu turno
+precisa informar à equipe seguinte como está o ambiente de trabalho. Essa
+transferência de informações é chamada de **passagem de serviço**.
+
+No contexto ferroviário deste projeto, a passagem reúne informações como a
+ocupação das linhas, condições de equipamentos, composição da equipe,
+ocorrências e outras situações relevantes dos terminais. Esses dados ajudam o
+próximo turno a entender rapidamente o cenário que está recebendo e dão suporte
+a consultas e auditorias posteriores.
+
+O RailOps transforma esse processo em um fluxo digital guiado: o colaborador se
+identifica, registra a situação dos dois terminais, revisa a passagem completa e
+só então realiza a confirmação definitiva. Após essa confirmação, o registro é
+bloqueado para edição e permanece disponível para consulta conforme o perfil de
+acesso.
+
+## Por que o RailOps foi criado
+
+O processo baseado em papel cumpre uma função importante, mas traz limitações
+para uma operação que precisa preservar e consultar informações ao longo do
+tempo:
+
+- formulários físicos podem ser extraviados, danificados ou arquivados de forma
+  inconsistente;
+- localizar uma informação antiga exige procurar manualmente entre registros;
+- campos manuscritos podem ficar incompletos ou difíceis de interpretar;
+- consolidar dados para auditorias e relatórios demanda trabalho manual;
+- cópias de segurança e controle de acesso são limitados;
+- a passagem pode seguir formatos diferentes, dificultando a padronização.
+
+O projeto foi criado para reduzir esses problemas sem substituir o conhecimento
+dos profissionais nem reinventar as regras da operação. A proposta é oferecer
+uma ferramenta simples para:
+
+- eliminar gradualmente a dependência de papel;
+- padronizar o preenchimento sem perder particularidades dos terminais;
+- exigir informações essenciais antes da confirmação;
+- melhorar a legibilidade e a continuidade entre os turnos;
+- permitir pesquisa rápida de passagens anteriores;
+- manter um histórico auditável das alterações;
+- facilitar exportações, auditorias e futuras rotinas de backup;
+- controlar recursos sensíveis de acordo com o perfil do usuário.
+
+## Como funciona na prática
+
+Uma passagem representa um único ciclo operacional e reúne os registros de
+**Brisamar** e **TECON**. Em termos simples, o fluxo é este:
+
+1. o colaborador entra com sua matrícula e PIN;
+2. registra a equipe e a situação operacional do primeiro terminal;
+3. preenche o segundo terminal dentro da mesma passagem;
+4. visualiza os dois registros juntos e corrige o que for necessário;
+5. confirma definitivamente a passagem;
+6. o sistema bloqueia novas edições e preserva o registro para consulta;
+7. usuários autorizados podem consultar histórico e gerar exportações.
+
+A data operacional corresponde à data em que o turno começou, inclusive quando
+o turno noturno termina na manhã do dia seguinte. A orientação operacional é
+realizar a passagem nos 15 minutos finais do turno para que a equipe que chega
+receba informações atualizadas; o sistema não impõe automaticamente essa janela.
+
+## Para quem não é da ferrovia
+
+Uma linha ferroviária pode estar livre ou ocupada por vagões, locomotivas,
+equipamentos ou uma situação que precise ser comunicada. Brisamar possui, por
+exemplo, trechos superiores, inferiores e travessões que podem estar ocupados
+simultaneamente. O RailOps permite registrar cada posição separadamente para
+que a representação digital seja compatível com o cenário real.
+
+O projeto pode ser entendido como um **livro digital estruturado de troca de
+turno**. Ele organiza informações importantes, orienta o preenchimento, reduz
+ambiguidades e preserva evidências para consultas futuras. A decisão operacional
+continua sendo das equipes; o sistema apoia o registro e a rastreabilidade.
+
+## Situação atual e limites do piloto
 
 > **Status:** piloto funcional, publicado e homologado com dados fictícios.
 > Login, primeiro acesso, ciclo Brisamar + TECON, revisão, confirmação, consulta,
 > histórico e exportações estão disponíveis no React. Backend, Frontend, E2E e
 > deploy são validados continuamente pela CI.
+
+Esta versão foi construída com serviços gratuitos para permitir testes de uso,
+coleta de feedback e validação do fluxo antes de qualquer investimento. Ela é
+uma demonstração funcional, não um sistema liberado para a operação real da
+empresa. Nesta fase, devem ser usados somente dados fictícios.
+
+Se o piloto for aprovado, a evolução para uso corporativo deverá incluir a
+infraestrutura e os controles exigidos pelas políticas da MRS, como definição
+formal de ambiente de produção, identidade corporativa, monitoramento, backups,
+recuperação, retenção de dados, segurança, suporte e nível de disponibilidade.
 
 ## Piloto público
 
@@ -41,15 +130,15 @@ As regras protegidas pela caracterização estão em
 
 ## Arquitetura e stack
 
-| Camada | Tecnologia |
-|---|---|
-| Backend | Python 3.13, FastAPI e Pydantic |
-| Persistência | PostgreSQL, SQLAlchemy e Alembic |
-| Frontend | React 19, TypeScript, Vite e React Router |
-| Autenticação | JWT, Passlib e bcrypt |
-| Qualidade | Pytest, Vitest, Testing Library, Ruff, mypy, ESLint e Prettier |
-| Automação | Docker Compose, pre-commit e GitHub Actions |
-| Dependências | `pyproject.toml`, `uv.lock` e `package-lock.json` |
+| Camada       | Tecnologia                                                     |
+| ------------ | -------------------------------------------------------------- |
+| Backend      | Python 3.13, FastAPI e Pydantic                                |
+| Persistência | PostgreSQL, SQLAlchemy e Alembic                               |
+| Frontend     | React 19, TypeScript, Vite e React Router                      |
+| Autenticação | JWT, Passlib e bcrypt                                          |
+| Qualidade    | Pytest, Vitest, Testing Library, Ruff, mypy, ESLint e Prettier |
+| Automação    | Docker Compose, pre-commit e GitHub Actions                    |
+| Dependências | `pyproject.toml`, `uv.lock` e `package-lock.json`              |
 
 O backend está organizado por features (`auth` e `passagens`) e mantém
 adaptadores temporários para imports antigos. O React usa uma API tipada e
@@ -241,7 +330,7 @@ nem apaga o volume do ambiente cotidiano. Para diagnóstico interativo, use
 Estado validado neste checkpoint:
 
 - backend: 177 testes;
-- frontend: 28 testes;
+- frontend: 31 testes;
 - 6 cenários E2E aprovados no Chromium contra API e PostgreSQL isolados;
 - formatter, lint, type-check, build e pre-commit aprovados;
 - CI executa jobs independentes de Backend, Frontend e E2E em PRs e na `main`;
