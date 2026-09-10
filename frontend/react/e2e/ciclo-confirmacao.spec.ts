@@ -32,7 +32,9 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
   await page.getByLabel('Nenhum EOT disponível').check();
   await page.getByLabel('Nenhum EOT avariado').check();
   await page.getByLabel('Nenhum rádio utilizado').check();
-  await page.getByRole('button', { name: 'Avançar para revisão' }).click();
+  await page
+    .getByRole('button', { name: 'Avançar para o próximo terminal' })
+    .click();
 
   await expect(page).toHaveURL(/\/tecon\?ciclo=/);
   await preencherEquipe(page, 'Manobrador E2E TECON');
