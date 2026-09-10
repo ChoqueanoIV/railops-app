@@ -821,7 +821,9 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
             ? 'Enviando...'
             : id
               ? 'Salvar alterações'
-              : 'Avançar para revisão'}
+              : cicloId
+                ? 'Avançar para revisão'
+                : 'Avançar para o próximo terminal'}
         </button>
       </form>
     </main>

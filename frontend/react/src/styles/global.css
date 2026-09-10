@@ -532,6 +532,91 @@ select:focus-visible {
   margin: 0;
   overflow-wrap: anywhere;
 }
+.review-page {
+  align-content: start;
+  gap: 1rem;
+}
+.review-page > .shell__card {
+  width: min(100%, 70rem);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+.review-terminal__header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--brand-yellow);
+}
+.review-terminal__header h2 {
+  margin: 0.35rem 0 0;
+  color: var(--brand-navy);
+  font-size: clamp(1.4rem, 4vw, 2rem);
+}
+.review-terminal h3 {
+  margin: 2rem 0 0.75rem;
+  color: var(--brand-navy);
+  font-size: 1rem;
+}
+.review-summary,
+.review-lines {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+.review-summary > div,
+.review-lines > div {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.8fr) minmax(0, 2fr);
+  gap: 1rem;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.review-summary > div:last-child,
+.review-lines > div:last-child {
+  border-bottom: 0;
+}
+.review-summary > div:nth-child(even),
+.review-lines > div:nth-child(even) {
+  background: var(--surface-muted);
+}
+.review-summary dt,
+.review-lines dt {
+  color: var(--brand-blue);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.review-summary dd,
+.review-lines dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #172033;
+  font-weight: 600;
+}
+.review-team {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.review-team li {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  border-left: 4px solid var(--brand-yellow);
+  border-radius: 0.5rem;
+  background: var(--surface-muted);
+}
+.review-team span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
 .link-button {
   display: block;
   margin-top: 0.75rem;
@@ -698,5 +783,11 @@ select:focus-visible {
   .history-diff > div {
     display: grid;
     grid-template-columns: 1fr;
+  }
+  .review-summary > div,
+  .review-lines > div {
+    grid-template-columns: minmax(6.5rem, 0.8fr) minmax(0, 1.4fr);
+    gap: 0.65rem;
+    padding: 0.7rem 0.75rem;
   }
 }

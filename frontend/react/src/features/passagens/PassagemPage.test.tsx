@@ -38,6 +38,34 @@ describe('migração das passagens para React', () => {
     expect(screen.queryByText('Posição')).not.toBeInTheDocument();
     expect(screen.getByLabelText('Veículos da linha 16')).toBeRequired();
     expect(screen.getByLabelText('Linha 16 livre')).not.toBeChecked();
+    expect(
+      screen.getByRole('button', {
+        name: 'Avançar para o próximo terminal',
+      }),
+    ).toBeVisible();
+  });
+
+  it('indica a revisão ao preencher o segundo terminal do ciclo', async () => {
+    const ciclo = cicloCompleto();
+    ciclo.terminal_pendente = 'TECON';
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify(ciclo), {
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      ),
+    );
+
+    render(
+      <MemoryRouter initialEntries={['/tecon?ciclo=ciclo-1']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(
+      await screen.findByRole('button', { name: 'Avançar para revisão' }),
+    ).toBeVisible();
   });
 
   it('permite declarar uma linha livre ou exige a descrição da ocupação', async () => {
@@ -194,6 +222,8 @@ describe('migração das passagens para React', () => {
     expect(screen.getByText('Não')).toBeVisible();
     expect(screen.queryByText('false')).not.toBeInTheDocument();
     expect(screen.queryByText('Não informado')).not.toBeInTheDocument();
+    expect(screen.getByText('Rádios operantes')).toBeVisible();
+    expect(screen.queryByText('radios operantes')).not.toBeInTheDocument();
   });
 
   it('oculta detalhes condicionais que não se aplicam ao atendimento', async () => {

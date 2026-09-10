@@ -13,6 +13,25 @@ const caminhoTerminal = (terminal: Terminal) =>
   terminal === 'BRISAMAR' ? '/brisamar' : '/tecon';
 const nomeTerminal = (terminal: Terminal) =>
   terminal === 'BRISAMAR' ? 'Pátio Brisamar' : 'Terminal TECON';
+const ROTULOS_DETALHE: Record<string, string> = {
+  radios_operantes: 'Rádios operantes',
+  radios_inoperantes: 'Rádios inoperantes',
+  baterias: 'Baterias',
+  carregadores: 'Carregadores',
+  eots_disponiveis: 'EOTs disponíveis',
+  eots_avariados: 'EOTs avariados',
+  houve_atendimento: 'Houve atendimento',
+  carga_mal_posicionada: 'Carga mal posicionada',
+  carga_mal_posicionada_descricao: 'Descrição da carga',
+  area1_atendida: 'Área 1 atendida',
+  area1_inicio: 'Início da Área 1',
+  area1_termino: 'Término da Área 1',
+  area2_atendida: 'Área 2 atendida',
+  area2_inicio: 'Início da Área 2',
+  area2_termino: 'Término da Área 2',
+};
+const rotuloDetalhe = (campo: string) =>
+  ROTULOS_DETALHE[campo] ?? campo.replaceAll('_', ' ');
 const formatarDetalhe = (valor: unknown) => {
   if (valor == null || valor === '') return 'Pendente de correção';
   if (typeof valor === 'boolean') return valor ? 'Sim' : 'Não';
@@ -215,20 +234,26 @@ function DetalhePassagem({
   });
   return (
     <section className="shell__card review-terminal">
-      <h2>{nomeTerminal(passagem.terminal)}</h2>
-      <p>
-        <strong>Observações:</strong>{' '}
-        {passagem.observacoes || 'Pendente de correção'}
-      </p>
-      <p>
-        <strong>Relatório de ocorrências:</strong>{' '}
-        {passagem.relatorio_ocorrencias || 'Pendente de correção'}
-      </p>
+      <header className="review-terminal__header">
+        <span className="shell__eyebrow">Resumo operacional</span>
+        <h2>{nomeTerminal(passagem.terminal)}</h2>
+      </header>
+      <dl className="review-summary">
+        <div>
+          <dt>Observações</dt>
+          <dd>{passagem.observacoes || 'Pendente de correção'}</dd>
+        </div>
+        <div>
+          <dt>Relatório de ocorrências</dt>
+          <dd>{passagem.relatorio_ocorrencias || 'Pendente de correção'}</dd>
+        </div>
+      </dl>
       <h3>Equipe</h3>
-      <ul>
+      <ul className="review-team">
         {passagem.equipe.map((membro) => (
           <li key={`${membro.matricula}-${membro.nome}`}>
-            {membro.nome} — {membro.matricula}
+            <strong>{membro.nome}</strong>
+            <span>Matrícula {membro.matricula}</span>
           </li>
         ))}
       </ul>
@@ -245,7 +270,7 @@ function DetalhePassagem({
       <dl className="review-lines">
         {detalhes.map(([campo, valor]) => (
           <div key={campo}>
-            <dt>{campo.replaceAll('_', ' ')}</dt>
+            <dt>{rotuloDetalhe(campo)}</dt>
             <dd>{formatarDetalhe(valor)}</dd>
           </div>
         ))}
