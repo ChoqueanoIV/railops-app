@@ -7,7 +7,7 @@ import {
   prepararCicloConfirmado,
 } from './support/ciclo';
 
-const CICLO_PERMISSOES: CredenciaisE2E = { ...INSTRUTOR, turma: 'A' };
+const CICLO_PERMISSOES: CredenciaisE2E = { ...MANOBRADOR, turma: 'A' };
 
 test('aplica permissões sem encerrar a sessão e libera consolidados ao Instrutor', async ({
   page,
@@ -52,6 +52,19 @@ test('aplica permissões sem encerrar a sessão e libera consolidados ao Instrut
   await page.getByRole('button', { name: 'Sair' }).click();
 
   await autenticar(page, INSTRUTOR);
+  await expect(page.getByRole('link', { name: /Pátio Brisamar/ })).toHaveCount(
+    0,
+  );
+  await page.goto('/brisamar');
+  await expect(page).toHaveURL(/\/passagens$/);
+  const tentativaCriacao = await page.request.post(
+    'http://127.0.0.1:18000/passagens/brisamar',
+    {
+      headers: { Authorization: `Bearer ${await tokenDaSessao(page)}` },
+      data: {},
+    },
+  );
+  expect(tentativaCriacao.status()).toBe(403);
   await page.goto(`/passagens/${passagemBrisamarId}/historico`);
   await expect(
     page.getByRole('heading', { name: 'Histórico de edições' }),

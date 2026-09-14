@@ -31,6 +31,13 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
   await marcarLinhasVaziasComoLivres(page);
   await page.getByLabel('Nenhum EOT disponível').check();
   await page.getByLabel('Nenhum EOT avariado').check();
+  await page
+    .getByLabel(/Condição de entrega do celular do EOT/)
+    .fill('CELULAR ENTREGUE EM BOAS CONDIÇÕES');
+  await page.getByLabel('Quantidade de Mobiles na sala da equipe').fill('2');
+  await page
+    .getByLabel(/Condição dos Mobiles na sala/)
+    .fill('DOIS MOBILES EM BOAS CONDIÇÕES');
   await page.getByLabel('Nenhum rádio utilizado').check();
   await page
     .getByRole('button', { name: 'Avançar para o próximo terminal' })
@@ -47,6 +54,9 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
     .fill('Sem ocorrências no TECON');
   await marcarLinhasVaziasComoLivres(page);
   await page.getByLabel('Nenhum rádio utilizado').check();
+  await page
+    .getByLabel(/Condição de entrega do celular da TECON/)
+    .fill('CELULAR ENTREGUE EM BOAS CONDIÇÕES');
   await page.getByRole('button', { name: 'Avançar para revisão' }).click();
 
   await expect(page).toHaveURL(/\/confirmacao\?ciclo=/);

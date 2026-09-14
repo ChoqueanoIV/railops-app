@@ -31,6 +31,9 @@ def dados_passagem_validos() -> dict:
             "carregadores": 2,
             "eots_disponiveis": "EOT 101",
             "eots_avariados": "Nenhum",
+            "celular_eot_condicao": "Em boas condições",
+            "mobiles_sala_quantidade": 2,
+            "mobiles_sala_condicao": "Dois em boas condições",
         },
         "radios_utilizados": [
             {
@@ -49,6 +52,25 @@ def test_passagem_brisamar_aceita_dados_validos():
 
     assert passagem.ocupacoes_linhas[0].sup_inf == LadoLinha.SUP
     assert passagem.detalhe.radios_operantes == 4
+
+
+@pytest.mark.parametrize(
+    "campo",
+    ["celular_eot_condicao", "mobiles_sala_quantidade", "mobiles_sala_condicao"],
+)
+def test_brisamar_exige_controle_dos_aparelhos(campo):
+    dados = dados_passagem_validos()
+    dados["detalhe"][campo] = None
+    with pytest.raises(ValidationError):
+        PassagemBrisamarRequest(**dados)
+
+
+def test_brisamar_permite_zero_mobiles_com_condicao_explicita():
+    dados = dados_passagem_validos()
+    dados["detalhe"]["mobiles_sala_quantidade"] = 0
+    dados["detalhe"]["mobiles_sala_condicao"] = "NENHUM MOBILE NA SALA"
+    passagem = PassagemBrisamarRequest(**dados)
+    assert passagem.detalhe.mobiles_sala_quantidade == 0
 
 
 @pytest.mark.parametrize(

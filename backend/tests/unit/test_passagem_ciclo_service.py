@@ -9,6 +9,7 @@ from app.features.passagens.exceptions import PassagemError
 from app.features.passagens.models import (
     CicloPassagem,
     EstadoCicloPassagem,
+    PassagemBrisamarDetalhe,
     PassagemServico,
     Terminal,
     Turma,
@@ -44,6 +45,21 @@ def test_confirmar_ciclo_exige_brisamar_e_tecon():
 
     repository.confirmar_ciclo.assert_not_called()
     repository.desfazer.assert_called_once_with()
+
+
+def test_confirmar_ciclo_exige_atualizacao_de_rascunho_antigo_sem_aparelhos():
+    repository = MagicMock()
+    ciclo = criar_ciclo(Terminal.BRISAMAR, Terminal.TECON)
+    ciclo.passagens[0].detalhe_brisamar = PassagemBrisamarDetalhe(
+        radios_operantes=0, radios_inoperantes=0, baterias=0, carregadores=0
+    )
+    repository.buscar_ciclo_para_confirmacao.return_value = ciclo
+    service = PassagemCicloService(repository)
+
+    with pytest.raises(PassagemError, match="celular do EOT"):
+        service.confirmar(ciclo.id, Usuario(id=ciclo.criado_por))
+
+    repository.confirmar_ciclo.assert_not_called()
 
 
 def test_confirmar_ciclo_bloqueia_as_duas_passagens_atomicamente():

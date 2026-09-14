@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field
 
+from app.features.auth.models import PerfilUsuario
+
 
 class PrimeiroAcessoRequest(BaseModel):
     matricula: str = Field(pattern=r"^\d{8}$")
@@ -15,3 +17,9 @@ class LoginRequest(BaseModel):
 class LoginResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+
+class UsuarioAtualResponse(BaseModel):
+    nome: str
+    matricula: str
+    perfil: PerfilUsuario

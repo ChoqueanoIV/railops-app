@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { ProductBrand } from '@/components/ProductBrand';
+import { useAuth } from '@/features/auth/useAuth';
 import { passagemService, salvarDownload } from './service';
 import type {
   CicloPassagem,
@@ -20,6 +21,10 @@ const ROTULOS_DETALHE: Record<string, string> = {
   carregadores: 'Carregadores',
   eots_disponiveis: 'EOTs disponíveis',
   eots_avariados: 'EOTs avariados',
+  celular_eot_condicao: 'Condição de entrega do celular do EOT',
+  mobiles_sala_quantidade: 'Mobiles na sala da equipe',
+  mobiles_sala_condicao: 'Condição dos Mobiles na sala',
+  celular_tecon_condicao: 'Condição de entrega do celular da TECON',
   houve_atendimento: 'Houve atendimento',
   carga_mal_posicionada: 'Carga mal posicionada',
   carga_mal_posicionada_descricao: 'Descrição da carga',
@@ -47,7 +52,16 @@ const passagemTemPendencias = (passagem: PassagemConsulta) => {
     passagem.terminal === 'BRISAMAR' &&
     'eots_disponiveis' in passagem.detalhe &&
     (!passagem.detalhe.eots_disponiveis?.trim() ||
-      !passagem.detalhe.eots_avariados?.trim())
+      !passagem.detalhe.eots_avariados?.trim() ||
+      !passagem.detalhe.celular_eot_condicao?.trim() ||
+      passagem.detalhe.mobiles_sala_quantidade == null ||
+      !passagem.detalhe.mobiles_sala_condicao?.trim())
+  )
+    return true;
+  if (
+    passagem.terminal === 'TECON' &&
+    'houve_atendimento' in passagem.detalhe &&
+    !passagem.detalhe.celular_tecon_condicao?.trim()
   )
     return true;
   return false;
@@ -60,6 +74,8 @@ export function ConfirmationPage() {
 }
 
 function RevisaoCiclo({ cicloId }: { cicloId: string }) {
+  const { usuario } = useAuth();
+  const podePreencher = usuario?.perfil === 'MANOBRADOR';
   const [ciclo, setCiclo] = useState<CicloPassagem | null>(null);
   const [erro, setErro] = useState('');
   const [confirmando, setConfirmando] = useState(false);
@@ -145,7 +161,7 @@ function RevisaoCiclo({ cicloId }: { cicloId: string }) {
             <dd>{confirmado ? 'Confirmado — somente leitura' : 'Rascunho'}</dd>
           </div>
         </dl>
-        {ciclo.terminal_pendente && (
+        {podePreencher && ciclo.terminal_pendente && (
           <Link
             className="button link-button"
             to={`${caminhoTerminal(ciclo.terminal_pendente)}?ciclo=${ciclo.id}`}
@@ -160,6 +176,7 @@ function RevisaoCiclo({ cicloId }: { cicloId: string }) {
           passagem={passagem}
           cicloId={ciclo.id}
           confirmado={confirmado}
+          podePreencher={podePreencher}
         />
       ))}
       <section className="shell__card confirmation review-actions">
@@ -174,7 +191,7 @@ function RevisaoCiclo({ cicloId }: { cicloId: string }) {
             final.
           </p>
         )}
-        {!confirmado && !ciclo.terminal_pendente && (
+        {podePreencher && !confirmado && !ciclo.terminal_pendente && (
           <button
             className="button"
             disabled={confirmando || possuiPendencias}
@@ -210,10 +227,12 @@ function DetalhePassagem({
   passagem,
   cicloId,
   confirmado,
+  podePreencher,
 }: {
   passagem: PassagemConsulta;
   cicloId: string;
   confirmado: boolean;
+  podePreencher: boolean;
 }) {
   const detalhes = Object.entries(passagem.detalhe).filter(([campo, valor]) => {
     if (valor == null || valor === '') return false;
@@ -275,7 +294,7 @@ function DetalhePassagem({
           </div>
         ))}
       </dl>
-      {!confirmado && passagem.editavel && (
+      {podePreencher && !confirmado && passagem.editavel && (
         <Link
           className="button button--secondary link-button"
           to={`${caminhoTerminal(passagem.terminal)}?editar=${passagem.id}&ciclo=${cicloId}`}

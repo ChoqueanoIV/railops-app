@@ -3,11 +3,16 @@ import type {
   LoginResponse,
   PrimeiroAcessoRequest,
   PrimeiroAcessoResponse,
+  UsuarioAtual,
 } from '@/features/auth/types';
 import { apiClient, type ApiClient } from '@/services/api/client';
 
 export class AuthService {
   constructor(private readonly client: ApiClient) {}
+
+  me(): Promise<UsuarioAtual> {
+    return this.client.request<UsuarioAtual>('/auth/me');
+  }
 
   login(payload: LoginRequest): Promise<LoginResponse> {
     return this.client.request<LoginResponse>('/auth/login', {

@@ -8,6 +8,12 @@ export interface LoginResponse {
   token_type: 'bearer';
 }
 
+export interface UsuarioAtual {
+  nome: string;
+  matricula: string;
+  perfil: 'MANOBRADOR' | 'INSTRUTOR' | 'MONITOR_QUALIDADE';
+}
+
 export interface PrimeiroAcessoRequest {
   matricula: string;
   codigo_ativacao: string;

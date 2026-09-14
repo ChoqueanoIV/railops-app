@@ -87,14 +87,28 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
   const [linhas, setLinhas] = useState<LinhaOcupacao[]>(novasLinhas(terminal));
   const [radios, setRadios] = useState<RadioUso[]>([]);
   const [semRadios, setSemRadios] = useState(false);
-  const [recursos, setRecursos] = useState({
+  const [recursos, setRecursos] = useState<{
+    radios_operantes: number;
+    radios_inoperantes: number;
+    baterias: number;
+    carregadores: number;
+    eots_disponiveis: string;
+    eots_avariados: string;
+    celular_eot_condicao: string;
+    mobiles_sala_quantidade: number | '';
+    mobiles_sala_condicao: string;
+  }>({
     radios_operantes: 0,
     radios_inoperantes: 0,
     baterias: 0,
     carregadores: 0,
     eots_disponiveis: '',
     eots_avariados: '',
+    celular_eot_condicao: '',
+    mobiles_sala_quantidade: '',
+    mobiles_sala_condicao: '',
   });
+  const [celularTeconCondicao, setCelularTeconCondicao] = useState('');
   const [houveAtendimento, setHouveAtendimento] = useState(false);
   const [cargaMalPosicionada, setCargaMalPosicionada] = useState(false);
   const [cargaDescricao, setCargaDescricao] = useState('');
@@ -141,8 +155,12 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
             ...p.detalhe,
             eots_disponiveis: p.detalhe.eots_disponiveis ?? '',
             eots_avariados: p.detalhe.eots_avariados ?? '',
+            celular_eot_condicao: p.detalhe.celular_eot_condicao ?? '',
+            mobiles_sala_quantidade: p.detalhe.mobiles_sala_quantidade ?? '',
+            mobiles_sala_condicao: p.detalhe.mobiles_sala_condicao ?? '',
           });
         if (terminal === 'TECON' && 'houve_atendimento' in p.detalhe) {
+          setCelularTeconCondicao(p.detalhe.celular_tecon_condicao ?? '');
           setHouveAtendimento(p.detalhe.houve_atendimento);
           setCargaMalPosicionada(p.detalhe.carga_mal_posicionada ?? false);
           setCargaDescricao(p.detalhe.carga_mal_posicionada_descricao ?? '');
@@ -261,11 +279,21 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
             ...recursos,
             eots_disponiveis: vazio(recursos.eots_disponiveis),
             eots_avariados: vazio(recursos.eots_avariados),
+            celular_eot_condicao: vazio(recursos.celular_eot_condicao),
+            mobiles_sala_quantidade:
+              recursos.mobiles_sala_quantidade === ''
+                ? null
+                : recursos.mobiles_sala_quantidade,
+            mobiles_sala_condicao: vazio(recursos.mobiles_sala_condicao),
           }
         : !houveAtendimento
-          ? { houve_atendimento: false }
+          ? {
+              houve_atendimento: false,
+              celular_tecon_condicao: vazio(celularTeconCondicao),
+            }
           : {
               houve_atendimento: true,
+              celular_tecon_condicao: vazio(celularTeconCondicao),
               carga_mal_posicionada: cargaMalPosicionada,
               carga_mal_posicionada_descricao: cargaMalPosicionada
                 ? vazio(cargaDescricao)
@@ -387,6 +415,11 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
           </div>
         </Section>
         <Section id="equipe" title="Equipe presente">
+          <p className="status">
+            {terminal === 'BRISAMAR'
+              ? 'Preencha apenas os manobradores que trabalharam no Pátio do Brisamar/Apoio, Gerdau e EOT.'
+              : 'Preencha apenas os manobradores que trabalharam na TECON.'}
+          </p>
           {equipe.map((m, i) => (
             <div className="form-grid dynamic-row" key={i}>
               <Field label="Nome">
@@ -521,6 +554,47 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
         </Section>
         {terminal === 'BRISAMAR' ? (
           <Section id="terminal" title="Recursos entregues">
+            <Field label="Condição de entrega do celular do EOT (informe também se estiver ausente)">
+              <textarea
+                required
+                value={recursos.celular_eot_condicao}
+                onChange={(e) =>
+                  setRecursos((r) => ({
+                    ...r,
+                    celular_eot_condicao: maiusculo(e.target.value),
+                  }))
+                }
+              />
+            </Field>
+            <div className="form-grid">
+              <Field label="Quantidade de Mobiles na sala da equipe">
+                <input
+                  type="number"
+                  min="0"
+                  required
+                  value={recursos.mobiles_sala_quantidade}
+                  onChange={(e) =>
+                    setRecursos((r) => ({
+                      ...r,
+                      mobiles_sala_quantidade:
+                        e.target.value === '' ? '' : Number(e.target.value),
+                    }))
+                  }
+                />
+              </Field>
+              <Field label="Condição dos Mobiles na sala (informe também se não houver nenhum)">
+                <textarea
+                  required
+                  value={recursos.mobiles_sala_condicao}
+                  onChange={(e) =>
+                    setRecursos((r) => ({
+                      ...r,
+                      mobiles_sala_condicao: maiusculo(e.target.value),
+                    }))
+                  }
+                />
+              </Field>
+            </div>
             <div className="form-grid">
               {(
                 [
@@ -637,6 +711,15 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
           </Section>
         ) : (
           <Section id="terminal" title="Atendimento no TECON">
+            <Field label="Condição de entrega do celular da TECON (informe também se estiver ausente)">
+              <textarea
+                required
+                value={celularTeconCondicao}
+                onChange={(e) =>
+                  setCelularTeconCondicao(maiusculo(e.target.value))
+                }
+              />
+            </Field>
             <Choice
               label="Houve atendimento?"
               value={houveAtendimento}

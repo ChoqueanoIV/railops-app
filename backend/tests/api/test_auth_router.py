@@ -5,11 +5,21 @@ import pytest
 from app.api.errors import ApiError
 from app.features.auth import controller as auth_controller
 from app.features.auth.exceptions import AutenticacaoError
+from app.features.auth.models import PerfilUsuario, Usuario
 from app.features.auth.schemas import LoginRequest, PrimeiroAcessoRequest
 
 
 def criar_service() -> auth_controller.AuthService:
     return auth_controller.AuthService(MagicMock())
+
+
+def test_usuario_atual_expoe_perfil_sem_credenciais():
+    usuario = Usuario(
+        nome="Inspetor", matricula="12345678", perfil=PerfilUsuario.INSTRUTOR
+    )
+    resposta = auth_controller.usuario_atual(usuario)
+    assert resposta.perfil == PerfilUsuario.INSTRUTOR
+    assert resposta.matricula == "12345678"
 
 
 def test_primeiro_acesso_retorna_status_sem_expor_usuario(monkeypatch):

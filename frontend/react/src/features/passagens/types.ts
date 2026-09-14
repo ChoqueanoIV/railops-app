@@ -20,6 +20,9 @@ export interface RadioUso {
   falha_descricao: string | null;
 }
 export interface BrisamarDetalhe {
+  celular_eot_condicao?: string | null;
+  mobiles_sala_quantidade?: number | null;
+  mobiles_sala_condicao?: string | null;
   radios_operantes: number;
   radios_inoperantes: number;
   baterias: number;
@@ -29,6 +32,7 @@ export interface BrisamarDetalhe {
 }
 export interface TeconDetalhe {
   houve_atendimento: boolean;
+  celular_tecon_condicao?: string | null;
   carga_mal_posicionada?: boolean | null;
   carga_mal_posicionada_descricao?: string | null;
   area1_atendida?: boolean | null;

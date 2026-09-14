@@ -28,7 +28,10 @@ def dados_tecon_validos() -> dict:
         "ocupacoes_linhas": [
             {"codigo_linha": codigo, "veiculos": "Livre"} for codigo in LINHAS_TECON
         ],
-        "detalhe": {"houve_atendimento": False},
+        "detalhe": {
+            "houve_atendimento": False,
+            "celular_tecon_condicao": "Em boas condições",
+        },
         "radios_utilizados": [],
     }
 
@@ -38,6 +41,13 @@ def test_tecon_sem_atendimento_aceita_apenas_nucleo():
 
     assert passagem.detalhe.houve_atendimento is False
     assert passagem.detalhe.area1_atendida is None
+
+
+def test_tecon_exige_condicao_do_celular_mesmo_sem_atendimento():
+    dados = dados_tecon_validos()
+    dados["detalhe"]["celular_tecon_condicao"] = "  "
+    with pytest.raises(ValidationError, match="celular da TECON"):
+        PassagemTeconRequest(**dados)
 
 
 def test_tecon_sem_atendimento_rejeita_campos_especificos():
@@ -50,7 +60,10 @@ def test_tecon_sem_atendimento_rejeita_campos_especificos():
 
 def test_tecon_com_atendimento_exige_vistoria_e_duas_areas():
     dados = dados_tecon_validos()
-    dados["detalhe"] = {"houve_atendimento": True}
+    dados["detalhe"] = {
+        "houve_atendimento": True,
+        "celular_tecon_condicao": "Em boas condições",
+    }
 
     with pytest.raises(ValidationError, match="carga mal posicionada"):
         PassagemTeconRequest(**dados)
@@ -60,6 +73,7 @@ def test_tecon_exige_descricao_de_carga_mal_posicionada():
     dados = dados_tecon_validos()
     dados["detalhe"] = {
         "houve_atendimento": True,
+        "celular_tecon_condicao": "Em boas condições",
         "carga_mal_posicionada": True,
         "area1_atendida": False,
         "area2_atendida": False,
@@ -73,6 +87,7 @@ def test_tecon_aceita_atendimento_parcial_na_area_1():
     dados = dados_tecon_validos()
     dados["detalhe"] = {
         "houve_atendimento": True,
+        "celular_tecon_condicao": "Em boas condições",
         "carga_mal_posicionada": False,
         "area1_atendida": True,
         "area1_inicio": "08:00",
@@ -90,6 +105,7 @@ def test_tecon_aceita_atendimento_completo():
     dados = dados_tecon_validos()
     dados["detalhe"] = {
         "houve_atendimento": True,
+        "celular_tecon_condicao": "Em boas condições",
         "carga_mal_posicionada": True,
         "carga_mal_posicionada_descricao": "Vagão com carga deslocada.",
         "area1_atendida": True,
@@ -110,6 +126,7 @@ def test_tecon_area_atendida_exige_horarios():
     dados = dados_tecon_validos()
     dados["detalhe"] = {
         "houve_atendimento": True,
+        "celular_tecon_condicao": "Em boas condições",
         "carga_mal_posicionada": False,
         "area1_atendida": True,
         "area2_atendida": False,
@@ -123,6 +140,7 @@ def test_tecon_area_nao_atendida_rejeita_horarios():
     dados = dados_tecon_validos()
     dados["detalhe"] = {
         "houve_atendimento": True,
+        "celular_tecon_condicao": "Em boas condições",
         "carga_mal_posicionada": False,
         "area1_atendida": False,
         "area1_inicio": "08:00",

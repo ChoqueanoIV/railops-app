@@ -5,6 +5,7 @@ ENDPOINTS_PUBLICOS = {
     "/ready": {"get"},
     "/auth/primeiro-acesso": {"post"},
     "/auth/login": {"post"},
+    "/auth/me": {"get"},
     "/passagens/brisamar": {"post"},
     "/passagens/tecon": {"post"},
     "/passagens/ciclos": {"get"},
@@ -51,6 +52,7 @@ def test_openapi_mantem_autenticacao_apenas_nas_rotas_de_passagem():
     assert caminhos["/auth/primeiro-acesso"]["post"].get("security") is None
     for caminho in (
         "/passagens/brisamar",
+        "/auth/me",
         "/passagens/tecon",
         "/passagens/ciclos",
         "/passagens/ciclos/exportacoes.csv",

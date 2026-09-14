@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import {
   autenticar,
   INSTRUTOR,
+  MANOBRADOR,
   prepararCicloConfirmado,
 } from './support/ciclo';
 
@@ -18,13 +19,13 @@ test('localiza o ciclo confirmado e baixa o PDF individual autenticado', async (
   ).toBeVisible();
   await page.getByLabel('Data inicial').fill(data);
   await page.getByLabel('Data final').fill(data);
-  await page.getByLabel('Turma').selectOption(INSTRUTOR.turma);
-  await page.getByLabel('Responsável').fill(INSTRUTOR.matricula);
+  await page.getByLabel('Turma').selectOption('D');
+  await page.getByLabel('Responsável').fill(MANOBRADOR.matricula);
   await page.getByRole('button', { name: 'Aplicar filtros' }).click();
 
   const resultado = page.locator('article').filter({ hasText: cicloId });
-  await expect(resultado).toContainText('Instrutor E2E');
-  await expect(resultado).toContainText(`Matrícula ${INSTRUTOR.matricula}`);
+  await expect(resultado).toContainText('Manobrador E2E');
+  await expect(resultado).toContainText(`Matrícula ${MANOBRADOR.matricula}`);
   await resultado.getByRole('link', { name: 'Ver passagem completa' }).click();
   await expect(page.getByText('Confirmado — somente leitura')).toBeVisible();
 

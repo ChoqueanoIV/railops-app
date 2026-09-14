@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, Query, Response
 from app.api.errors import ApiError, resposta_erro
 from app.features.auth.dependencies import (
     exigir_consulta_historico,
+    exigir_manobrador,
     exigir_perfil_especial,
     obter_usuario_atual,
 )
@@ -158,7 +159,7 @@ def montar_resposta_ciclo(
 def criar_passagem_brisamar(
     dados: PassagemBrisamarRequest,
     service: PassagemService = Depends(obter_passagem_service),
-    usuario_atual: Usuario = Depends(obter_usuario_atual),
+    usuario_atual: Usuario = Depends(exigir_manobrador),
 ) -> PassagemCriadaResponse:
     try:
         passagem = service.criar_brisamar(dados, usuario_atual)
@@ -189,7 +190,7 @@ def criar_passagem_brisamar(
 def criar_passagem_tecon(
     dados: PassagemTeconRequest,
     service: PassagemService = Depends(obter_passagem_service),
-    usuario_atual: Usuario = Depends(obter_usuario_atual),
+    usuario_atual: Usuario = Depends(exigir_manobrador),
 ) -> PassagemCriadaResponse:
     try:
         passagem = service.criar_tecon(dados, usuario_atual)
@@ -394,7 +395,7 @@ def confirmar_ciclo(
     ciclo_id: uuid.UUID,
     ciclo_service: PassagemCicloService = Depends(obter_ciclo_service),
     passagem_service: PassagemService = Depends(obter_passagem_service),
-    usuario_atual: Usuario = Depends(obter_usuario_atual),
+    usuario_atual: Usuario = Depends(exigir_manobrador),
 ) -> CicloPassagemResponse:
     try:
         ciclo = ciclo_service.confirmar(ciclo_id, usuario_atual)
@@ -469,7 +470,7 @@ def editar_passagem(
     passagem_id: uuid.UUID,
     dados: PassagemBrisamarEdicaoRequest | PassagemTeconEdicaoRequest,
     service: PassagemService = Depends(obter_passagem_service),
-    usuario_atual: Usuario = Depends(obter_usuario_atual),
+    usuario_atual: Usuario = Depends(exigir_manobrador),
 ) -> PassagemAtualizadaResponse:
     try:
         if isinstance(dados, PassagemBrisamarEdicaoRequest):

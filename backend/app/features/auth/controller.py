@@ -1,16 +1,29 @@
 from fastapi import APIRouter, Depends
 
 from app.api.errors import ApiError, resposta_erro
-from app.features.auth.dependencies import obter_auth_service
+from app.features.auth.dependencies import obter_auth_service, obter_usuario_atual
 from app.features.auth.exceptions import AutenticacaoError
+from app.features.auth.models import Usuario
 from app.features.auth.schemas import (
     LoginRequest,
     LoginResponse,
     PrimeiroAcessoRequest,
+    UsuarioAtualResponse,
 )
 from app.features.auth.service import AuthService
 
 router = APIRouter(prefix="/auth", tags=["Autenticação"])
+
+
+@router.get(
+    "/me", response_model=UsuarioAtualResponse, summary="Consultar perfil autenticado"
+)
+def usuario_atual(
+    usuario: Usuario = Depends(obter_usuario_atual),
+) -> UsuarioAtualResponse:
+    return UsuarioAtualResponse(
+        nome=usuario.nome, matricula=usuario.matricula, perfil=usuario.perfil
+    )
 
 
 @router.post(

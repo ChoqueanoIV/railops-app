@@ -201,6 +201,9 @@ class PassagemBrisamarDetalhe(Base):
     carregadores: Mapped[int] = mapped_column(Integer, nullable=False)
     eots_disponiveis: Mapped[str | None] = mapped_column(Text, nullable=True)
     eots_avariados: Mapped[str | None] = mapped_column(Text, nullable=True)
+    celular_eot_condicao: Mapped[str | None] = mapped_column(Text, nullable=True)
+    mobiles_sala_quantidade: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    mobiles_sala_condicao: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     passagem: Mapped[PassagemServico] = relationship(back_populates="detalhe_brisamar")
 
@@ -218,6 +221,7 @@ class PassagemTeconDetalhe(Base):
         nullable=False,
     )
     houve_atendimento: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    celular_tecon_condicao: Mapped[str | None] = mapped_column(Text, nullable=True)
     carga_mal_posicionada: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
     carga_mal_posicionada_descricao: Mapped[str | None] = mapped_column(
         Text, nullable=True
