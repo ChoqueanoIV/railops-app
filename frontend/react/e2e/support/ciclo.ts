@@ -20,6 +20,8 @@ export const MANOBRADOR: CredenciaisE2E = {
   turma: 'C',
 };
 
+const AUTOR_CICLO_CONSULTA: CredenciaisE2E = { ...MANOBRADOR, turma: 'D' };
+
 export async function autenticar(page: Page, usuario: CredenciaisE2E) {
   await page.goto('/login');
   await page.getByLabel('Matrícula').fill(usuario.matricula);
@@ -37,7 +39,7 @@ export async function autenticar(page: Page, usuario: CredenciaisE2E) {
 
 export async function prepararCicloConfirmado(
   request: APIRequestContext,
-  usuario: CredenciaisE2E = MANOBRADOR,
+  usuario: CredenciaisE2E = AUTOR_CICLO_CONSULTA,
 ) {
   const data = dataOperacionalAtual();
   const login = await request.post(`${API_URL}/auth/login`, {

@@ -40,9 +40,6 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
     .fill('DOIS MOBILES EM BOAS CONDIÇÕES');
   await page.getByLabel('Nenhum rádio utilizado').check();
   await page
-    .getByLabel(/Condição de entrega do celular da TECON/)
-    .fill('CELULAR ENTREGUE EM BOAS CONDIÇÕES');
-  await page
     .getByRole('button', { name: 'Avançar para o próximo terminal' })
     .click();
 
@@ -57,6 +54,9 @@ test('preenche os dois terminais, revisa e bloqueia o ciclo confirmado', async (
     .fill('Sem ocorrências no TECON');
   await marcarLinhasVaziasComoLivres(page);
   await page.getByLabel('Nenhum rádio utilizado').check();
+  await page
+    .getByLabel(/Condição de entrega do celular da TECON/)
+    .fill('CELULAR ENTREGUE EM BOAS CONDIÇÕES');
   await page.getByRole('button', { name: 'Avançar para revisão' }).click();
 
   await expect(page).toHaveURL(/\/confirmacao\?ciclo=/);
