@@ -1,12 +1,12 @@
 # Checkpoint de continuidade — RailOps
 
-Atualizado em: 05/09/2026
+Atualizado em: 14/09/2026
 
 ## Estado seguro atual
 
 - branch de continuidade: `main`;
-- PR mais recente: [#50 — remoção do frontend legado](https://github.com/ChoqueanoIV/railops-app/pull/50), mesclada;
-- merge consolidado na `main`: `e6b5400`;
+- PR mais recente: [#61 — condição dos aparelhos e perfis](https://github.com/ChoqueanoIV/railops-app/pull/61), mesclada;
+- merge consolidado na `main`: `585c34c`;
 - Task 019B concluída, validada e integrada;
 - Task 019C concluída, validada e integrada;
 - Task 020 concluída, validada e integrada;
@@ -19,8 +19,13 @@ Atualizado em: 05/09/2026
   homologação pública aprovada e provedores acompanhando a branch `main`;
 - Task 026 concluída e integrada: frontend estático anterior removido sem
   alteração de regras, contratos ou compatibilidades históricas;
-- piloto publicado em Cloudflare Pages, Render Free e Supabase Free, somente
-  com identidades e dados fictícios;
+- piloto publicado em Cloudflare Pages, Render Free e Supabase Free;
+- uso cotidiano autorizado por período inicial de um a dois meses, restrito a
+  participantes identificados e ao levantamento operacional aprovado;
+- dados fictícios anteriores removidos do banco ativo após inventário e cópia
+  isolada de recuperação; banco reiniciado sem ciclos ou passagens;
+- dois usuários reais inicialmente autorizados: um `MANOBRADOR` e um
+  `INSTRUTOR`, sem credenciais registradas no repositório;
 - homologação pública aprovada com Manobrador, Instrutor e Monitor de Qualidade,
   incluindo primeiro acesso, ciclo completo, confirmação, bloqueio de edição,
   PDF, histórico e CSV conforme as permissões vigentes;
@@ -64,6 +69,23 @@ Atualizado em: 05/09/2026
 - 024 — testes E2E dos fluxos críticos: integrada no PR #47.
 - 025 — estratégia e piloto de deploy: integrada no PR #48.
 - 026 — remoção segura do frontend legado: integrada no PR #50.
+- 035 — condição dos aparelhos e permissão de preenchimento: integrada no PR
+  #61.
+
+## Validação da task 035
+
+- celular do EOT e quantidade/condição dos Mobiles registrados em Brisamar;
+- condição do celular da TECON registrada na passagem TECON;
+- orientação de composição da equipe específica em cada terminal;
+- somente `MANOBRADOR` pode criar, editar e confirmar passagens;
+- `INSTRUTOR` e `MONITOR_QUALIDADE` permanecem em consulta, auditoria e
+  exportação conforme as permissões existentes;
+- PR #61 integrado no merge `585c34c`, com Backend, Frontend e E2E aprovados;
+- API pública validada em `/ready` com estado `ok` após o merge;
+- banco ativo conferido com zero ciclos e zero passagens antes do início do
+  piloto real;
+- cópia `pilot_backup_20260914` preserva 4 usuários fictícios, 8 ciclos e 16
+  passagens anteriores, sem acesso para `anon` ou `authenticated`.
 
 O pacote técnico das tasks 001–018 foi integralmente executado. A Task 019 foi
 concluída e originou as correções 019B e 019C. Ambas estão integradas na
@@ -256,13 +278,19 @@ concluída e originou as correções 019B e 019C. Ambas estão integradas na
 
 ## Próximo passo obrigatório
 
-1. manter o piloto restrito a testadores convidados e dados fictícios;
-2. coletar feedback sem alterar regras de negócio implicitamente;
-3. definir e aprovar um novo gate antes de iniciar outra evolução funcional;
-4. preservar integralmente regras, contratos e dados cotidianos.
+1. concluir o primeiro acesso individual dos dois usuários autorizados, sem
+   compartilhar PINs;
+2. executar uma passagem controlada e validar as permissões dos dois perfis;
+3. acompanhar disponibilidade, qualidade dos registros e feedback durante o
+   período autorizado de um a dois meses;
+4. não ampliar usuários, finalidade ou retenção sem nova aprovação;
+5. definir backup externo, retenção e adequação às políticas da MRS antes de
+   qualquer evolução para produção definitiva;
+6. preservar integralmente regras, contratos e dados cotidianos.
 
-A Task 026 foi concluída e integrada em 05/09/2026. Não há task de implementação
-autorizada após ela neste checkpoint.
+A Task 035 foi concluída e integrada em 14/09/2026. O próximo trabalho é a
+validação operacional controlada; novas mudanças funcionais dependem de
+requisito explícito e aceite.
 
 ## Restrições de continuidade
 
