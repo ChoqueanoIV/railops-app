@@ -22,3 +22,14 @@ O piloto precisa registrar como os aparelhos são entregues entre turnos e imped
 ## Implantação
 
 Aplicar `alembic upgrade head` antes de servir o novo backend (o script de início no Render já faz isso). A publicação deve seguir a ordem banco/backend e depois frontend. A atribuição real do perfil a matrículas de instrutores/monitores é administrativa; sem ela, novos usuários continuam com o perfil padrão `MANOBRADOR`.
+
+## Resultado da implantação
+
+- PR #61 integrado à `main` no merge `585c34c`;
+- Backend, Frontend e E2E aprovados após o merge;
+- API pública saudável em `/ready`;
+- migration aplicada antes do cadastro dos usuários autorizados;
+- dados fictícios anteriores removidos do banco ativo, com cópia isolada de
+  recuperação preservada;
+- perfis iniciais do piloto cadastrados administrativamente sem versionar
+  matrícula, código de ativação, PIN ou hash.

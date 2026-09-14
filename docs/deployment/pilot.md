@@ -1,15 +1,20 @@
 # Piloto público gratuito
 
-Este runbook publica uma demonstração do RailOps sem dados operacionais reais,
-sem custo contratado e sem tratá-la como produção.
+Este runbook mantém um piloto operacional controlado do Passagem de Turno
+Digital, sem custo contratado e sem tratá-lo como ambiente definitivo de
+produção. O uso cotidiano foi autorizado por período inicial de um a dois
+meses para coleta de dados e avaliação na operação.
 
 ## Limites aprovados
 
-- somente identidades e passagens fictícias;
-- URL pública compartilhada com testadores convidados;
+- somente usuários previamente autorizados e identificados;
+- dados operacionais limitados ao escopo da passagem de turno do piloto;
+- URL pública compartilhada apenas com participantes convidados;
 - nenhum cartão, upgrade ou cobrança automática;
 - indisponibilidade e inicialização lenta dos planos gratuitos são aceitas;
-- qualquer uso operacional exige novo gate de privacidade, retenção e backup.
+- a autorização do piloto não equivale à homologação corporativa definitiva;
+- expansão de público, prazo, finalidade ou integração exige novo gate de
+  privacidade, retenção, backup e aderência às políticas da MRS.
 
 ## Arquitetura
 
@@ -30,7 +35,8 @@ variáveis secretas do Render.
 2. Guarde a senha em um gerenciador de senhas.
 3. Em **Connect**, copie a URI do pooler em modo de sessão (IPv4).
 4. Use TLS, acrescentando `sslmode=require` se necessário.
-5. Não importe dados cotidianos nem execute o seed E2E.
+5. Nunca execute o seed E2E neste banco. Cadastros e dados cotidianos devem
+   respeitar exclusivamente o escopo autorizado do piloto.
 
 ### API Render
 
@@ -59,24 +65,31 @@ continuam resolvendo para `index.html` sem uma regra `_redirects` redundante.
 
 ## Usuários e homologação
 
-Cadastre apenas matrículas fictícias por procedimento administrativo. O seed
-E2E é bloqueado fora do banco E2E e não deve ser adaptado para este piloto.
+Cadastre somente matrículas expressamente autorizadas, por procedimento
+administrativo. Não registre matrículas, códigos de ativação, PINs ou hashes no
+repositório. O seed E2E é bloqueado fora do banco E2E e não deve ser adaptado
+para este piloto.
 
-Valide `/health`, `/ready`, primeiro acesso, login, ciclo completo, confirmação,
-consulta, permissões e downloads com os três perfis fictícios. Confirme que URL,
-tela, logs e arquivos não expõem PIN, código, JWT ou conexão do banco.
+Somente `MANOBRADOR` cria, edita e confirma passagens. `INSTRUTOR` e
+`MONITOR_QUALIDADE` ficam restritos à consulta, auditoria e exportações já
+autorizadas. Valide `/health`, `/ready`, primeiro acesso, login, ciclo completo,
+confirmação, consulta, permissões e downloads. Confirme que URL, tela, logs e
+arquivos não expõem PIN, código, JWT ou conexão do banco.
 
 ## Backup e recuperação
 
 O Supabase Free não oferece backup automático. Antes de migrations ou rodadas
 relevantes, produza dump lógico pela CLI do Supabase ou `pg_dump`, mantenha-o
-fora do repositório e teste sua restauração em banco descartável. Como só há
-dados fictícios, também é aceitável recriar o banco e reaplicar migrations.
+fora do repositório e teste sua restauração em banco descartável. A cópia
+temporária `pilot_backup_20260914`, criada antes da limpeza dos dados de
+homologação, é isolada dos papéis públicos, mas não substitui um backup externo
+testado nem deve ser mantida além do prazo necessário.
 
 ## Operação e retirada
 
 - merges na `main` podem disparar deploy após os checks do PR;
 - suspensão e latência do plano grátis não justificam reduzir segurança;
 - pause o serviço nos painéis para interromper o piloto;
-- só exclua o banco após confirmar que contém exclusivamente dados fictícios;
+- não exclua o banco ou dados operacionais sem inventário, cópia recuperável e
+  autorização explícita;
 - exclusão de projeto é irreversível.
