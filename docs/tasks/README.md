@@ -47,6 +47,7 @@ descrita no [`roadmap do produto`](../ROADMAP.md).
 | 032 | Preenchimento obrigatório sem valores indefinidos | 031 |
 | 033 | Identidade visual Passagem de Turno Digital | 032 |
 | 034 | Revisão operacional e orientação do fluxo | 033 |
+| 035 | Condição dos aparelhos e permissão de preenchimento | 034 |
 
 As correções 019B e 019C e as Tasks 020–023 estão concluídas e integradas. A
 Task 024 está concluída e integrada à `main` pelo PR #47, com evidências em
@@ -73,6 +74,9 @@ e reorganiza a apresentação visual em azul, amarelo e branco, sem alterar as
 regras de negócio ou utilizar o logotipo oficial da MRS.
 A Task 034 organiza a revisão consolidada em grades operacionais e torna o
 texto do botão final coerente com o primeiro ou segundo terminal do ciclo.
+A Task 035 registra a condição dos celulares da TECON/EOT e dos Mobiles da sala
+da manobra, orienta a equipe por terminal e restringe a escrita ao perfil
+`MANOBRADOR`, preservando a consulta por instrutores e monitores.
 
 ## Como pedir uma task ao Codex
 

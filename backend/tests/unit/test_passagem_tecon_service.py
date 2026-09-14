@@ -102,6 +102,7 @@ def test_criar_tecon_com_atendimento_preserva_areas_independentes():
     dados = dados_tecon_validos()
     dados["detalhe"] = {
         "houve_atendimento": True,
+        "celular_tecon_condicao": "Em boas condições",
         "carga_mal_posicionada": False,
         "area1_atendida": True,
         "area1_inicio": "08:00",

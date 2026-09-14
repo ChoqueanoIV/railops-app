@@ -87,6 +87,29 @@ class PassagemCicloService:
                     "Brisamar e TECON devem estar preenchidos antes da confirmação."
                 )
 
+            for passagem in ciclo.passagens:
+                if (
+                    passagem.terminal == Terminal.BRISAMAR
+                    and passagem.detalhe_brisamar is not None
+                ):
+                    detalhe = passagem.detalhe_brisamar
+                    if (
+                        not detalhe.celular_eot_condicao
+                        or detalhe.mobiles_sala_quantidade is None
+                        or not detalhe.mobiles_sala_condicao
+                    ):
+                        raise PassagemError(
+                            "Atualize o celular do EOT e os Mobiles da sala antes de confirmar."
+                        )
+                if (
+                    passagem.terminal == Terminal.TECON
+                    and passagem.detalhe_tecon is not None
+                ):
+                    if not passagem.detalhe_tecon.celular_tecon_condicao:
+                        raise PassagemError(
+                            "Atualize a condição do celular da TECON antes de confirmar."
+                        )
+
             ciclo.estado = EstadoCicloPassagem.CONFIRMADO
             ciclo.confirmado_em = datetime.now(UTC)
             return self.repository.confirmar_ciclo(ciclo)
@@ -496,6 +519,13 @@ class PassagemService:
         responsavel: Usuario,
         agora: datetime | None = None,
     ) -> None:
+        from app.features.auth.models import PerfilUsuario
+
+        if responsavel.perfil in {
+            PerfilUsuario.INSTRUTOR,
+            PerfilUsuario.MONITOR_QUALIDADE,
+        }:
+            raise PassagemError("Apenas manobradores podem editar passagens.")
         if passagem is None:
             raise PassagemError("Passagem de serviço não encontrada.")
         if PassagemCicloService.passagem_confirmada(passagem):

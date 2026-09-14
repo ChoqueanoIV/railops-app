@@ -12,14 +12,14 @@ describe('migração das passagens para React', () => {
     vi.restoreAllMocks();
   });
 
-  it('permite registrar separadamente os lados e travessões de L22 e L24', () => {
+  it('permite registrar separadamente os lados e travessões de L22 e L24', async () => {
     render(
       <MemoryRouter initialEntries={['/brisamar']}>
         <App />
       </MemoryRouter>,
     );
     expect(
-      screen.getByRole('heading', { name: 'Nova passagem de turno' }),
+      await screen.findByRole('heading', { name: 'Nova passagem de turno' }),
     ).toBeVisible();
     expect(
       screen.getByRole('navigation', { name: 'Etapas do preenchimento' }),
@@ -76,6 +76,8 @@ describe('migração das passagens para React', () => {
       </MemoryRouter>,
     );
 
+    await screen.findByRole('heading', { name: 'Nova passagem de turno' });
+
     const ocupacao = screen.getByLabelText('Veículos da linha L1');
     await user.click(screen.getByLabelText('Linha L1 livre'));
     expect(ocupacao).toBeDisabled();
@@ -93,6 +95,7 @@ describe('migração das passagens para React', () => {
         <App />
       </MemoryRouter>,
     );
+    await screen.findByRole('heading', { name: 'Nova passagem de turno' });
     expect(
       screen.queryByText('Havia carga mal posicionada?'),
     ).not.toBeInTheDocument();
@@ -111,6 +114,8 @@ describe('migração das passagens para React', () => {
         <App />
       </MemoryRouter>,
     );
+
+    await screen.findByRole('heading', { name: 'Nova passagem de turno' });
 
     const observacoes = screen.getByLabelText('Observações');
     const ocorrencias = screen.getByLabelText('Relatório de ocorrências');
@@ -131,6 +136,8 @@ describe('migração das passagens para React', () => {
       </MemoryRouter>,
     );
 
+    await screen.findByRole('heading', { name: 'Nova passagem de turno' });
+
     const disponiveis = screen.getByLabelText('EOTs disponíveis');
     const avariados = screen.getByLabelText('EOTs avariados');
     const semRadios = screen.getByLabelText('Nenhum rádio utilizado');
@@ -146,6 +153,46 @@ describe('migração das passagens para React', () => {
     expect(semRadios).toBeChecked();
   });
 
+  it('exige condição do celular EOT e escolha explícita dos Mobiles no Brisamar', async () => {
+    render(
+      <MemoryRouter initialEntries={['/brisamar']}>
+        <App />
+      </MemoryRouter>,
+    );
+    const celular = await screen.findByLabelText(
+      /Condição de entrega do celular do EOT/,
+    );
+    const quantidade = screen.getByLabelText(
+      'Quantidade de Mobiles na sala da equipe',
+    );
+    const condicao = screen.getByLabelText(/Condição dos Mobiles na sala/);
+    expect(celular).toBeRequired();
+    expect(quantidade).toBeRequired();
+    expect(quantidade).toHaveValue(null);
+    expect(condicao).toBeRequired();
+    expect(
+      screen.getByText(
+        /Preencha apenas os manobradores que trabalharam no Pátio do Brisamar/,
+      ),
+    ).toBeVisible();
+  });
+
+  it('exige condição do celular TECON mesmo sem atendimento', async () => {
+    render(
+      <MemoryRouter initialEntries={['/tecon']}>
+        <App />
+      </MemoryRouter>,
+    );
+    expect(
+      await screen.findByLabelText(/Condição de entrega do celular da TECON/),
+    ).toBeRequired();
+    expect(
+      screen.getByText(
+        'Preencha apenas os manobradores que trabalharam na TECON.',
+      ),
+    ).toBeVisible();
+  });
+
   it('converte textos digitados para maiúsculas e explica a inclusão na equipe', async () => {
     const user = userEvent.setup();
     render(
@@ -153,6 +200,8 @@ describe('migração das passagens para React', () => {
         <App />
       </MemoryRouter>,
     );
+
+    await screen.findByRole('heading', { name: 'Nova passagem de turno' });
 
     await user.type(screen.getByLabelText('Nome'), 'João da Silva');
     await user.type(screen.getByLabelText('Observações'), 'Pátio normal');
@@ -364,6 +413,9 @@ function cicloCompleto(
         id: 'brisamar-1',
         terminal: 'BRISAMAR',
         detalhe: {
+          celular_eot_condicao: 'EM BOAS CONDIÇÕES',
+          mobiles_sala_quantidade: 2,
+          mobiles_sala_condicao: 'DOIS EM BOAS CONDIÇÕES',
           radios_operantes: 4,
           radios_inoperantes: 0,
           baterias: 4,
@@ -376,7 +428,10 @@ function cicloCompleto(
         ...base,
         id: 'tecon-1',
         terminal: 'TECON',
-        detalhe: { houve_atendimento: false },
+        detalhe: {
+          houve_atendimento: false,
+          celular_tecon_condicao: 'EM BOAS CONDIÇÕES',
+        },
       },
     ],
   };

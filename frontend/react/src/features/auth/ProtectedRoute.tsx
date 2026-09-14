@@ -12,3 +12,11 @@ export function ProtectedRoute() {
 
   return <Outlet />;
 }
+
+export function ManobradorRoute() {
+  const { usuario, carregandoPerfil } = useAuth();
+  if (carregandoPerfil) return <p className="status">Verificando perfil...</p>;
+  if (usuario?.perfil !== 'MANOBRADOR')
+    return <Navigate to="/passagens" replace />;
+  return <Outlet />;
+}

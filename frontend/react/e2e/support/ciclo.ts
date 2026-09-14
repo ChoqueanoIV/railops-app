@@ -26,13 +26,18 @@ export async function autenticar(page: Page, usuario: CredenciaisE2E) {
   await page.getByLabel('PIN', { exact: true }).fill(usuario.pin);
   await page.getByRole('button', { name: 'Entrar' }).click();
   await expect(
-    page.getByRole('heading', { name: 'Selecione o terminal' }),
+    page.getByRole('heading', {
+      name:
+        usuario.matricula === INSTRUTOR.matricula
+          ? 'Passagens registradas'
+          : 'Selecione o terminal',
+    }),
   ).toBeVisible();
 }
 
 export async function prepararCicloConfirmado(
   request: APIRequestContext,
-  usuario: CredenciaisE2E = INSTRUTOR,
+  usuario: CredenciaisE2E = MANOBRADOR,
 ) {
   const data = dataOperacionalAtual();
   const login = await request.post(`${API_URL}/auth/login`, {
@@ -120,6 +125,9 @@ function payloadBrisamar(data: string, usuario: CredenciaisE2E) {
       carregadores: 1,
       eots_disponiveis: 'NENHUM EOT DISPONÍVEL',
       eots_avariados: 'NENHUM EOT AVARIADO',
+      celular_eot_condicao: 'EM BOAS CONDIÇÕES',
+      mobiles_sala_quantidade: 2,
+      mobiles_sala_condicao: 'DOIS EM BOAS CONDIÇÕES',
     },
   };
 }
@@ -141,7 +149,10 @@ function payloadTecon(data: string, usuario: CredenciaisE2E) {
       ],
       usuario,
     ),
-    detalhe: { houve_atendimento: false },
+    detalhe: {
+      houve_atendimento: false,
+      celular_tecon_condicao: 'EM BOAS CONDIÇÕES',
+    },
   };
 }
 

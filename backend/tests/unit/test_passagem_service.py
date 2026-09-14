@@ -79,6 +79,9 @@ def criar_dados_validos() -> PassagemBrisamarRequest:
             "carregadores": 2,
             "eots_disponiveis": "Nenhum EOT disponível",
             "eots_avariados": "Nenhum EOT avariado",
+            "celular_eot_condicao": "Em boas condições",
+            "mobiles_sala_quantidade": 2,
+            "mobiles_sala_condicao": "Dois em boas condições",
         },
         radios_utilizados=[
             {

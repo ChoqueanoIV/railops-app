@@ -56,6 +56,16 @@ def exigir_perfil_especial(
     return usuario_atual
 
 
+def exigir_manobrador(usuario_atual: Usuario = Depends(obter_usuario_atual)) -> Usuario:
+    if usuario_atual.perfil != PerfilUsuario.MANOBRADOR:
+        raise ApiError(
+            status_code=403,
+            code="PASSAGE_WRITE_DENIED",
+            message="Apenas manobradores podem preencher ou confirmar passagens.",
+        )
+    return usuario_atual
+
+
 def exigir_consulta_historico(
     usuario_atual: Usuario = Depends(obter_usuario_atual),
 ) -> Usuario:

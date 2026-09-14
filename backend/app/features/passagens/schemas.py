@@ -42,6 +42,9 @@ class BrisamarDetalheRequest(SchemaBase):
     carregadores: int = Field(ge=0)
     eots_disponiveis: str | None = None
     eots_avariados: str | None = None
+    celular_eot_condicao: str | None = None
+    mobiles_sala_quantidade: int | None = Field(default=None, ge=0)
+    mobiles_sala_condicao: str | None = None
 
 
 class RadioUsoRequest(SchemaBase):
@@ -81,6 +84,12 @@ def _validar_conteudo_obrigatorio(
 
 
 def _validar_detalhe_brisamar(detalhe: BrisamarDetalheRequest) -> None:
+    if not detalhe.celular_eot_condicao:
+        raise ValueError("Informe a condição de entrega do celular do EOT.")
+    if detalhe.mobiles_sala_quantidade is None:
+        raise ValueError("Informe quantos Mobiles há na sala da equipe.")
+    if not detalhe.mobiles_sala_condicao:
+        raise ValueError("Informe a condição dos Mobiles da sala da equipe.")
     if not detalhe.eots_disponiveis:
         raise ValueError(
             "Informe os EOTs disponíveis ou declare que não há nenhum disponível."
@@ -177,6 +186,7 @@ class PassagemConsultaResponse(SchemaBase):
 
 class TeconDetalheRequest(SchemaBase):
     houve_atendimento: bool
+    celular_tecon_condicao: str | None = None
     carga_mal_posicionada: bool | None = None
     carga_mal_posicionada_descricao: str | None = None
     area1_atendida: bool | None = None
@@ -258,6 +268,8 @@ class PassagemTeconRequest(SchemaBase):
 
     @model_validator(mode="after")
     def validar_justificativa_mobile(self) -> Self:
+        if not self.detalhe.celular_tecon_condicao:
+            raise ValueError("Informe a condição de entrega do celular da TECON.")
         _validar_conteudo_obrigatorio(
             observacoes=self.observacoes,
             relatorio_ocorrencias=self.relatorio_ocorrencias,
@@ -283,6 +295,8 @@ class PassagemTeconEdicaoRequest(SchemaBase):
 
     @model_validator(mode="after")
     def validar_justificativa_mobile(self) -> Self:
+        if not self.detalhe.celular_tecon_condicao:
+            raise ValueError("Informe a condição de entrega do celular da TECON.")
         _validar_conteudo_obrigatorio(
             observacoes=self.observacoes,
             relatorio_ocorrencias=self.relatorio_ocorrencias,
