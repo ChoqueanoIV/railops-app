@@ -400,7 +400,6 @@ select:focus-visible {
   margin-bottom: 1rem;
   color: #26364a;
   font-weight: 650;
-  text-transform: capitalize;
 }
 .field input,
 .field textarea,
@@ -503,6 +502,21 @@ select:focus-visible {
   border-radius: 0.7rem;
   color: #fff;
   background: var(--brand-blue);
+}
+.team-guidance {
+  width: 100%;
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.85rem;
+  border-left: 0.25rem solid var(--brand-yellow);
+  border-radius: 0.45rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.mobiles-grid {
+  grid-template-columns: minmax(12rem, 0.45fr) minmax(18rem, 1fr);
+}
+.mobiles-grid .field:first-child {
+  align-self: start;
 }
 .status--error {
   margin: 0;
@@ -754,6 +768,9 @@ select:focus-visible {
     position: sticky;
     z-index: 2;
     top: 0;
+  }
+  .mobiles-grid {
+    grid-template-columns: 1fr;
   }
   .line-row {
     grid-template-areas:
