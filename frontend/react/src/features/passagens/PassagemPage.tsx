@@ -48,6 +48,12 @@ const SEM_ALTERACOES = 'SEM ALTERAÇÕES';
 const LINHA_LIVRE = 'LIVRE';
 const SEM_EOTS_DISPONIVEIS = 'NENHUM EOT DISPONÍVEL';
 const SEM_EOTS_AVARIADOS = 'NENHUM EOT AVARIADO';
+const ROTULOS_RECURSOS = {
+  radios_operantes: 'Rádios operantes',
+  radios_inoperantes: 'Rádios inoperantes',
+  baterias: 'Baterias',
+  carregadores: 'Carregadores',
+} as const;
 const corresponde = (valor: string | null, declaracao: string) =>
   valor != null && maiusculo(valor.trim()) === declaracao;
 const novaEquipe = (): EquipeMembro => ({ nome: '', matricula: '' });
@@ -415,7 +421,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
           </div>
         </Section>
         <Section id="equipe" title="Equipe presente">
-          <p className="status">
+          <p className="status team-guidance">
             {terminal === 'BRISAMAR'
               ? 'Preencha apenas os manobradores que trabalharam no Pátio do Brisamar/Apoio, Gerdau e EOT.'
               : 'Preencha apenas os manobradores que trabalharam na TECON.'}
@@ -566,7 +572,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
                 }
               />
             </Field>
-            <div className="form-grid">
+            <div className="form-grid mobiles-grid">
               <Field label="Quantidade de Mobiles na sala da equipe">
                 <input
                   type="number"
@@ -604,7 +610,7 @@ export function PassagemPage({ terminal }: { terminal: Terminal }) {
                   'carregadores',
                 ] as const
               ).map((k) => (
-                <Field key={k} label={k.replaceAll('_', ' ')}>
+                <Field key={k} label={ROTULOS_RECURSOS[k]}>
                   <input
                     type="number"
                     min="0"
